@@ -564,11 +564,13 @@
         }
 
         .trace-stage .trace-canvas {
-            z-index: 1;
+            z-index: 4;
             width: 100%;
             height: 100%;
             border: 0;
             border-radius: 0;
+            pointer-events: auto;
+            touch-action: none;
         }
 
         .hanzi-writer-target {
@@ -584,7 +586,7 @@
         }
 
         .stroke-number-layer {
-            z-index: 3;
+            z-index: 5;
             overflow: visible;
             pointer-events: none;
         }
@@ -4851,18 +4853,32 @@
         const raw = MOE_STROKE_DATA[character];
         if (!raw || !Array.isArray(raw) || raw.length !== 3) return null;
 
-        const [strokeCount, spriteBase64, masks] = raw;
-        if (!Number.isInteger(strokeCount) || strokeCount < 1 ||
-            !spriteBase64 || !Array.isArray(masks) ||
-            masks.length !== strokeCount) {
-            return null;
-        }
+        const [, spriteBase64, rawMasks] = raw;
+        if (!spriteBase64 || !Array.isArray(rawMasks)) return null;
+
+        // 重要：教育部 6063png 的 PNG 是「逐步累積示範影格」，
+        // 部分字的資料陣列會包含空白影格，因此不能把 raw[0] 或 masks.length
+        // 直接當成實際筆畫數。例如「二」的原始影格數是 3，但實際只有 2 筆。
+        // 保留原始影格索引，之後示範動畫才能跳過空白影格。
+        const masks = [];
+        const frameIndices = [];
+        rawMasks.forEach((stroke, index) => {
+            if (!Array.isArray(stroke) || stroke.length !== 3) return;
+            const pixels = stroke[0];
+            if (Array.isArray(pixels) && pixels.length > 0) {
+                masks.push(stroke);
+                frameIndices.push(index);
+            }
+        });
+
+        if (!masks.length) return null;
 
         return {
             character,
-            strokeCount,
+            strokeCount: masks.length,
             sprite: `data:image/png;base64,${spriteBase64}`,
-            masks
+            masks,
+            frameIndices
         };
     }
 
@@ -4871,6 +4887,8 @@
         if (!data || data.character !== character) return false;
         if (!Number.isInteger(data.strokeCount) || data.strokeCount < 1) return false;
         if (!Array.isArray(data.masks) || data.masks.length !== data.strokeCount) return false;
+        if (!Array.isArray(data.frameIndices) || data.frameIndices.length !== data.strokeCount) return false;
+        if (!data.sprite || typeof data.sprite !== "string") return false;
 
         return data.masks.every(stroke => {
             if (!Array.isArray(stroke) || stroke.length !== 3) return false;
@@ -4931,9 +4949,13 @@
                     const dx = (stageSize - displayWidth) / 2;
                     const dy = (stageSize - displayHeight) / 2;
 
+                    const sourceFrame = Array.isArray(characterData.frameIndices)
+                        ? characterData.frameIndices[frame]
+                        : frame;
+
                     ctx.drawImage(
                         img,
-                        0, frame * 45, 50, 45,
+                        0, sourceFrame * 45, 50, 45,
                         dx, dy, displayWidth, displayHeight
                     );
 
@@ -5288,22 +5310,26 @@
         canvas.addEventListener("pointerdown", event => {
             if (characterDemoActive || !characterCanGrade || characterCompleted) return;
             event.preventDefault();
-            canvas.setPointerCapture(event.pointerId);
+            try { canvas.setPointerCapture(event.pointerId); } catch (e) {}
             activeCharacterStroke = [];
             addTracePoint(event);
+            drawTraceCanvas();
         });
 
         canvas.addEventListener("pointermove", event => {
-            if (event.buttons && activeCharacterStroke) {
+            if (activeCharacterStroke && (event.buttons !== 0 || event.pointerType === "touch" || event.pointerType === "pen")) {
                 event.preventDefault();
                 addTracePoint(event);
+                drawTraceCanvas();
             }
         });
 
         const endStroke = event => {
-            if (canvas.hasPointerCapture(event.pointerId)) {
-                canvas.releasePointerCapture(event.pointerId);
-            }
+            try {
+                if (canvas.hasPointerCapture(event.pointerId)) {
+                    canvas.releasePointerCapture(event.pointerId);
+                }
+            } catch (e) {}
             if (activeCharacterStroke && activeCharacterStroke.length) {
                 finishCharacterStroke();
             } else {
