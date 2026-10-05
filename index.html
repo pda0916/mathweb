@@ -807,6 +807,16 @@
             display: none;
         }
 
+        .learning-record{margin-top:18px;padding:16px;border:1px solid #d6e8ee;border-radius:16px;background:#f7fbfc;text-align:left}
+        .learning-record h2{margin:0 0 10px;font-size:22px}
+        .record-summary{color:#526a73;margin-bottom:12px;line-height:1.6}
+        .record-list{display:grid;gap:8px;max-height:45vh;overflow-y:auto}
+        .record-item{padding:10px 12px;border-radius:10px;background:#fff;border:1px solid #e1ecef}
+        .record-item b{color:#126e8a}
+        .record-empty{color:#7b8d83;padding:8px 0}
+        .record-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+
         .result-score {
             font-size: 60px;
             font-weight: bold;
@@ -1125,6 +1135,7 @@
             </div>
 
             <button class="start-button" id="startButton" onclick="startGame()">開始練習</button>
+            <button class="trace-button" type="button" onclick="showLearningRecord()">📚 學習紀錄</button>
         </div>
 
         <div id="quiz" style="display: none;">
@@ -1282,6 +1293,15 @@
             </div>
         </section>
 
+        <section class="learning-record" id="learningRecord" style="display:none;" aria-label="學習紀錄">
+            <h2>📚 學習紀錄</h2>
+            <div class="record-summary" id="recordSummary"></div>
+            <div class="record-list" id="recordList"></div>
+            <div class="record-actions">
+                <button class="trace-button" type="button" onclick="hideLearningRecord()">← 返回學習</button>
+                <button class="trace-button" type="button" onclick="clearLearningRecord()">🗑️ 清除紀錄</button>
+            </div>
+        </section>
     </div>
 
 
@@ -1373,6 +1393,9 @@
     let englishAnswered = false;
     let englishDeck = [];
     let englishResults = [];
+    let mathResultRecorded=false;
+    let characterResultRecorded=false;
+    let englishResultRecorded=false;
 
     const englishWordsByAgeBand = {
         preschool: [
@@ -3969,6 +3992,86 @@
     // 鼓勵文字
     // ==========================
 
+    function getStoredChildName() {
+        try { return localStorage.getItem("aiLearningChildName") || ""; } catch (e) { return ""; }
+    }
+
+    function saveChildName() {
+        const input = document.getElementById("childName");
+        const name = input.value.trim() || "小朋友";
+        input.value = name;
+        try { localStorage.setItem("aiLearningChildName", name); } catch (e) {}
+        return name;
+    }
+
+    function getLearningRecords() {
+        try { return JSON.parse(localStorage.getItem("aiLearningRecords") || "[]"); } catch (e) { return []; }
+    }
+
+    function saveLearningRecord(record) {
+        const records = getLearningRecords();
+        records.unshift(record);
+        try { localStorage.setItem("aiLearningRecords", JSON.stringify(records.slice(0, 365))); } catch (e) {}
+    }
+
+    function recordMathResult() {
+        const operationNames = { addition:"加法", subtraction:"減法", mixed:"加法＋減法混合", multiplication:"九九乘法入門" };
+        const operation = document.getElementById("operationSelect").value;
+        saveLearningRecord({
+            date:new Date().toISOString(), type:"數學",
+            detail:`${Number(document.getElementById("ageSelect").value)} 歲・${operationNames[operation]}`,
+            score, total:totalQuestions, correct:score
+        });
+    }
+
+    function recordCharacterResult(finalScore) {
+        saveLearningRecord({
+            date:new Date().toISOString(), type:"國字",
+            detail:`國小${characterGrade}年級・10 個字`,
+            score:finalScore, total:100
+        });
+    }
+
+    function recordEnglishResult() {
+        saveLearningRecord({
+            date:new Date().toISOString(), type:"英文",
+            detail:`${englishAgeBand ? englishAgeBand.label : "英文練習"}・${englishDeck.length} 個單字`,
+            score:englishScore, total:englishDeck.length
+        });
+    }
+
+    function showLearningRecord() {
+        document.getElementById("setup").style.display="none";
+        document.getElementById("learningRecord").style.display="block";
+        const records=getLearningRecords();
+        const name=getChildName();
+        document.getElementById("recordSummary").textContent=records.length
+            ? `${name}目前共有 ${records.length} 筆學習紀錄。紀錄會保存在這台裝置的瀏覽器中。`
+            : `${name}目前還沒有學習紀錄，完成一次練習後就會自動記錄。`;
+        const list=document.getElementById("recordList"); list.innerHTML="";
+        if(!records.length){list.innerHTML='<div class="record-empty">還沒有紀錄喔，開始學習吧！</div>';return;}
+        records.forEach(r=>{
+            const d=new Date(r.date), row=document.createElement("div");
+            row.className="record-item";
+            row.innerHTML=`<b>${d.toLocaleDateString("zh-TW",{year:"numeric",month:"2-digit",day:"2-digit"})}</b>　${r.type}・${r.detail}<br>⭐ ${r.score} / ${r.total}${r.correct!==undefined?`　答對 ${r.correct} 題`:""}`;
+            list.appendChild(row);
+        });
+    }
+
+    function hideLearningRecord(){document.getElementById("learningRecord").style.display="none";document.getElementById("setup").style.display="grid";}
+    function clearLearningRecord(){
+        if(!confirm("確定要清除這台裝置上的所有學習紀錄嗎？"))return;
+        try{localStorage.removeItem("aiLearningRecords");}catch(e){}
+        showLearningRecord();
+    }
+
+    function loadSavedSettings(){
+        const savedName=getStoredChildName();
+        if(savedName)document.getElementById("childName").value=savedName;
+        document.getElementById("childName").addEventListener("change",saveChildName);
+        document.getElementById("childName").addEventListener("blur",saveChildName);
+    }
+
     function getChildName() {
 
         return document.getElementById("childName").value.trim() || "小朋友";
@@ -4082,6 +4185,7 @@
         }
 
         setChineseText(document.getElementById("resultMessage"), message);
+        if(!mathResultRecorded){recordMathResult();mathResultRecorded=true;}
         renderAnswerReview();
     }
 
@@ -4144,6 +4248,8 @@
 
     function startEnglishPractice() {
 
+        saveChildName();
+        englishResultRecorded=false;
         const age = Number(document.getElementById("englishAgeSelect").value);
         englishAgeBand = getEnglishAgeBand(age);
         englishDeck = shuffleCharacters([...englishWordsByAgeBand[englishAgeBand.key]]);
@@ -4273,6 +4379,7 @@
         document.getElementById("game").style.display = "none";
         document.getElementById("englishResult").style.display = "block";
         document.getElementById("englishFinalScore").textContent = englishScore;
+        if(!englishResultRecorded){recordEnglishResult();englishResultRecorded=true;}
         document.getElementById("englishResultSummary").textContent =
             englishScore === totalQuestions
                 ? "太棒了！10 個英文單字都答對了。"
@@ -4381,6 +4488,8 @@
 
     function startCharacterPractice() {
 
+        saveChildName();
+        characterResultRecorded=false;
         characterGrade = Number(document.getElementById("gradeSelect").value);
         const pool = [...getCurrentCharacterList()];
         const historyKey = `characterRecentGrade${characterGrade}`;
@@ -4408,6 +4517,7 @@
 
     function backToSetup() {
 
+        document.getElementById("learningRecord").style.display="none";
         if (hanziWriterInstance) hanziWriterInstance.cancelQuiz();
         document.getElementById("result").style.display = "none";
         document.getElementById("characterResult").style.display = "none";
@@ -4483,6 +4593,7 @@
         document.getElementById("result").style.display = "none";
         document.getElementById("characterResult").style.display = "block";
         document.getElementById("characterFinalScore").innerText = finalScore;
+        if(!characterResultRecorded){recordCharacterResult(finalScore);characterResultRecorded=true;}
         document.getElementById("characterResultSummary").innerText =
             `完成 ${completedCount} / 10 字・評分 ${gradedResults.length} / 10 字・筆順或偏線錯誤 ${totalMistakes} 次`;
 
@@ -5169,6 +5280,8 @@
 
     function startGame() {
 
+        saveChildName();
+        mathResultRecorded=false;
         const practiceMode = document.getElementById("practiceMode").value;
 
         if (practiceMode === "characters") {
@@ -5294,6 +5407,7 @@
     document.getElementById("replayCharacter").disabled =
         !("speechSynthesis" in window);
     initializeTraceCanvas();
+    loadSavedSettings();
     updateLevelHint();
     updateEnglishLevelHint();
     updatePracticeSettings();
