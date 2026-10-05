@@ -1,11 +1,10 @@
-```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AI 數學與國字練習</title>
+    <title>AI 數學、國字與英文練習</title>
 
     <style>
         * {
@@ -177,6 +176,143 @@
         .lesson-card {
             color: #365b46;
             line-height: 1.7;
+        }
+
+        .english-settings,
+        .english-practice {
+            display: grid;
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid #c9dfe8;
+            border-radius: 12px;
+            background: #f1f9fc;
+        }
+
+        .english-level-note,
+        .english-explanation,
+        .english-example {
+            margin: 0;
+            color: #365665;
+            line-height: 1.65;
+        }
+
+        .english-word-card {
+            padding: 24px 18px;
+            border: 1px solid #c8dfe5;
+            border-radius: 18px;
+            background: #fffefa;
+        }
+
+        .english-word {
+            margin: 0;
+            color: #126e8a;
+            font-family: Arial, sans-serif;
+            font-size: clamp(42px, 9vw, 68px);
+            letter-spacing: 0.04em;
+        }
+
+        .english-phonetic {
+            margin: 8px 0 0;
+            color: #526a73;
+            font-size: 18px;
+        }
+
+        .english-meaning {
+            margin: 16px 0 0;
+            color: #263238;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .english-example {
+            padding: 12px;
+            border-radius: 10px;
+            background: #e8f4f7;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+        }
+
+        .english-example-meaning {
+            margin: -6px 0 0;
+            color: #526a73;
+        }
+
+        .english-stage-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 4px 0 16px;
+        }
+        .english-stage-btn {
+            border: 1px solid #c8dfe5;
+            border-radius: 12px;
+            padding: 10px 6px;
+            background: #fff;
+            color: #365665;
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .english-stage-btn.active {
+            background: #168aad;
+            color: #fff;
+            border-color: #168aad;
+        }
+        .english-stage-panel { display: none; }
+        .english-stage-panel.active { display: block; }
+        .english-teach-title {
+            margin: 8px 0;
+            color: #365665;
+        }
+        .english-word-big {
+            font-family: Arial, sans-serif;
+            font-size: clamp(48px, 11vw, 82px);
+            color: #126e8a;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+        .english-emoji { font-size: 64px; margin: 4px; }
+        .english-teach-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .english-mini-card {
+            padding: 12px;
+            border-radius: 12px;
+            background: #f7fbfc;
+            border: 1px solid #dcebf0;
+            text-align: left;
+        }
+        .english-phase-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+        .english-choice-note {
+            margin: 10px 0;
+            color: #526a73;
+            font-weight: bold;
+        }
+        .wrong-review-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        @media (max-width: 500px) {
+            .english-stage-nav { grid-template-columns: repeat(2, 1fr); }
+            .english-teach-grid { grid-template-columns: 1fr; }
+        }
+
+        .english-feedback {
+            min-height: 32px;
+            margin: 0;
+            color: #365665;
+            font-size: 18px;
+            font-weight: bold;
         }
 
         .lesson-hint {
@@ -758,6 +894,51 @@
             overflow: hidden;
         }
 
+        .english-phonics-box {
+            display: grid;
+            gap: 8px;
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 12px;
+            background: #fff8e8;
+            border: 1px solid #f0dca8;
+            text-align: left;
+        }
+
+        .english-phonics-title {
+            margin: 0;
+            color: #7b5b18;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .english-phonics-text {
+            margin: 0;
+            color: #5d4b2a;
+            line-height: 1.6;
+        }
+
+        .english-syllables {
+            margin: 0;
+            color: #126e8a;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .english-sound-tip {
+            margin: 0;
+            color: #526a73;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .english-teach-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
         @media (max-width: 650px) {
             .question-area {
                 grid-template-columns: 1fr;
@@ -830,7 +1011,7 @@
 
         <div class="emoji">🧒🔢</div>
 
-        <h1>AI 數學與國字練習</h1>
+        <h1>AI 數學、國字與英文練習</h1>
 
         <div class="subtitle">選擇年級與練習內容，開始學習吧！</div>
 
@@ -845,6 +1026,7 @@
                 <select id="practiceMode">
                     <option value="math" selected>數學運算</option>
                     <option value="characters">國字描寫</option>
+                    <option value="english">英文單字</option>
                 </select>
             </div>
 
@@ -921,6 +1103,25 @@
                     字庫為年級參考練習，並非教育部逐年級指定生字表。教育部課綱以一至二、三至四、五至六年級分學習階段訂識字目標；實際課本生字依出版社版本而異。<br>
                     <a href="https://www.naer.edu.tw/PageSyllabus?fid=52" target="_blank" rel="noreferrer">查看國家教育研究院公布的課程綱要</a>
                 </p>
+            </div>
+
+            <div class="english-settings" id="englishSettings" style="display: none;">
+                <div>
+                    <label class="setting-label" for="englishAgeSelect">選擇年齡</label>
+                    <select id="englishAgeSelect">
+                        <option value="4">4 歲</option>
+                        <option value="5">5 歲</option>
+                        <option value="6" selected>6 歲</option>
+                        <option value="7">7 歲</option>
+                        <option value="8">8 歲</option>
+                        <option value="9">9 歲</option>
+                        <option value="10">10 歲</option>
+                        <option value="11">11 歲</option>
+                        <option value="12">12 歲</option>
+                    </select>
+                </div>
+                <p class="english-level-note" id="englishLevelHint"></p>
+                <p class="english-level-note">每次學習 10 個單字：先聽發音，再學自然發音（Phonics）、音節、中文意思與例句，最後選出正確中文意思。</p>
             </div>
 
             <button class="start-button" id="startButton" onclick="startGame()">開始練習</button>
@@ -1003,6 +1204,84 @@
             </div>
         </section>
 
+        <section class="english-practice" id="englishPractice" style="display: none;" aria-label="英文學習課程">
+            <div class="character-practice-header">
+                <p class="character-progress" id="englishProgress"></p>
+                <button class="trace-button" type="button" onclick="backToSetup()">← 選擇其他練習</button>
+            </div>
+
+            <div class="english-stage-nav">
+                <button class="english-stage-btn active" data-stage="teach" onclick="setEnglishStage('teach')">① 教學</button>
+                <button class="english-stage-btn" data-stage="practice" onclick="setEnglishStage('practice')">② 練習</button>
+                <button class="english-stage-btn" data-stage="test" onclick="setEnglishStage('test')">③ 測驗</button>
+                <button class="english-stage-btn" data-stage="review" onclick="setEnglishStage('review')">④ 錯題再練</button>
+            </div>
+
+            <div class="progress"><div class="progress-bar" id="englishProgressBar"></div></div>
+
+            <div class="english-stage-panel active" id="englishTeachPanel">
+                <h2 class="english-teach-title">👩‍🏫 老師教學</h2>
+                <div class="english-word-card">
+                    <div class="english-emoji" id="englishTeachEmoji">📚</div>
+                    <div class="english-word-big" id="englishTeachWord"></div>
+                    <p class="english-phonetic" id="englishTeachPhonetic"></p>
+                    <p class="english-meaning" id="englishTeachMeaning"></p>
+                    <p class="english-explanation" id="englishTeachExplanation"></p>
+                    <div class="english-teach-grid">
+                        <div class="english-mini-card"><b>📖 音節</b><br><span id="englishTeachSyllables"></span></div>
+                        <div class="english-mini-card"><b>🔤 Phonics</b><br><span id="englishTeachPhonics"></span></div>
+                        <div class="english-mini-card"><b>👄 發音提醒</b><br><span id="englishTeachTip"></span></div>
+                        <div class="english-mini-card"><b>💡 例句</b><br><span id="englishTeachExample"></span><br><span id="englishTeachExampleMeaning"></span></div>
+                    </div>
+                    <div class="english-phase-actions">
+                        <button class="trace-button primary" type="button" onclick="speakTeachingWord()">🔊 聽單字</button>
+                        <button class="trace-button" type="button" onclick="speakTeachingExample()">🗣️ 聽例句</button>
+                        <button class="trace-button" type="button" onclick="nextTeachingWord()">下一個單字 →</button>
+                    </div>
+                </div>
+                <p class="english-feedback" id="englishTeachFeedback">先聽老師發音，再看看單字、意思和自然發音。</p>
+            </div>
+
+            <div class="english-stage-panel" id="englishPracticePanel">
+                <h2 class="english-teach-title">🎯 練習：不用計分，先熟悉單字</h2>
+                <div class="english-word-card">
+                    <div class="question-prompt"><h2 class="english-word" id="englishPracticeWord"></h2><button class="voice-button" type="button" onclick="speakPracticeWord()">🔊</button></div>
+                    <p class="english-phonetic" id="englishPracticePhonetic"></p>
+                    <p class="english-choice-note" id="englishPracticePrompt"></p>
+                    <div class="answers" id="englishPracticeAnswers"></div>
+                    <p class="english-feedback" id="englishPracticeFeedback"></p>
+                </div>
+                <div class="english-phase-actions"><button class="trace-button" type="button" onclick="nextEnglishPractice()">下一題 →</button><button class="trace-button" type="button" onclick="setEnglishStage('test')">我準備好了，開始測驗</button></div>
+            </div>
+
+            <div class="english-stage-panel" id="englishTestPanel">
+                <h2 class="english-teach-title">📝 測驗：這次才正式計分</h2>
+                <div class="english-word-card">
+                    <div class="question-prompt"><h2 class="english-word" id="englishTestWord"></h2><button class="voice-button" type="button" onclick="speakTestQuestion()">🔊</button></div>
+                    <p class="english-phonetic" id="englishTestPhonetic"></p>
+                    <p class="english-choice-note" id="englishTestPrompt">聽一次英文，再選出正確答案。</p>
+                    <div class="answers" id="englishTestAnswers"></div>
+                    <p class="english-feedback" id="englishTestFeedback"></p>
+                </div>
+            </div>
+
+            <div class="english-stage-panel" id="englishReviewPanel">
+                <h2 class="english-teach-title">🔁 錯題再練</h2>
+                <p class="english-feedback" id="englishReviewIntro"></p>
+                <div class="wrong-review-list" id="englishWrongList"></div>
+                <div class="english-phase-actions">
+                    <button class="trace-button primary" type="button" onclick="startWrongReview()" id="startWrongReviewButton">🔄 開始錯題練習</button>
+                    <button class="trace-button" type="button" onclick="setEnglishStage('teach')">再學一次</button>
+                </div>
+                <div class="english-word-card" id="englishWrongQuestion" style="display:none; margin-top:14px;">
+                    <div class="question-prompt"><h2 class="english-word" id="englishWrongWord"></h2><button class="voice-button" type="button" onclick="speakWrongWord()">🔊</button></div>
+                    <p class="english-phonetic" id="englishWrongPhonetic"></p>
+                    <div class="answers" id="englishWrongAnswers"></div>
+                    <p class="english-feedback" id="englishWrongFeedback"></p>
+                </div>
+            </div>
+        </section>
+
     </div>
 
 
@@ -1036,6 +1315,16 @@
         <p class="character-result-summary" id="characterResultSummary"></p>
         <div class="answer-review" id="characterResultList" aria-label="每字筆順與描寫結果"></div>
         <button class="restart" type="button" onclick="startCharacterPractice()">🔄 再測一次</button>
+        <button class="trace-button" type="button" onclick="backToSetup()">選擇其他練習</button>
+    </div>
+
+    <div class="result" id="englishResult">
+        <div class="emoji">🔤🌟</div>
+        <h1>英文測驗完成</h1>
+        <div class="result-score"><span id="englishFinalScore">0</span> / 10</div>
+        <p class="character-result-summary" id="englishResultSummary"></p>
+        <div class="answer-review" id="englishResultList" aria-label="英文測驗結果"></div>
+        <button class="restart" type="button" onclick="restartEnglishCourse()">🔄 再學一次</button>
         <button class="trace-button" type="button" onclick="backToSetup()">選擇其他練習</button>
     </div>
 
@@ -1077,6 +1366,110 @@
     let activeCharacterData = null;
     let characterCanGrade = false;
     let activeWriterCharacter = "";
+    let englishAgeBand = null;
+    let englishIndex = 0;
+    let englishScore = 0;
+    let englishAnswered = false;
+    let englishDeck = [];
+    let englishResults = [];
+
+    const englishWordsByAgeBand = {
+        preschool: [
+            { word: "cat", phonetic: "/kæt/", meaning: "貓", explanation: "cat 是貓，常常當作家裡的寵物。", lesson: "A cat is a small animal that can be a pet.", example: "I see a cat.", exampleMeaning: "我看見一隻貓。" },
+            { word: "dog", phonetic: "/dɔːɡ/", meaning: "狗", explanation: "dog 是狗，狗會汪汪叫。", lesson: "A dog is an animal that can be a pet.", example: "The dog can run.", exampleMeaning: "這隻狗會跑。" },
+            { word: "apple", phonetic: "/ˈæp.əl/", meaning: "蘋果", explanation: "apple 是蘋果，是一種水果。", lesson: "An apple is a fruit.", example: "I eat an apple.", exampleMeaning: "我吃一顆蘋果。" },
+            { word: "ball", phonetic: "/bɔːl/", meaning: "球", explanation: "ball 是圓圓的球，可以拿來玩。", lesson: "A ball is round and fun to play with.", example: "Kick the ball.", exampleMeaning: "踢這顆球。" },
+            { word: "red", phonetic: "/red/", meaning: "紅色", explanation: "red 是紅色，像紅紅的蘋果。", lesson: "Red is a color.", example: "The apple is red.", exampleMeaning: "這顆蘋果是紅色的。" },
+            { word: "blue", phonetic: "/bluː/", meaning: "藍色", explanation: "blue 是藍色，天空常常是藍色的。", lesson: "Blue is a color.", example: "The sky is blue.", exampleMeaning: "天空是藍色的。" },
+            { word: "sun", phonetic: "/sʌn/", meaning: "太陽", explanation: "sun 是太陽，會帶來光和溫暖。", lesson: "The sun gives us light.", example: "The sun is bright.", exampleMeaning: "太陽很明亮。" },
+            { word: "milk", phonetic: "/mɪlk/", meaning: "牛奶", explanation: "milk 是牛奶，是白白的飲料。", lesson: "Milk is a white drink.", example: "I drink milk.", exampleMeaning: "我喝牛奶。" },
+            { word: "mom", phonetic: "/mɑːm/", meaning: "媽媽", explanation: "mom 是媽媽，是家人。", lesson: "Mom is a member of the family.", example: "I love my mom.", exampleMeaning: "我愛我的媽媽。" },
+            { word: "book", phonetic: "/bʊk/", meaning: "書", explanation: "book 是書，裡面有故事或知識。", lesson: "A book has stories and pictures.", example: "Read a book.", exampleMeaning: "讀一本書。" }
+        ],
+        earlyElementary: [
+            { word: "friend", phonetic: "/frend/", meaning: "朋友", explanation: "friend 是朋友，可以一起學習和玩耍。", lesson: "A friend is someone you like and trust.", example: "My friend is kind.", exampleMeaning: "我的朋友很親切。" },
+            { word: "school", phonetic: "/skuːl/", meaning: "學校", explanation: "school 是學校，是學習和上課的地方。", lesson: "School is a place to learn.", example: "We go to school.", exampleMeaning: "我們去上學。" },
+            { word: "water", phonetic: "/ˈwɔː.t̬ɚ/", meaning: "水", explanation: "water 是水，每天都需要喝水。", lesson: "Water is important for our bodies.", example: "Please drink water.", exampleMeaning: "請喝水。" },
+            { word: "happy", phonetic: "/ˈhæp.i/", meaning: "快樂的", explanation: "happy 是快樂的，形容開心的感覺。", lesson: "Happy means feeling good.", example: "I am happy today.", exampleMeaning: "我今天很快樂。" },
+            { word: "jump", phonetic: "/dʒʌmp/", meaning: "跳", explanation: "jump 是跳起來的動作。", lesson: "Jump means to move up from the ground.", example: "Jump up high.", exampleMeaning: "跳高一點。" },
+            { word: "sleep", phonetic: "/sliːp/", meaning: "睡覺", explanation: "sleep 是睡覺，讓身體休息。", lesson: "Sleep helps your body rest.", example: "I sleep at night.", exampleMeaning: "我在晚上睡覺。" },
+            { word: "family", phonetic: "/ˈfæm.əl.i/", meaning: "家人", explanation: "family 是家人，一起生活和互相照顧的人。", lesson: "Family members care for each other.", example: "My family is big.", exampleMeaning: "我的家人很多。" },
+            { word: "teacher", phonetic: "/ˈtiː.tʃɚ/", meaning: "老師", explanation: "teacher 是老師，會教我們學習。", lesson: "A teacher helps children learn.", example: "My teacher is nice.", exampleMeaning: "我的老師很好。" },
+            { word: "small", phonetic: "/smɔːl/", meaning: "小的", explanation: "small 是小的，和 big（大的）相反。", lesson: "Small means not big.", example: "This ball is small.", exampleMeaning: "這顆球很小。" },
+            { word: "morning", phonetic: "/ˈmɔːr.nɪŋ/", meaning: "早晨", explanation: "morning 是早晨，是一天剛開始的時間。", lesson: "Morning is the early part of the day.", example: "Good morning, Dad.", exampleMeaning: "早安，爸爸。" }
+        ],
+        upperElementary: [
+            { word: "because", phonetic: "/bɪˈkɔːz/", meaning: "因為", explanation: "because 用來說明原因。", lesson: "Because tells us why something happens.", example: "I smile because I am happy.", exampleMeaning: "我微笑，因為我很快樂。" },
+            { word: "important", phonetic: "/ɪmˈpɔːr.tənt/", meaning: "重要的", explanation: "important 是重要的，表示很值得注意。", lesson: "Important means something matters a lot.", example: "Sleep is important.", exampleMeaning: "睡眠很重要。" },
+            { word: "different", phonetic: "/ˈdɪf.ɚ.ənt/", meaning: "不同的", explanation: "different 是不同的，不一樣的意思。", lesson: "Different means not the same.", example: "The two bags are different.", exampleMeaning: "這兩個袋子不一樣。" },
+            { word: "careful", phonetic: "/ˈker.fəl/", meaning: "小心的", explanation: "careful 是小心的，做事注意安全和細節。", lesson: "Careful means doing something safely.", example: "Be careful on the stairs.", exampleMeaning: "走樓梯要小心。" },
+            { word: "weather", phonetic: "/ˈweð.ɚ/", meaning: "天氣", explanation: "weather 是天氣，例如晴天、下雨或刮風。", lesson: "Weather tells us about the sky and air.", example: "The weather is sunny.", exampleMeaning: "天氣晴朗。" },
+            { word: "picture", phonetic: "/ˈpɪk.tʃɚ/", meaning: "圖片", explanation: "picture 是圖片或圖畫。", lesson: "A picture shows something we can see.", example: "Draw a picture.", exampleMeaning: "畫一張圖。" },
+            { word: "question", phonetic: "/ˈkwes.tʃən/", meaning: "問題", explanation: "question 是問題，是想要知道答案時提出的話。", lesson: "A question asks for an answer.", example: "I have a question.", exampleMeaning: "我有一個問題。" },
+            { word: "answer", phonetic: "/ˈæn.sɚ/", meaning: "答案", explanation: "answer 是答案，是回應問題的內容。", lesson: "An answer responds to a question.", example: "I know the answer.", exampleMeaning: "我知道答案。" },
+            { word: "together", phonetic: "/təˈɡeð.ɚ/", meaning: "一起", explanation: "together 是一起，表示和別人同時做事。", lesson: "Together means with other people.", example: "We learn together.", exampleMeaning: "我們一起學習。" },
+            { word: "practice", phonetic: "/ˈpræk.tɪs/", meaning: "練習", explanation: "practice 是練習，重複做來進步。", lesson: "Practice helps us get better.", example: "Practice English every day.", exampleMeaning: "每天練習英文。" }
+        ],
+        preteen: [
+            { word: "environment", phonetic: "/ɪnˈvaɪ.rən.mənt/", meaning: "環境", explanation: "environment 是環境，指我們生活周圍的自然和地方。", lesson: "The environment is the world around us.", example: "We protect the environment.", exampleMeaning: "我們保護環境。" },
+            { word: "recycle", phonetic: "/ˌriːˈsaɪ.kəl/", meaning: "回收", explanation: "recycle 是回收，讓可用的材料再被使用。", lesson: "Recycle means to use materials again.", example: "Recycle paper and bottles.", exampleMeaning: "回收紙張和瓶子。" },
+            { word: "healthy", phonetic: "/ˈhel.θi/", meaning: "健康的", explanation: "healthy 是健康的，形容身體狀況良好。", lesson: "Healthy means good for your body.", example: "Vegetables are healthy.", exampleMeaning: "蔬菜很健康。" },
+            { word: "decision", phonetic: "/dɪˈsɪʒ.ən/", meaning: "決定", explanation: "decision 是決定，是思考後做出的選擇。", lesson: "A decision is a choice you make.", example: "Make a good decision.", exampleMeaning: "做一個好決定。" },
+            { word: "discover", phonetic: "/dɪˈskʌv.ɚ/", meaning: "發現", explanation: "discover 是發現，找到以前不知道的事物。", lesson: "Discover means to find something new.", example: "We discover new ideas.", exampleMeaning: "我們發現新的想法。" },
+            { word: "improve", phonetic: "/ɪmˈpruːv/", meaning: "改善", explanation: "improve 是改善，讓事情變得更好。", lesson: "Improve means to make something better.", example: "I improve with practice.", exampleMeaning: "我透過練習進步。" },
+            { word: "responsible", phonetic: "/rɪˈspɑːn.sə.bəl/", meaning: "負責任的", explanation: "responsible 是負責任的，會做好應該做的事。", lesson: "Responsible means doing what you should do.", example: "Be responsible for your work.", exampleMeaning: "對自己的工作負責。" },
+            { word: "community", phonetic: "/kəˈmjuː.nə.t̬i/", meaning: "社區", explanation: "community 是社區，是人們一起生活的地方。", lesson: "A community is a group of people living together.", example: "Our community is clean.", exampleMeaning: "我們的社區很乾淨。" },
+            { word: "challenge", phonetic: "/ˈtʃæl.ɪndʒ/", meaning: "挑戰", explanation: "challenge 是挑戰，需要努力完成的事情。", lesson: "A challenge is something difficult but possible.", example: "This game is a fun challenge.", exampleMeaning: "這個遊戲是有趣的挑戰。" },
+            { word: "knowledge", phonetic: "/ˈnɑː.lɪdʒ/", meaning: "知識", explanation: "knowledge 是知識，是學習得到的了解。", lesson: "Knowledge grows when we learn.", example: "Books give us knowledge.", exampleMeaning: "書本帶給我們知識。" }
+        ]
+    };
+
+    // 自然發音教學資料：以兒童能理解的方式拆解常見字母與字母組合。
+    const englishPhonicsByWord = {
+        cat: { syllables: "1 音節", phonics: "c = /k/，a = 短母音 /æ/，t = /t/。把三個聲音連起來。", tip: "短母音 a 要短，不要拉成長音。" },
+        dog: { syllables: "1 音節", phonics: "d = /d/，o = 短母音，g = /g/。", tip: "d 和 g 都是有聲子音。" },
+        apple: { syllables: "2 音節", phonics: "a 開頭是短母音；pp 是雙寫子音；le 在字尾形成輕音節。", tip: "重音在第一音節。" },
+        ball: { syllables: "1 音節", phonics: "b = /b/；all 是常見的母音＋l 組合。", tip: "字尾 ll 只發一個 l 的音。" },
+        red: { syllables: "1 音節", phonics: "r = /r/，e = 短母音，d = /d/。", tip: "e 是短母音，不是字母 E 的名稱。" },
+        blue: { syllables: "1 音節", phonics: "bl 是子音群；ue 在字尾形成長 /uː/ 音。", tip: "bl 兩個子音要連著讀。" },
+        sun: { syllables: "1 音節", phonics: "s = /s/，u = /ʌ/，n = /n/。", tip: "u 的音要短而放鬆。" },
+        milk: { syllables: "1 音節", phonics: "m = /m/，i = 短母音，lk 是字尾子音群。", tip: "i 是短音，不是字母 I 的名稱。" },
+        mom: { syllables: "1 音節", phonics: "m = /m/，o 是母音，m = /m/。", tip: "兩邊的 m 都要清楚。" },
+        book: { syllables: "1 音節", phonics: "oo 在 book 中發短 /ʊ/。", tip: "book 的 oo 不像 moon 那樣發長音。" },
+
+        friend: { syllables: "1 音節", phonics: "fr 是子音群；ie 在 friend 中是特殊拼法；nd 是字尾子音群。", tip: "friend 是常見特殊拼字，建議聽音＋記憶。" },
+        school: { syllables: "1 音節", phonics: "sch 常見發 /sk/；oo 在 school 中發長 /uː/。", tip: "sch 不要拆成三個獨立聲音。" },
+        water: { syllables: "2 音節", phonics: "wa 開頭；ter 形成第二音節。", tip: "重音在第一音節。" },
+        happy: { syllables: "2 音節", phonics: "h = /h/，a = 短 /æ/；pp 仍只發一個 /p/；y 在字尾發 e 音。", tip: "重音在第一音節。" },
+        jump: { syllables: "1 音節", phonics: "j = /dʒ/，u = /ʌ/，mp = /mp/。", tip: "j 是合成音，不是字母名稱。" },
+        sleep: { syllables: "1 音節", phonics: "sl 是子音群；ee 是常見長 e 字母組合。", tip: "ee 通常發長 /iː/。" },
+        family: { syllables: "3 音節", phonics: "fa-mi-ly；字尾 y 發輕的 e 音。", tip: "重音在第一音節。" },
+        teacher: { syllables: "2 音節", phonics: "teach 中 ea 發長 e 音；er 形成字尾輕音節。", tip: "ea 是常見母音組合。" },
+        small: { syllables: "1 音節", phonics: "sm 是子音群；all 是常見母音＋l 組合。", tip: "s 和 m 要連在一起。" },
+        morning: { syllables: "2 音節", phonics: "morn-ing；or 是 r 控制母音；ing 是常見字尾。", tip: "重音在第一音節。" },
+
+        because: { syllables: "2 音節", phonics: "be-cause；be 是輕音節，cause 中 au 是母音組合。", tip: "重音通常在第二音節。" },
+        important: { syllables: "3 音節", phonics: "im-por-tant；im- 是常見字首，-ant 是常見字尾。", tip: "重音在第二音節。" },
+        different: { syllables: "3 音節", phonics: "dif-fer-ent；ff 雙寫但只發一個 /f/。", tip: "重音在第一音節。" },
+        careful: { syllables: "2 音節", phonics: "care-ful；care 是常見拼法，-ful 是常見字尾。", tip: "重音在第一音節。" },
+        weather: { syllables: "2 音節", phonics: "wea 在 weather 中發 /ɛ/；ther 形成第二音節。", tip: "weather 的 ea 是特殊拼法，要整體記住。" },
+        picture: { syllables: "2 音節", phonics: "pic-ture；字尾 ture 形成 /tʃər/ 類的音。", tip: "不要把每個字母逐一念出來。" },
+        question: { syllables: "2 音節", phonics: "qu 通常發 /kw/；tion 在字尾常發 /ʃən/。", tip: "qu、tion 都是重要字母組合。" },
+        answer: { syllables: "2 音節", phonics: "an-swer；w 在 answer 中不發音。", tip: "這是常見的不規則拼字。" },
+        together: { syllables: "3 音節", phonics: "to-ge-ther；th 是舌齒音，-er 是輕音節。", tip: "重音在第二音節。" },
+        practice: { syllables: "2 音節", phonics: "prac-tice；字尾 e 不單獨發音，c 在字尾形成 /s/。", tip: "practice 是很常用的單字。" },
+
+        environment: { syllables: "4 音節", phonics: "en-vi-ron-ment；-ment 是常見名詞字尾。", tip: "重音在第二音節。" },
+        recycle: { syllables: "3 音節", phonics: "re-cy-cle；字尾 e 不單獨發音。", tip: "重音在第二音節。" },
+        healthy: { syllables: "2 音節", phonics: "health-y；ea 在 health 中發短 e，y 在字尾發 e 音。", tip: "health 的 ea 不是長 e。" },
+        decision: { syllables: "3 音節", phonics: "de-ci-sion；sion 在字尾常發 /ʒən/。", tip: "重音在第二音節。" },
+        discover: { syllables: "3 音節", phonics: "dis-cov-er；dis- 是常見字首。", tip: "重音在第二音節。" },
+        improve: { syllables: "2 音節", phonics: "im-prove；字尾 o_e 形成長 o 音，最後 e 不發音。", tip: "字尾 e 會影響前面的母音。" },
+        responsible: { syllables: "4 音節", phonics: "re-spon-si-ble；-ble 是常見字尾。", tip: "重音在第二音節。" },
+        community: { syllables: "4 音節", phonics: "com-mu-ni-ty；字尾 y 發長 e 音。", tip: "重音通常在第二音節。" },
+        challenge: { syllables: "2 音節", phonics: "ch 是 /tʃ/；ll 在字尾只形成一個 l 音。", tip: "ch 是重要的雙字母子音。" },
+        knowledge: { syllables: "2 音節", phonics: "kn 開頭的 k 不發音；字尾是特殊拼法，需要整體記憶。", tip: "knowledge 是常見的不規則拼字。" }
+    };
 
     const characterPracticeByGrade = {
         1: [
@@ -1416,6 +1809,28 @@
         const voices = window.speechSynthesis.getVoices();
         utterance.voice = voices.find(voice => voice.lang.toLowerCase() === "zh-tw") ||
             voices.find(voice => voice.lang.toLowerCase().startsWith("zh")) || null;
+
+        window.speechSynthesis.speak(utterance);
+        return utterance;
+    }
+
+
+    function speakEnglishText(text) {
+
+        if (
+            !document.getElementById("voiceToggle").checked ||
+            !("speechSynthesis" in window) ||
+            !("SpeechSynthesisUtterance" in window)
+        ) return;
+
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 0.78;
+
+        const voices = window.speechSynthesis.getVoices();
+        utterance.voice = voices.find(voice => voice.lang.toLowerCase() === "en-us") ||
+            voices.find(voice => voice.lang.toLowerCase().startsWith("en")) || null;
 
         window.speechSynthesis.speak(utterance);
         return utterance;
@@ -1958,6 +2373,8 @@
         document.getElementById("setup").style.display = "grid";
         document.getElementById("quiz").style.display = "none";
         document.getElementById("characterPractice").style.display = "none";
+        document.getElementById("englishPractice").style.display = "none";
+        document.getElementById("englishResult").style.display = "none";
     }
 
 
@@ -2446,13 +2863,241 @@
 
 
     // ==========================
+    // 英文學習：教學 → 練習 → 測驗 → 錯題再練
+    // ==========================
+
+    let englishStage = "teach";
+    let englishTeachIndex = 0;
+    let englishPracticeIndex = 0;
+    let englishTestIndex = 0;
+    let englishTestScore = 0;
+    let englishTestAnswered = false;
+    let englishTestResults = [];
+    let englishWrongWords = [];
+    let englishWrongIndex = 0;
+    let englishWrongAnswered = false;
+    const englishEmojiByWord = {
+        cat:"🐱", dog:"🐶", apple:"🍎", ball:"⚽", red:"🔴", blue:"🔵", sun:"☀️", milk:"🥛", mom:"👩", book:"📖",
+        friend:"🧑‍🤝‍🧑", school:"🏫", water:"💧", happy:"😊", jump:"🦘", sleep:"😴", family:"👨‍👩‍👧", teacher:"👩‍🏫", small:"🔹", morning:"🌅"
+    };
+
+    function getEnglishAgeBand(age) {
+        if (age <= 5) return { key:"preschool", label:"幼兒啟蒙（4～5 歲）", hint:"生活單字：動物、食物、顏色、家人。先聽、認讀、跟著說。" };
+        if (age <= 7) return { key:"earlyElementary", label:"英文入門（6～7 歲）", hint:"生活單字＋簡單句子，搭配自然發音建立字母與聲音的關係。" };
+        if (age <= 9) return { key:"upperElementary", label:"英文基礎（8～9 歲）", hint:"增加學習與生活詞彙，開始注意音節、重音與常見字母組合。" };
+        return { key:"preteen", label:"英文進階（10～12 歲）", hint:"較長單字、字首字尾、音節、拼字規則與句子理解。" };
+    }
+
+    function updateEnglishLevelHint() {
+        const age = Number(document.getElementById("englishAgeSelect").value);
+        const band = getEnglishAgeBand(age);
+        document.getElementById("englishLevelHint").textContent = `${band.label}：${band.hint}`;
+    }
+
+    function shuffleEnglishWords(words) {
+        const deck=[...words];
+        for(let i=deck.length-1;i>0;i--){ const j=randomNumber(0,i); [deck[i],deck[j]]=[deck[j],deck[i]]; }
+        return deck;
+    }
+
+    function loadEnglishWrongWords() {
+        try { return JSON.parse(localStorage.getItem("aiEnglishWrongWords") || "[]"); } catch(e) { return []; }
+    }
+    function saveEnglishWrongWords(words) {
+        const unique=[]; const seen=new Set();
+        words.forEach(w=>{ if(w && !seen.has(w.word)){seen.add(w.word); unique.push(w);} });
+        localStorage.setItem("aiEnglishWrongWords", JSON.stringify(unique.slice(0,50)));
+    }
+
+    function startEnglishPractice() {
+        const age=Number(document.getElementById("englishAgeSelect").value);
+        englishAgeBand=getEnglishAgeBand(age);
+        englishDeck=shuffleEnglishWords(englishWordsByAgeBand[englishAgeBand.key] || []).slice(0,totalQuestions);
+        englishTeachIndex=0; englishPracticeIndex=0; englishTestIndex=0; englishTestScore=0;
+        englishTestAnswered=false; englishTestResults=[]; englishWrongWords=[]; englishWrongIndex=0;
+        document.getElementById("game").style.display="block";
+        document.getElementById("setup").style.display="none";
+        document.getElementById("quiz").style.display="none";
+        document.getElementById("characterPractice").style.display="none";
+        document.getElementById("englishPractice").style.display="grid";
+        document.getElementById("result").style.display="none";
+        document.getElementById("characterResult").style.display="none";
+        document.getElementById("englishResult").style.display="none";
+        setEnglishStage("teach");
+    }
+
+    function setEnglishStage(stage) {
+        englishStage=stage;
+        ["teach","practice","test","review"].forEach(s=>{
+            const panel=document.getElementById(`english${s[0].toUpperCase()+s.slice(1)}Panel`);
+            if(panel) panel.classList.toggle("active",s===stage);
+        });
+        document.querySelectorAll(".english-stage-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.stage===stage));
+        if(stage==="teach") showEnglishTeachingWord();
+        if(stage==="practice") showEnglishPracticeQuestion();
+        if(stage==="test") { if(englishTestIndex===0 && !englishTestResults.length) prepareEnglishTest(); showEnglishTestQuestion(); }
+        if(stage==="review") renderWrongReview();
+    }
+
+    function getEnglishPhonics(entry) {
+        return englishPhonicsByWord[entry.word] || {syllables:"請慢慢分音節",phonics:"先聽整個單字，再觀察字母與聲音的關係。",tip:"先聽一次，再跟著念。"};
+    }
+
+    function updateEnglishProgress(label,index,total) {
+        document.getElementById("englishProgress").textContent=`${getChildName()}・${englishAgeBand.label}・${label} ${Math.min(index+1,total)} / ${total}`;
+        document.getElementById("englishProgressBar").style.width=`${Math.min(index,total)/total*100}%`;
+    }
+
+    function showEnglishTeachingWord() {
+        const entry=englishDeck[englishTeachIndex]; if(!entry)return;
+        const p=getEnglishPhonics(entry);
+        updateEnglishProgress("教學",englishTeachIndex,englishDeck.length);
+        document.getElementById("englishTeachEmoji").textContent=englishEmojiByWord[entry.word]||"🔤";
+        document.getElementById("englishTeachWord").textContent=entry.word;
+        document.getElementById("englishTeachPhonetic").textContent=`IPA：${entry.phonetic}`;
+        document.getElementById("englishTeachMeaning").textContent=entry.meaning;
+        document.getElementById("englishTeachExplanation").textContent=`💡 ${entry.explanation}`;
+        document.getElementById("englishTeachSyllables").textContent=p.syllables;
+        document.getElementById("englishTeachPhonics").textContent=p.phonics;
+        document.getElementById("englishTeachTip").textContent=p.tip;
+        document.getElementById("englishTeachExample").textContent=entry.example;
+        document.getElementById("englishTeachExampleMeaning").textContent=entry.exampleMeaning;
+        document.getElementById("englishTeachFeedback").textContent="先聽老師發音，再看看單字、意思和自然發音。";
+        speakEnglishText(entry.word);
+    }
+    function speakTeachingWord(){ const e=englishDeck[englishTeachIndex]; if(e)speakEnglishText(e.word); }
+    function speakTeachingExample(){ const e=englishDeck[englishTeachIndex]; if(e)speakEnglishText(e.example); }
+    function nextTeachingWord(){
+        englishTeachIndex++;
+        if(englishTeachIndex>=englishDeck.length){ englishTeachIndex=0; setEnglishStage("practice"); }
+        else showEnglishTeachingWord();
+    }
+
+    function makeEnglishChoices(entry, mode="meaning") {
+        let values;
+        if(mode==="word") values=englishDeck.map(x=>x.word).filter(x=>x!==entry.word);
+        else values=englishDeck.map(x=>x.meaning).filter(x=>x!==entry.meaning);
+        const pool=[...new Set(values)], distractors=[];
+        while(distractors.length<Math.min(3,pool.length)){const c=pool[randomNumber(0,pool.length-1)];if(!distractors.includes(c))distractors.push(c);}
+        const answers=[mode==="word"?entry.word:entry.meaning,...distractors];
+        return answers.sort(()=>Math.random()-0.5);
+    }
+
+    function showEnglishPracticeQuestion(){
+        const entry=englishDeck[englishPracticeIndex]; if(!entry)return;
+        updateEnglishProgress("練習",englishPracticeIndex,englishDeck.length);
+        document.getElementById("englishPracticeWord").textContent=entry.word;
+        document.getElementById("englishPracticePhonetic").textContent=`IPA：${entry.phonetic}`;
+        document.getElementById("englishPracticePrompt").textContent=englishPracticeIndex%2===0?"選出這個英文單字的中文意思。":"選出正確的英文單字。";
+        document.getElementById("englishPracticeFeedback").textContent="這一階段不計分，答錯可以再試。";
+        const mode=englishPracticeIndex%2===0?"meaning":"word";
+        const answers=makeEnglishChoices(entry,mode), box=document.getElementById("englishPracticeAnswers"); box.innerHTML="";
+        answers.forEach(a=>{const b=document.createElement("button");b.className="answer-btn";b.textContent=a;b.onclick=()=>checkEnglishPractice(a,mode);box.appendChild(b);});
+        if(englishPracticeIndex%2===0)speakEnglishText(entry.word); else speakEnglishText(entry.meaning);
+    }
+    function speakPracticeWord(){ const e=englishDeck[englishPracticeIndex]; if(e)speakEnglishText(e.word); }
+    function checkEnglishPractice(answer,mode){
+        const e=englishDeck[englishPracticeIndex], correct=mode==="word"?e.word:e.meaning;
+        document.querySelectorAll("#englishPracticeAnswers .answer-btn").forEach(b=>b.disabled=true);
+        document.getElementById("englishPracticeFeedback").textContent=answer===correct?`✅ 很好！${e.word} = ${e.meaning}`:`💡 再看一次：${e.word} = ${e.meaning}`;
+    }
+    function nextEnglishPractice(){
+        englishPracticeIndex++;
+        if(englishPracticeIndex>=englishDeck.length){englishPracticeIndex=0;setEnglishStage("test");}
+        else showEnglishPracticeQuestion();
+    }
+
+    function prepareEnglishTest(){ englishTestIndex=0; englishTestScore=0; englishTestResults=[]; englishWrongWords=[]; }
+    function showEnglishTestQuestion(){
+        const entry=englishDeck[englishTestIndex]; if(!entry)return;
+        englishTestAnswered=false;
+        updateEnglishProgress("測驗",englishTestIndex,englishDeck.length);
+        document.getElementById("englishTestWord").textContent=entry.word;
+        document.getElementById("englishTestPhonetic").textContent="IPA："+entry.phonetic;
+        document.getElementById("englishTestFeedback").textContent="🔊 先按喇叭聽一次，再選出正確答案。";
+        const mode=englishTestIndex%3===1?"word":"meaning";
+        document.getElementById("englishTestPrompt").textContent=mode==="word"?"看到中文意思，選出正確英文。":"聽英文發音，選出正確中文意思。";
+        const box=document.getElementById("englishTestAnswers");box.innerHTML="";
+        const answers=makeEnglishChoices(entry,mode);
+        answers.forEach(a=>{const b=document.createElement("button");b.className="answer-btn";b.textContent=a;b.onclick=()=>checkEnglishTest(a,mode);box.appendChild(b);});
+        if(mode==="word") document.getElementById("englishTestWord").textContent=entry.meaning; else speakEnglishText(entry.word);
+    }
+    function speakTestQuestion(){ const e=englishDeck[englishTestIndex]; if(e)speakEnglishText(e.word); }
+    function checkEnglishTest(answer,mode){
+        if(englishTestAnswered)return; englishTestAnswered=true;
+        const e=englishDeck[englishTestIndex], correct=mode==="word"?e.word:e.meaning, isCorrect=answer===correct;
+        document.querySelectorAll("#englishTestAnswers .answer-btn").forEach(b=>b.disabled=true);
+        document.getElementById("englishTestFeedback").textContent=isCorrect?`✅ 答對了！${e.word} = ${e.meaning}`:`❌ 答錯了：${e.word} = ${e.meaning}`;
+        if(isCorrect)englishTestScore++; else englishWrongWords.push(e);
+        englishTestResults.push({word:e.word,meaning:e.meaning,selected:answer,correct:isCorrect});
+        setTimeout(()=>{englishTestIndex++;if(englishTestIndex>=englishDeck.length)showEnglishResult();else showEnglishTestQuestion();},800);
+    }
+
+    function showEnglishResult(){
+        document.getElementById("game").style.display="none";
+        document.getElementById("englishResult").style.display="block";
+        document.getElementById("englishFinalScore").textContent=englishTestScore;
+        const oldWrong=loadEnglishWrongWords(); saveEnglishWrongWords([...oldWrong,...englishWrongWords]);
+        const msg=englishTestScore===10?"🏆 全部答對！":englishTestScore>=8?"🌟 很棒！再把錯題複習一次。":englishTestScore>=6?"👍 基礎不錯，把錯題再練熟。":"💪 不用急，先回到教學，再做一次練習。";
+        document.getElementById("englishResultSummary").textContent=`${msg} 本次測驗 ${englishDeck.length} 個單字，答對 ${englishTestScore} 題。錯題會放到「錯題再練」。`;
+        const list=document.getElementById("englishResultList");list.innerHTML="";
+        englishTestResults.forEach((r,i)=>{const row=document.createElement("div");row.className=`review-item${r.correct?"":" is-wrong"}`;row.innerHTML=`<span class="review-question">${i+1}. ${r.word}</span><span class="review-status">${r.correct?"答對":"答錯"}</span><span class="review-answer">${r.correct?"中文：":"你的答案："}${r.correct?r.meaning:r.selected+"｜正確答案："+r.meaning}</span>`;list.appendChild(row);});
+    }
+    function restartEnglishCourse(){ document.getElementById("englishResult").style.display="none";document.getElementById("game").style.display="block";startEnglishPractice(); }
+
+    function renderWrongReview(){
+        const list=loadEnglishWrongWords();
+        const intro=document.getElementById("englishReviewIntro");
+        const box=document.getElementById("englishWrongList");box.innerHTML="";
+        if(!list.length){intro.textContent="🎉 目前沒有需要複習的錯題！先完成一次測驗，錯題會自動放進這裡。";document.getElementById("startWrongReviewButton").disabled=true;return;}
+        document.getElementById("startWrongReviewButton").disabled=false;
+        intro.textContent=`目前有 ${list.length} 個需要再練的單字。完成後會從錯題清單移除。`;
+        list.forEach(w=>{const row=document.createElement("div");row.className="english-mini-card";row.innerHTML=`<b>${w.word}</b> — ${w.meaning}<br>${w.phonetic}`;box.appendChild(row);});
+    }
+    function startWrongReview(){
+        englishWrongWords=loadEnglishWrongWords(); englishWrongIndex=0; englishWrongAnswered=false;
+        if(!englishWrongWords.length)return;
+        document.getElementById("englishWrongQuestion").style.display="block";showWrongReviewQuestion();
+    }
+    function showWrongReviewQuestion(){
+        const e=englishWrongWords[englishWrongIndex];if(!e)return;
+        document.getElementById("englishWrongWord").textContent=e.word;document.getElementById("englishWrongPhonetic").textContent=e.phonetic;
+        document.getElementById("englishWrongFeedback").textContent="聽一次，再選出正確中文意思。";speakEnglishText(e.word);
+        const answers=makeEnglishChoices(e,"meaning"),box=document.getElementById("englishWrongAnswers");box.innerHTML="";
+        const all=[...new Set([e,...englishWordsByAgeBand[englishAgeBand.key]])];
+        let meanings=all.map(x=>x.meaning).filter(Boolean).filter(x=>x!==e.meaning); meanings=[...new Set(meanings)];
+        while(meanings.length>3) meanings.splice(randomNumber(0,meanings.length-1),1);
+        [e.meaning,...meanings].sort(()=>Math.random()-0.5).forEach(a=>{const b=document.createElement("button");b.className="answer-btn";b.textContent=a;b.onclick=()=>checkWrongReview(a);box.appendChild(b);});
+    }
+    function speakWrongWord(){const e=englishWrongWords[englishWrongIndex];if(e)speakEnglishText(e.word);}
+    function checkWrongReview(answer){
+        if(englishWrongAnswered)return;englishWrongAnswered=true;
+        const e=englishWrongWords[englishWrongIndex],ok=answer===e.meaning;
+        document.querySelectorAll("#englishWrongAnswers .answer-btn").forEach(b=>b.disabled=true);
+        document.getElementById("englishWrongFeedback").textContent=ok?`🎉 這次答對了！${e.word} = ${e.meaning}`:`再試一次：${e.word} = ${e.meaning}`;
+        setTimeout(()=>{
+            if(ok){ const saved=loadEnglishWrongWords().filter(w=>w.word!==e.word);saveEnglishWrongWords(saved);englishWrongWords=englishWrongWords.filter(w=>w.word!==e.word); }
+            englishWrongAnswered=false;
+            if(!englishWrongWords.length){document.getElementById("englishWrongQuestion").style.display="none";renderWrongReview();document.getElementById("englishReviewIntro").textContent="🎉 太好了！目前沒有錯題了。";return;}
+            if(englishWrongIndex>=englishWrongWords.length)englishWrongIndex=0;showWrongReviewQuestion();
+        },700);
+    }
+
+    // ==========================
     // 開始遊戲
     // ==========================
 
     function startGame() {
 
-        if (document.getElementById("practiceMode").value === "characters") {
+        const practiceMode = document.getElementById("practiceMode").value;
+
+        if (practiceMode === "characters") {
             startCharacterPractice();
+            return;
+        }
+
+        if (practiceMode === "english") {
+            startEnglishPractice();
             return;
         }
 
@@ -2521,16 +3166,25 @@
 
     function updatePracticeSettings() {
 
-        const isCharacterPractice =
-            document.getElementById("practiceMode").value === "characters";
+        const mode = document.getElementById("practiceMode").value;
+        const isCharacterPractice = mode === "characters";
+        const isEnglishPractice = mode === "english";
+
         document.getElementById("mathSettings").style.display =
-            isCharacterPractice ? "none" : "grid";
+            (!isCharacterPractice && !isEnglishPractice) ? "grid" : "none";
         document.getElementById("characterSettings").style.display =
             isCharacterPractice ? "grid" : "none";
-        document.getElementById("startButton").innerText =
-            isCharacterPractice ? "開始描寫" : "開始練習";
+        document.getElementById("englishSettings").style.display =
+            isEnglishPractice ? "grid" : "none";
 
-        if (isCharacterPractice) return;
+        document.getElementById("startButton").innerText =
+            isCharacterPractice ? "開始描寫" :
+            isEnglishPractice ? "開始英文練習" : "開始練習";
+
+        if (isCharacterPractice || isEnglishPractice) {
+            if (isEnglishPractice) updateEnglishLevelHint();
+            return;
+        }
 
         const isMultiplication =
             document.getElementById("operationSelect").value === "multiplication";
@@ -2551,14 +3205,19 @@
         .addEventListener("change", updatePracticeSettings);
     document.getElementById("operationSelect")
         .addEventListener("change", updatePracticeSettings);
+    document.getElementById("englishAgeSelect")
+        .addEventListener("change", updateEnglishLevelHint);
     document.getElementById("zhuyinToggle")
         .addEventListener("change", refreshZhuyin);
     document.getElementById("replayQuestion").disabled =
         !("speechSynthesis" in window);
     document.getElementById("replayCharacter").disabled =
         !("speechSynthesis" in window);
+    document.getElementById("replayEnglish").disabled =
+        !("speechSynthesis" in window);
     initializeTraceCanvas();
     updateLevelHint();
+    updateEnglishLevelHint();
     updatePracticeSettings();
     refreshZhuyin();
 
@@ -2566,4 +3225,3 @@
 
 </body>
 </html>
-```
