@@ -1188,7 +1188,7 @@
                         <button class="trace-button primary" id="nextCharacterButton" type="button" onclick="changeCharacter(1)">下一個字 →</button>
                     </div>
                     <p class="stroke-feedback" id="strokeFeedback" aria-live="polite"></p>
-                    <p class="character-writing-tip">依序照著筆畫編號描寫，可用手指或觸控筆；正確筆畫比例計入分數，每次筆順或偏線錯誤扣 5 分，十字取平均。</p>
+                    <p class="character-writing-tip">先觀察老師示範一次完整筆順，再依照 1、2、3…自己書寫；可用手指或觸控筆。正式書寫時，筆順與偏線錯誤會計入評分。</p>
                 </div>
 
                 <aside class="character-info">
@@ -1366,6 +1366,7 @@
     let activeCharacterData = null;
     let characterCanGrade = false;
     let activeWriterCharacter = "";
+    let characterDemoActive = false;
     let englishAgeBand = null;
     let englishIndex = 0;
     let englishScore = 0;
@@ -2269,6 +2270,186 @@
     }
 
 
+    /* Replaced by the four-stage English course below.
+    function getEnglishAgeBand(age) {
+
+        if (age <= 5) {
+            return { key: "preschool", label: "4–5 歲・生活常見單字" };
+        }
+        if (age <= 7) {
+            return { key: "earlyElementary", label: "6–7 歲・校園與日常單字" };
+        }
+        if (age <= 9) {
+            return { key: "upperElementary", label: "8–9 歲・句子常用單字" };
+        }
+        return { key: "preteen", label: "10–12 歲・主題與思考單字" };
+    }
+
+
+    function updateEnglishLevelHint() {
+
+        const age = Number(document.getElementById("englishAgeSelect").value);
+        const band = getEnglishAgeBand(age);
+        document.getElementById("englishLevelHint").textContent =
+            `目前程度：${band.label}。`;
+    }
+
+
+    function startEnglishPractice() {
+
+        const age = Number(document.getElementById("englishAgeSelect").value);
+        englishAgeBand = getEnglishAgeBand(age);
+        englishDeck = shuffleCharacters([...englishWordsByAgeBand[englishAgeBand.key]]);
+        englishIndex = 0;
+        englishScore = 0;
+        englishAnswered = false;
+        englishResults = [];
+
+        document.getElementById("game").style.display = "block";
+        document.getElementById("setup").style.display = "none";
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("characterPractice").style.display = "none";
+        document.getElementById("englishPractice").style.display = "grid";
+        document.getElementById("result").style.display = "none";
+        document.getElementById("characterResult").style.display = "none";
+        document.getElementById("englishResult").style.display = "none";
+
+        showCurrentEnglishWord();
+    }
+
+
+    function speakCurrentEnglishWord() {
+
+        const entry = englishDeck[englishIndex];
+        if (!entry) return;
+        return speakEnglishText(`${entry.word}. ${entry.word}. ${entry.lesson} ${entry.example}`);
+    }
+
+
+    function showCurrentEnglishWord() {
+
+        const entry = englishDeck[englishIndex];
+        if (!entry) return;
+
+        document.getElementById("englishProgress").textContent =
+            `${englishAgeBand.label}・第 ${englishIndex + 1} / ${totalQuestions} 個單字`;
+        document.getElementById("englishProgressBar").style.width =
+            `${(englishIndex / totalQuestions) * 100}%`;
+        document.getElementById("englishWord").textContent = entry.word;
+        document.getElementById("englishPhonetic").textContent = `念法：${entry.phonetic}`;
+        document.getElementById("englishMeaning").textContent = `中文意思：${entry.meaning}`;
+        document.getElementById("englishExplanation").textContent = entry.explanation;
+        document.getElementById("englishExample").textContent = `例句：${entry.example}`;
+        document.getElementById("englishExampleMeaning").textContent = entry.exampleMeaning;
+        document.getElementById("englishFeedback").textContent =
+            "聽完後，選出這個英文單字的中文意思。";
+        document.getElementById("englishFeedback").style.color = "#365665";
+
+        const otherWords = englishDeck.filter(word => word.word !== entry.word);
+        const choices = shuffleCharacters([entry, ...otherWords.slice(0, 3)]);
+        const answerContainer = document.getElementById("englishAnswers");
+        answerContainer.innerHTML = "";
+        choices.forEach(choice => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "answer-btn";
+            button.textContent = choice.meaning;
+            button.addEventListener("click", () => checkEnglishAnswer(choice.word));
+            answerContainer.appendChild(button);
+        });
+
+        englishAnswered = false;
+        speakCurrentEnglishWord();
+    }
+
+
+    function checkEnglishAnswer(selectedWord) {
+
+        if (englishAnswered) return;
+        englishAnswered = true;
+        const entry = englishDeck[englishIndex];
+        const isCorrect = selectedWord === entry.word;
+        const buttons = document.querySelectorAll("#englishAnswers .answer-btn");
+        buttons.forEach(button => {
+            button.disabled = true;
+            if (button.textContent === entry.meaning) button.classList.add("correct");
+        });
+
+        englishResults.push({
+            word: entry.word,
+            meaning: entry.meaning,
+            selectedWord,
+            isCorrect
+        });
+
+        const feedback = document.getElementById("englishFeedback");
+        if (isCorrect) {
+            englishScore++;
+            feedback.textContent = `答對了！${entry.word} 就是「${entry.meaning}」。再跟著念一次。`;
+            feedback.style.color = "#24734f";
+        } else {
+            feedback.textContent = `再記一次：${entry.word} 是「${entry.meaning}」。`;
+            feedback.style.color = "#b34235";
+        }
+
+        const utterance = speakEnglishText(
+            isCorrect
+                ? `Correct. ${entry.word} means ${entry.meaning}. ${entry.example}`
+                : `The answer is ${entry.word}. ${entry.example}`
+        );
+        let advanced = false;
+        let fallbackTimer;
+        const advance = () => {
+            if (advanced) return;
+            advanced = true;
+            clearTimeout(fallbackTimer);
+            englishIndex++;
+            if (englishIndex >= totalQuestions) {
+                showEnglishResult();
+            } else {
+                showCurrentEnglishWord();
+            }
+        };
+
+        if (utterance) {
+            utterance.addEventListener("end", () => setTimeout(advance, 250), { once: true });
+            utterance.addEventListener("error", advance, { once: true });
+            fallbackTimer = setTimeout(advance, 10000);
+        } else {
+            setTimeout(advance, 900);
+        }
+    }
+
+
+    function showEnglishResult() {
+
+        document.getElementById("game").style.display = "none";
+        document.getElementById("englishResult").style.display = "block";
+        document.getElementById("englishFinalScore").textContent = englishScore;
+        document.getElementById("englishResultSummary").textContent =
+            englishScore === totalQuestions
+                ? "太棒了！10 個英文單字都答對了。"
+                : `你答對 ${englishScore} 個單字。再按一次發音按鈕，多聽多念會更熟！`;
+
+        const list = document.getElementById("englishResultList");
+        list.innerHTML = "";
+        englishResults.forEach((result, index) => {
+            const row = document.createElement("div");
+            row.className = `review-item${result.isCorrect ? "" : " is-wrong"}`;
+            const word = document.createElement("span");
+            word.className = "review-question";
+            word.textContent = `${index + 1}. ${result.word} = ${result.meaning}`;
+            const status = document.createElement("span");
+            status.className = "review-status";
+            status.textContent = result.isCorrect ? "答對" : "再複習";
+            row.append(word, status);
+            list.appendChild(row);
+        });
+    }
+
+
+    */
+
     function getCurrentCharacterList() {
 
         return characterPracticeByGrade[characterGrade];
@@ -2326,6 +2507,7 @@
         characterStrokeCount = 0;
         characterCompleted = false;
         characterCanGrade = false;
+        characterDemoActive = false;
         activeCharacterData = null;
         activeWriterCharacter = entry.character;
 
@@ -2334,8 +2516,10 @@
         document.getElementById("strokeNumberLayer").style.display = "none";
         document.getElementById("hanziWriterTarget").innerHTML = "";
         document.getElementById("strokeNumberLayer").innerHTML = "";
-        document.getElementById("nextCharacterButton").innerText =
+        const nextCharacterButton = document.getElementById("nextCharacterButton");
+        nextCharacterButton.innerText =
             characterIndex === 9 ? "查看測驗結果 →" : "下一個字 →";
+        nextCharacterButton.disabled = true;
 
         renderCharacterReading(entry.zhuyin);
         setStrokeFeedback("正在載入正確筆順資料…", "");
@@ -2380,7 +2564,7 @@
 
     function changeCharacter(direction) {
 
-        if (direction < 0) return;
+        if (direction < 0 || characterDemoActive) return;
 
         saveCurrentCharacterResult();
         if (characterIndex === 9) {
@@ -2675,15 +2859,39 @@
             });
 
             renderStrokeOrderNumbers(characterData);
+
+            // 先由系統完整示範一次正確筆順，讓孩子觀察後再開始正式書寫。
+            characterDemoActive = true;
+            document.getElementById("nextCharacterButton").disabled = true;
             setStrokeFeedback(
-                `共 ${characterStrokeCount} 筆，請依序照著 1、2、3…描寫；偏離筆畫或順序錯誤會提醒並扣分。`,
-                ""
+                `👩‍🏫 老師示範中：請先觀察「${entry.character}」的正確筆順，共 ${characterStrokeCount} 筆…`,
+                "success"
             );
-            startCurrentCharacterQuiz(entry);
+
+            hanziWriterInstance.animateCharacter({
+                strokeAnimationSpeed: 0.75,
+                delayBetweenStrokes: 350,
+                onComplete() {
+                    if (activeWriterCharacter !== entry.character) return;
+
+                    // 示範完成後清空動畫筆跡，只留下虛線筆畫與筆順編號。
+                    characterDemoActive = false;
+                    target.innerHTML = "";
+                    document.getElementById("nextCharacterButton").disabled = false;
+
+                    setStrokeFeedback(
+                        `✍️ 示範完成！現在請你自己依照 1、2、3…的筆順寫一次。`,
+                        ""
+                    );
+
+                    startCurrentCharacterQuiz(entry);
+                }
+            });
         } catch (error) {
             if (activeWriterCharacter !== entry.character) return;
 
             characterCanGrade = false;
+            characterDemoActive = false;
             characterStrokeCount = 0;
             activeCharacterData = null;
             document.getElementById("hanziWriterTarget").style.display = "none";
@@ -2815,6 +3023,11 @@
 
     function clearCharacterStrokes() {
 
+        if (characterDemoActive) {
+            setStrokeFeedback("👀 老師正在示範筆順，請先觀察完成，再開始自己寫。", "");
+            return;
+        }
+
         characterStrokes = [];
         activeCharacterStroke = null;
 
@@ -2823,7 +3036,7 @@
             characterCompleted = false;
             const entry = characterTestDeck[characterIndex];
             hanziWriterInstance.cancelQuiz();
-            setStrokeFeedback("已重新開始本字，前面的錯誤仍會計入測驗。", "");
+            setStrokeFeedback("已重新開始本字，請再依筆順書寫。", "");
             startCurrentCharacterQuiz(entry);
             return;
         }
@@ -3212,8 +3425,6 @@
     document.getElementById("replayQuestion").disabled =
         !("speechSynthesis" in window);
     document.getElementById("replayCharacter").disabled =
-        !("speechSynthesis" in window);
-    document.getElementById("replayEnglish").disabled =
         !("speechSynthesis" in window);
     initializeTraceCanvas();
     updateLevelHint();
