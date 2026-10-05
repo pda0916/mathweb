@@ -529,6 +529,36 @@
             min-width: 0;
         }
 
+        .moe-stroke-stage {
+            position: relative;
+            width: 100%;
+            min-height: 620px;
+            margin: 0 auto;
+            overflow: hidden;
+            border: 1px solid #d6e5df;
+            border-radius: 14px;
+            background: #fffefa;
+        }
+
+        .moe-stroke-frame {
+            display: block;
+            width: 100%;
+            height: 620px;
+            border: 0;
+            background: #fff;
+        }
+
+        .moe-attribution {
+            margin: 8px 0 0;
+            color: #64746d;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .moe-attribution a {
+            color: #126e8a;
+        }
+
         .trace-canvas {
             display: block;
             width: min(100%, 420px);
@@ -815,6 +845,11 @@
         .record-item b{color:#126e8a}
         .record-empty{color:#7b8d83;padding:8px 0}
         .record-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+        .character-learning-summary{margin-top:12px;padding:12px;border:1px solid #d6e8ee;border-radius:12px;background:#fff}
+        .grade-progress-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed #dfe9ec;font-size:14px}
+        .grade-progress-row:last-child{border-bottom:0}
+        .character-pool-hint{margin-top:10px;padding:10px 12px;border-radius:10px;background:#eaf6f8;color:#315864;font-weight:700;line-height:1.6}
+        @media (max-width:500px){.grade-progress-row{flex-direction:column;gap:2px}}
 
 
         .result-score {
@@ -1100,7 +1135,7 @@
             <div class="character-settings" id="characterSettings" style="display: none;">
                 <div>
                     <label class="setting-label" for="gradeSelect">選擇國小年級</label>
-                    <select id="gradeSelect">
+                    <select id="gradeSelect" onchange="updateCharacterPoolHint()">
                         <option value="1" selected>國小一年級</option>
                         <option value="2">國小二年級</option>
                         <option value="3">國小三年級</option>
@@ -1110,7 +1145,9 @@
                     </select>
                 </div>
                 <p class="character-source-note">
-                    字庫為年級參考練習，並非教育部逐年級指定生字表。教育部課綱以一至二、三至四、五至六年級分學習階段訂識字目標；實際課本生字依出版社版本而異。<br>
+                    本網站採「國小分級核心字庫」：每個年級都有新增核心字，選擇年級後會從「目前年級以前的累計核心字庫」抽題；不是教育部逐年級指定生字表。教育部課綱以學習階段訂識字目標，實際課本生字仍依出版社版本而異。<br>
+                    <b>學習方式：</b>低年級先建立基礎字庫，升年級後保留前面學過的字，再加入新的核心字。<br>
+                    <div id="characterPoolHint" class="character-pool-hint"></div>
                     <a href="https://www.naer.edu.tw/PageSyllabus?fid=52" target="_blank" rel="noreferrer">查看國家教育研究院公布的課程綱要</a>
                 </p>
             </div>
@@ -1135,7 +1172,7 @@
             </div>
 
             <button class="start-button" id="startButton" onclick="startGame()">開始練習</button>
-            <button class="trace-button" type="button" onclick="showLearningRecord()">📚 學習紀錄</button>
+            <button class="trace-button" type="button" onclick="showLearningRecord()">📚 學習紀錄／國字進度</button>
         </div>
 
         <div id="quiz" style="display: none;">
@@ -1189,17 +1226,22 @@
 
             <div class="character-layout">
                 <div class="trace-panel">
-                    <div class="trace-stage" id="traceStage">
-                        <canvas class="trace-canvas" id="traceCanvas" aria-label="在虛線國字上描寫，可以用手指或觸控筆書寫"></canvas>
-                        <div class="hanzi-writer-target" id="hanziWriterTarget" style="display: none;"></div>
-                        <svg class="stroke-number-layer" id="strokeNumberLayer" aria-hidden="true" style="display: none;"></svg>
+                    <div class="moe-stroke-stage" id="traceStage">
+                        <iframe
+                            class="moe-stroke-frame"
+                            id="moeStrokeFrame"
+                            title="教育部國字標準字體筆順學習網"
+                            loading="eager"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            src="about:blank"></iframe>
                     </div>
                     <div class="trace-actions">
-                        <button class="trace-button" type="button" onclick="clearCharacterStrokes()">↻ 重來本字</button>
+                        <button class="trace-button" type="button" onclick="openMoeStrokeOrder()">↗ 開啟教育部筆順</button>
                         <button class="trace-button primary" id="nextCharacterButton" type="button" onclick="changeCharacter(1)">下一個字 →</button>
                     </div>
                     <p class="stroke-feedback" id="strokeFeedback" aria-live="polite"></p>
-                    <p class="character-writing-tip">先觀察老師示範一次完整筆順，再依照 1、2、3…自己書寫；可用手指或觸控筆。正式書寫時，筆順與偏線錯誤會計入評分。</p>
+                    <p class="character-writing-tip">👩‍🏫 筆順示範與練習改用教育部《國字標準字體筆順學習網》。請在上方教育部頁面先觀看正確筆順，再進入「筆順練習」；完成後按「下一個字」。</p>
+                    <p class="moe-attribution">筆順資料與動畫來源：中華民國教育部《國字標準字體筆順學習網》。本網站僅作個人學習使用；教育部網站的筆順動畫採創用 CC 姓名標示－非商業性－禁止改作 3.0 臺灣版授權。</p>
                 </div>
 
                 <aside class="character-info">
@@ -1331,7 +1373,7 @@
     <div class="result" id="characterResult">
         <div class="emoji">✍️🌟</div>
         <h1>國字描寫測驗完成</h1>
-        <div class="character-result-score"><span id="characterFinalScore">0</span> / 100</div>
+        <div class="character-result-score"><span id="characterFinalScore">0</span>%</div>
         <p class="character-result-summary" id="characterResultSummary"></p>
         <div class="answer-review" id="characterResultList" aria-label="每字筆順與描寫結果"></div>
         <button class="restart" type="button" onclick="startCharacterPractice()">🔄 再測一次</button>
@@ -4018,23 +4060,30 @@
         const operationNames = { addition:"加法", subtraction:"減法", mixed:"加法＋減法混合", multiplication:"九九乘法入門" };
         const operation = document.getElementById("operationSelect").value;
         saveLearningRecord({
-            date:new Date().toISOString(), type:"數學",
+            date:new Date().toISOString(), childName:getChildName(), type:"數學",
             detail:`${Number(document.getElementById("ageSelect").value)} 歲・${operationNames[operation]}`,
             score, total:totalQuestions, correct:score
         });
     }
 
     function recordCharacterResult(finalScore) {
+        const pool = getCurrentCharacterList();
+        const mastery = getCharacterMastery();
+        const learnedCount = pool.filter(entry => mastery[entry.character]?.attempts > 0).length;
         saveLearningRecord({
-            date:new Date().toISOString(), type:"國字",
-            detail:`國小${characterGrade}年級・10 個字`,
-            score:finalScore, total:100
+            date:new Date().toISOString(),
+            childName:getChildName(),
+            type:"國字",
+            detail:`國小${getCharacterGradeName(characterGrade)}年級・累計核心字庫 ${pool.length} 字・本次 10 字`,
+            score:finalScore, total:100,
+            learnedCount,
+            poolSize:pool.length
         });
     }
 
     function recordEnglishResult() {
         saveLearningRecord({
-            date:new Date().toISOString(), type:"英文",
+            date:new Date().toISOString(), childName:getChildName(), type:"英文",
             detail:`${englishAgeBand ? englishAgeBand.label : "英文練習"}・${englishDeck.length} 個單字`,
             score:englishScore, total:englishDeck.length
         });
@@ -4043,17 +4092,45 @@
     function showLearningRecord() {
         document.getElementById("setup").style.display="none";
         document.getElementById("learningRecord").style.display="block";
+
         const records=getLearningRecords();
         const name=getChildName();
-        document.getElementById("recordSummary").textContent=records.length
-            ? `${name}目前共有 ${records.length} 筆學習紀錄。紀錄會保存在這台裝置的瀏覽器中。`
+        const mastery=getCharacterMastery();
+        const todayKey=new Date().toLocaleDateString("sv-SE");
+        const todayRecords=records.filter(r => {
+            const d=new Date(r.date);
+            return d.toLocaleDateString("sv-SE")===todayKey;
+        });
+
+        let summary = records.length
+            ? `${name}共有 ${records.length} 筆學習紀錄；今天已完成 ${todayRecords.length} 次學習。`
             : `${name}目前還沒有學習紀錄，完成一次練習後就會自動記錄。`;
-        const list=document.getElementById("recordList"); list.innerHTML="";
-        if(!records.length){list.innerHTML='<div class="record-empty">還沒有紀錄喔，開始學習吧！</div>';return;}
+
+        summary += `<div class="character-learning-summary">`;
+        summary += `<b>📚 國字個人學習進度</b>`;
+        for(let grade=1; grade<=6; grade++){
+            const list=getCharacterGradeList(grade);
+            const learned=list.filter(e=>mastery[e.character]?.attempts>0).length;
+            const attempts=list.reduce((n,e)=>n+(mastery[e.character]?.attempts||0),0);
+            summary += `<div class="grade-progress-row"><span>國小${getCharacterGradeName(grade)}年級</span><span>累計 ${list.length} 字・已學 ${learned} 字・練習 ${attempts} 次</span></div>`;
+        }
+        summary += `</div>`;
+        document.getElementById("recordSummary").innerHTML=summary;
+
+        const list=document.getElementById("recordList");
+        list.innerHTML="";
+        if(!records.length){
+            list.innerHTML='<div class="record-empty">還沒有紀錄喔，開始學習吧！</div>';
+            return;
+        }
+
         records.forEach(r=>{
             const d=new Date(r.date), row=document.createElement("div");
             row.className="record-item";
-            row.innerHTML=`<b>${d.toLocaleDateString("zh-TW",{year:"numeric",month:"2-digit",day:"2-digit"})}</b>　${r.type}・${r.detail}<br>⭐ ${r.score} / ${r.total}${r.correct!==undefined?`　答對 ${r.correct} 題`:""}`;
+            const scoreText = r.score !== undefined ? `⭐ ${r.score} / ${r.total}` : "";
+            const correctText = r.correct!==undefined ? `　答對 ${r.correct} 題` : "";
+            const learnedText = r.learnedCount!==undefined ? `　已學 ${r.learnedCount} / ${r.poolSize} 字` : "";
+            row.innerHTML=`<b>${d.toLocaleDateString("zh-TW",{year:"numeric",month:"2-digit",day:"2-digit"})}</b>　${r.type}・${r.detail}<br>${scoreText}${correctText}${learnedText}`;
             list.appendChild(row);
         });
     }
@@ -4061,7 +4138,10 @@
     function hideLearningRecord(){document.getElementById("learningRecord").style.display="none";document.getElementById("setup").style.display="grid";}
     function clearLearningRecord(){
         if(!confirm("確定要清除這台裝置上的所有學習紀錄嗎？"))return;
-        try{localStorage.removeItem("aiLearningRecords");}catch(e){}
+        try{
+            localStorage.removeItem("aiLearningRecords");
+            localStorage.removeItem("aiCharacterMastery");
+        }catch(e){}
         showLearningRecord();
     }
 
@@ -4405,8 +4485,37 @@
     */
 
     function getCurrentCharacterList() {
+        // 「分級核心字庫」採累進制：選擇幾年級，就從一年級一路累積到該年級。
+        // 每個年級原有字表視為該年級「新增核心字」，並去除重複字。
+        const seen = new Set();
+        const cumulative = [];
+        for (let grade = 1; grade <= characterGrade; grade++) {
+            (characterPracticeByGrade[grade] || []).forEach(entry => {
+                if (!seen.has(entry.character)) {
+                    seen.add(entry.character);
+                    cumulative.push({ ...entry, sourceGrade: grade });
+                }
+            });
+        }
+        return cumulative;
+    }
 
-        return characterPracticeByGrade[characterGrade];
+    function getCharacterGradeList(grade) {
+        const seen = new Set();
+        const list = [];
+        for (let g = 1; g <= grade; g++) {
+            (characterPracticeByGrade[g] || []).forEach(entry => {
+                if (!seen.has(entry.character)) {
+                    seen.add(entry.character);
+                    list.push({ ...entry, sourceGrade: g });
+                }
+            });
+        }
+        return list;
+    }
+
+    function getCharacterGradeName(grade) {
+        return ["", "一", "二", "三", "四", "五", "六"][grade] || grade;
     }
 
 
@@ -4442,14 +4551,11 @@
     function showCurrentCharacter() {
 
         const entry = characterTestDeck[characterIndex];
-        if (hanziWriterInstance) {
-            hanziWriterInstance.cancelQuiz();
-            hanziWriterInstance = null;
-        }
         characterDemoActive = false;
 
+        const cumulativePool = getCurrentCharacterList();
         document.getElementById("characterProgress").innerText =
-            `國小${["", "一", "二", "三", "四", "五", "六"][characterGrade]}年級・測驗第 ${characterIndex + 1} / 10 字`;
+            `國小${getCharacterGradeName(characterGrade)}年級・累計核心字庫 ${cumulativePool.length} 字・本次第 ${characterIndex + 1} / 10 字`;
         document.getElementById("characterGlyph").innerText = entry.character;
         const meaningEl = document.getElementById("characterMeaning");
         meaningEl.innerText = entry.meaning || "";
@@ -4468,23 +4574,66 @@
         activeCharacterData = null;
         activeWriterCharacter = entry.character;
 
-        document.getElementById("traceCanvas").style.display = "block";
-        document.getElementById("hanziWriterTarget").style.display = "none";
-        document.getElementById("strokeNumberLayer").style.display = "none";
-        document.getElementById("hanziWriterTarget").innerHTML = "";
-        document.getElementById("strokeNumberLayer").innerHTML = "";
         const nextCharacterButton = document.getElementById("nextCharacterButton");
         nextCharacterButton.innerText =
-            characterIndex === 9 ? "查看測驗結果 →" : "下一個字 →";
-        nextCharacterButton.disabled = true;
+            characterIndex === 9 ? "查看學習結果 →" : "下一個字 →";
+        nextCharacterButton.disabled = false;
 
         renderCharacterReading(entry.zhuyin);
-        setStrokeFeedback("正在載入正確筆順資料…", "");
+        setStrokeFeedback(
+            `👩‍🏫 現在學習「${entry.character}」：請先在教育部頁面觀看完整筆順，再點選「筆順練習」。`,
+            "success"
+        );
         speakCurrentCharacter();
-        requestAnimationFrame(resizeTraceCanvas);
-        loadCharacterStrokeData(entry);
+        loadMoeStrokeOrder(entry.character);
     }
 
+
+    function loadMoeStrokeOrder(character) {
+
+        const frame = document.getElementById("moeStrokeFrame");
+        if (!frame) return;
+
+        const codePoint = character.codePointAt(0);
+        const url = `https://stroke-order.learningweb.moe.edu.tw/dictView.jsp?ID=${codePoint}&q=1`;
+        frame.src = url;
+        frame.onload = () => {
+            if (activeWriterCharacter !== character) return;
+            setStrokeFeedback(
+                `✅ 已載入教育部「${character}」標準筆順。請先觀看動畫，再使用教育部的「筆順練習」功能。`,
+                "success"
+            );
+        };
+        frame.onerror = () => {
+            if (activeWriterCharacter !== character) return;
+            setStrokeFeedback(
+                "教育部筆順頁面載入失敗，請按「↗ 開啟教育部筆順」在新分頁練習。",
+                "error"
+            );
+        };
+    }
+
+
+    function openMoeStrokeOrder() {
+
+        const entry = characterTestDeck[characterIndex];
+        if (!entry) return;
+        const codePoint = entry.character.codePointAt(0);
+        const url = `https://stroke-order.learningweb.moe.edu.tw/dictView.jsp?ID=${codePoint}&q=1`;
+        window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function updateCharacterPoolHint() {
+        const select = document.getElementById("gradeSelect");
+        const hint = document.getElementById("characterPoolHint");
+        if (!select || !hint) return;
+        const grade = Number(select.value);
+        const current = getCharacterGradeList(grade);
+        const newCount = (characterPracticeByGrade[grade] || []).filter((entry, index, arr) =>
+            arr.findIndex(item => item.character === entry.character) === index
+        ).length;
+        hint.textContent = `目前選擇：國小${getCharacterGradeName(grade)}年級｜累計核心字庫 ${current.length} 字｜本年級字庫 ${newCount} 字｜每次抽 10 字`;
+    }
 
     function startCharacterPractice() {
 
@@ -4492,7 +4641,7 @@
         characterResultRecorded=false;
         characterGrade = Number(document.getElementById("gradeSelect").value);
         const pool = [...getCurrentCharacterList()];
-        const historyKey = `characterRecentGrade${characterGrade}`;
+        const historyKey = `characterRecentCumulativeGrade${characterGrade}`;
         let recent = [];
         try { recent = JSON.parse(localStorage.getItem(historyKey) || "[]"); } catch (e) { recent = []; }
         const freshPool = pool.filter(entry => !recent.includes(entry.character));
@@ -4559,49 +4708,63 @@
     function saveCurrentCharacterResult() {
 
         const entry = characterTestDeck[characterIndex];
-        const rawScore = characterStrokeCount
-            ? (characterCorrectStrokeCount / characterStrokeCount) * 100
-            : 0;
-        const score = characterCanGrade
-            ? Math.max(0, Math.round(rawScore - characterMistakeCount * 5))
-            : null;
+        if (!entry) return;
 
         characterTestResults[characterIndex] = {
             character: entry.character,
-            correctStrokes: characterCorrectStrokeCount,
-            totalStrokes: characterStrokeCount,
-            mistakes: characterMistakeCount,
-            completed: characterCompleted,
-            score
+            correctStrokes: 0,
+            totalStrokes: 0,
+            mistakes: 0,
+            completed: true,
+            score: 100
         };
+
+        recordCharacterMastery(entry);
     }
 
+    function getCharacterMastery() {
+        try {
+            return JSON.parse(localStorage.getItem("aiCharacterMastery") || "{}");
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function saveCharacterMastery(data) {
+        try {
+            localStorage.setItem("aiCharacterMastery", JSON.stringify(data));
+        } catch (e) {}
+    }
+
+    function recordCharacterMastery(entry) {
+        const data = getCharacterMastery();
+        const key = entry.character;
+        const old = data[key] || { attempts: 0, firstSeen: new Date().toISOString(), lastSeen: null, sourceGrade: entry.sourceGrade || characterGrade };
+        old.attempts += 1;
+        old.lastSeen = new Date().toISOString();
+        old.sourceGrade = Math.min(old.sourceGrade || characterGrade, entry.sourceGrade || characterGrade);
+        data[key] = old;
+        saveCharacterMastery(data);
+    }
 
     function showCharacterResult() {
 
-        const gradedResults = characterTestResults.filter(result => result && result.score !== null);
-        const totalMistakes = characterTestResults.reduce(
-            (total, result) => total + (result?.mistakes || 0),
-            0
-        );
         const completedCount = characterTestResults.filter(result => result?.completed).length;
-        const finalScore = gradedResults.length
-            ? Math.round(gradedResults.reduce((total, result) => total + result.score, 0) / gradedResults.length)
-            : 0;
+        const completionRate = Math.round((completedCount / 10) * 100);
 
         document.getElementById("game").style.display = "none";
         document.getElementById("result").style.display = "none";
         document.getElementById("characterResult").style.display = "block";
-        document.getElementById("characterFinalScore").innerText = finalScore;
-        if(!characterResultRecorded){recordCharacterResult(finalScore);characterResultRecorded=true;}
+        document.getElementById("characterFinalScore").innerText = completionRate;
+        if(!characterResultRecorded){recordCharacterResult(completionRate);characterResultRecorded=true;}
         document.getElementById("characterResultSummary").innerText =
-            `完成 ${completedCount} / 10 字・評分 ${gradedResults.length} / 10 字・筆順或偏線錯誤 ${totalMistakes} 次`;
+            `已完成 ${completedCount} / 10 字・完成度 ${completionRate}%・本次字卡來自「國小${getCharacterGradeName(characterGrade)}年級累計核心字庫」・筆順以教育部標準頁面為準`;
 
         const list = document.getElementById("characterResultList");
         list.innerHTML = "";
         characterTestResults.forEach((result, index) => {
             const row = document.createElement("div");
-            row.className = `review-item${result && result.score === 100 ? "" : " is-wrong"}`;
+            row.className = `review-item${result?.completed ? "" : " is-wrong"}`;
 
             const label = document.createElement("span");
             label.className = "review-question";
@@ -4610,21 +4773,18 @@
 
             const points = document.createElement("span");
             points.className = "review-status";
-            points.innerText = result?.score === null || !result
-                ? "未能評分"
-                : `${result.score} 分`;
+            points.innerText = result?.completed ? "已完成" : "未完成";
             row.appendChild(points);
 
             const detail = document.createElement("span");
             detail.className = "review-answer";
-            detail.innerText = result
-                ? `正確筆畫 ${result.correctStrokes} / ${result.totalStrokes}・錯誤 ${result.mistakes} 次・${result.completed ? "完成" : "未完成"}`
-                : "未作答";
+            detail.innerText = result?.completed
+                ? "請以教育部筆順頁面的練習結果為準。"
+                : "尚未完成本字。";
             row.appendChild(detail);
             list.appendChild(row);
         });
     }
-
 
     function setStrokeFeedback(message, status) {
 
@@ -4634,423 +4794,22 @@
     }
 
 
-    function ensureHanziWriterLoaded() {
-
-        if (window.HanziWriter) return Promise.resolve(window.HanziWriter);
-        if (hanziWriterLoadPromise) return hanziWriterLoadPromise;
-
-        hanziWriterLoadPromise = new Promise((resolve, reject) => {
-            const script = document.createElement("script");
-            script.src = "https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js";
-            script.async = true;
-            script.onload = () => resolve(window.HanziWriter);
-            script.onerror = () => reject(new Error("無法載入筆順評量工具"));
-            document.head.appendChild(script);
-        });
-
-        return hanziWriterLoadPromise;
-    }
-
-
-    function renderStrokeOrderNumbers(characterData) {
-
-        const stage = document.getElementById("traceStage");
-        const overlay = document.getElementById("strokeNumberLayer");
-        const stageSize = Math.round(stage.getBoundingClientRect().width);
-        if (!stageSize || !window.HanziWriter) return;
-
-        overlay.innerHTML = "";
-        overlay.setAttribute("viewBox", `0 0 ${stageSize} ${stageSize}`);
-        overlay.setAttribute("preserveAspectRatio", "none");
-
-        const padding = Math.max(36, Math.round(stageSize * 0.12));
-        const scaling = window.HanziWriter.getScalingTransform(stageSize, stageSize, padding);
-        const placedLabels = [];
-        const offsets = [[0, 0]];
-
-        for (let radius = 14; radius <= 74; radius += 10) {
-            for (let angle = 0; angle < 360; angle += 30) {
-                const radians = angle * Math.PI / 180;
-                offsets.push([
-                    Math.cos(radians) * radius,
-                    Math.sin(radians) * radius
-                ]);
-            }
-        }
-
-        characterData.medians.forEach((median, index) => {
-            const firstPoint = median[0];
-            if (!firstPoint) return;
-
-            const guide = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-            const guidePoints = median.map(([x, y]) => {
-                const scaledX = scaling.x + x * scaling.scale;
-                const scaledY = stageSize - scaling.y - y * scaling.scale;
-                return `${scaledX},${scaledY}`;
-            });
-            guide.setAttribute("class", "stroke-guide-path");
-            guide.setAttribute("points", guidePoints.join(" "));
-            overlay.appendChild(guide);
-
-            const originX = scaling.x + firstPoint[0] * scaling.scale;
-            const originY = stageSize - scaling.y - firstPoint[1] * scaling.scale;
-            let labelPosition = null;
-
-            for (const offset of offsets) {
-                const candidate = {
-                    x: originX + offset[0],
-                    y: originY + offset[1]
-                };
-                const inBounds = candidate.x >= 10 && candidate.x <= stageSize - 10 &&
-                    candidate.y >= 10 && candidate.y <= stageSize - 10;
-                const separated = placedLabels.every(label =>
-                    Math.hypot(label.x - candidate.x, label.y - candidate.y) >= 19
-                );
-
-                if (inBounds && separated) {
-                    labelPosition = candidate;
-                    break;
-                }
-            }
-
-            if (!labelPosition) {
-                labelPosition = {
-                    x: Math.max(10, Math.min(stageSize - 10, originX)),
-                    y: Math.max(10, Math.min(stageSize - 10, originY))
-                };
-            }
-            placedLabels.push(labelPosition);
-
-            if (Math.hypot(labelPosition.x - originX, labelPosition.y - originY) > 10) {
-                const leader = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                leader.setAttribute("class", "stroke-number-leader");
-                leader.setAttribute("x1", originX);
-                leader.setAttribute("y1", originY);
-                leader.setAttribute("x2", labelPosition.x);
-                leader.setAttribute("y2", labelPosition.y);
-                overlay.appendChild(leader);
-            }
-
-            const badge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            badge.setAttribute("class", "stroke-number-badge");
-            badge.setAttribute("cx", labelPosition.x);
-            badge.setAttribute("cy", labelPosition.y);
-            badge.setAttribute("r", "8");
-            overlay.appendChild(badge);
-
-            const number = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            number.setAttribute("class", "stroke-number-text");
-            number.setAttribute("x", labelPosition.x);
-            number.setAttribute("y", labelPosition.y);
-            number.textContent = String(index + 1);
-            overlay.appendChild(number);
-        });
-
-        overlay.style.display = "block";
-    }
-
-
-    function getStrokeQuizCallbacks(entry) {
-
-        return {
-            leniency: 0.75,
-            showHintAfterMisses: 2,
-            onMistake(strokeData) {
-                if (activeWriterCharacter !== entry.character) return;
-                characterMistakeCount++;
-                setStrokeFeedback(
-                    `第 ${strokeData.strokeNum + 1} 筆偏離範本太多或筆順不符（錯誤 ${characterMistakeCount} 次），請看編號再描一次。`,
-                    "error"
-                );
-            },
-            onCorrectStroke(strokeData) {
-                if (activeWriterCharacter !== entry.character) return;
-                characterCorrectStrokeCount = Math.max(
-                    characterCorrectStrokeCount,
-                    strokeData.strokeNum + 1
-                );
-                setStrokeFeedback(
-                    `第 ${strokeData.strokeNum + 1} 筆正確，還剩 ${strokeData.strokesRemaining} 筆。`,
-                    "success"
-                );
-            },
-            onComplete(summaryData) {
-                if (activeWriterCharacter !== entry.character) return;
-                characterCompleted = true;
-                characterCorrectStrokeCount = characterStrokeCount;
-                const nextAction = characterIndex === 9 ? "查看測驗結果" : "下一個字";
-                setStrokeFeedback(
-                    `這個字完成了！本字錯誤 ${characterMistakeCount} 次，按「${nextAction}」繼續。`,
-                    characterMistakeCount ? "error" : "success"
-                );
-            }
-        };
-    }
-
-
-    async function loadCharacterStrokeData(entry) {
-
-        try {
-            setStrokeFeedback("正在載入正確筆順資料…", "");
-            const writerLibrary = await ensureHanziWriterLoaded();
-            const characterData = await writerLibrary.loadCharacterData(entry.character);
-            if (activeWriterCharacter !== entry.character) return;
-
-            activeCharacterData = characterData;
-            characterStrokeCount = characterData.strokes.length;
-            characterCanGrade = true;
-
-            const target = document.getElementById("hanziWriterTarget");
-            const stageSize = Math.round(document.getElementById("traceStage").getBoundingClientRect().width);
-            const padding = Math.max(36, Math.round(stageSize * 0.12));
-
-            if (hanziWriterInstance) hanziWriterInstance.cancelQuiz();
-            target.innerHTML = "";
-            document.getElementById("traceCanvas").style.display = "none";
-            target.style.display = "block";
-
-            hanziWriterInstance = writerLibrary.create(target, entry.character, {
-                width: stageSize,
-                height: stageSize,
-                padding,
-                showCharacter: false,
-                showOutline: false,
-                drawingColor: "#168aad",
-                drawingWidth: 6,
-                showHintAfterMisses: 2,
-                charDataLoader(character, onComplete) {
-                    if (character === entry.character) {
-                        onComplete(characterData);
-                    } else {
-                        writerLibrary.loadCharacterData(character).then(onComplete);
-                    }
-                }
-            });
-
-            renderStrokeOrderNumbers(characterData);
-
-            // 先由系統完整示範一次正確筆順，讓孩子觀察後再開始正式書寫。
-            characterDemoActive = true;
-            document.getElementById("nextCharacterButton").disabled = true;
-            setStrokeFeedback(
-                `👩‍🏫 老師示範中：請先觀察「${entry.character}」的正確筆順，共 ${characterStrokeCount} 筆…`,
-                "success"
-            );
-
-            hanziWriterInstance.animateCharacter({
-                strokeAnimationSpeed: 0.75,
-                delayBetweenStrokes: 350,
-                onComplete() {
-                    if (activeWriterCharacter !== entry.character) return;
-
-                    // 示範完成後，不要清空 HanziWriter 的 SVG。
-                    // 原本清空 target.innerHTML 會把可供孩子書寫/判定的 SVG 一起刪掉，
-                    // 因此之後雖然顯示「可以開始寫」，實際上沒有可操作的筆順畫布。
-                    // 改成把示範字隱藏，再直接進入 HanziWriter quiz。
-                    hanziWriterInstance.hideCharacter({
-                        duration: 200,
-                        onComplete() {
-                            if (activeWriterCharacter !== entry.character) return;
-
-                            characterDemoActive = false;
-                            document.getElementById("nextCharacterButton").disabled = false;
-
-                            setStrokeFeedback(
-                                `✍️ 示範完成！現在請你自己依照 1、2、3…的筆順寫一次。`,
-                                "success"
-                            );
-
-                            startCurrentCharacterQuiz(entry);
-                        }
-                    });
-                }
-            });
-        } catch (error) {
-            if (activeWriterCharacter !== entry.character) return;
-
-            characterCanGrade = false;
-            characterDemoActive = false;
-            characterStrokeCount = 0;
-            activeCharacterData = null;
-            document.getElementById("hanziWriterTarget").style.display = "none";
-            document.getElementById("strokeNumberLayer").style.display = "none";
-            document.getElementById("traceCanvas").style.display = "block";
-            requestAnimationFrame(resizeTraceCanvas);
-            setStrokeFeedback(
-                "筆順資料目前無法載入，仍可自由描字，但本字不計入筆順分數。請確認網路後重試。",
-                "error"
-            );
-        }
-    }
-
-
-    function resizeTraceCanvas() {
-
-        const canvas = document.getElementById("traceCanvas");
-        const stage = document.getElementById("traceStage");
-        const bounds = stage.getBoundingClientRect();
-        if (!bounds.width || !bounds.height) return;
-
-        const pixelRatio = window.devicePixelRatio || 1;
-        canvas.width = Math.round(bounds.width * pixelRatio);
-        canvas.height = Math.round(bounds.height * pixelRatio);
-        traceContext = canvas.getContext("2d");
-        traceContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-
-        if (hanziWriterInstance && activeCharacterData) {
-            const size = Math.round(bounds.width);
-            const padding = Math.max(36, Math.round(size * 0.12));
-            hanziWriterInstance.updateDimensions({ width: size, height: size, padding });
-            renderStrokeOrderNumbers(activeCharacterData);
-        }
-
-        drawTraceCanvas();
-    }
-
-
-    function drawTraceCanvas() {
-
-        const canvas = document.getElementById("traceCanvas");
-        if (!traceContext || !canvas.clientWidth || canvas.style.display === "none") return;
-
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
-        const size = Math.min(width, height);
-        const centerX = width / 2;
-        const centerY = height / 2;
-        const entry = characterTestDeck[characterIndex] || getCurrentCharacterList()[characterIndex];
-
-        traceContext.clearRect(0, 0, width, height);
-        traceContext.fillStyle = "#fffefa";
-        traceContext.fillRect(0, 0, width, height);
-
-        traceContext.strokeStyle = "#e8eeea";
-        traceContext.lineWidth = 1;
-        traceContext.setLineDash([4, 7]);
-        traceContext.beginPath();
-        traceContext.moveTo(centerX, 14);
-        traceContext.lineTo(centerX, height - 14);
-        traceContext.moveTo(14, centerY);
-        traceContext.lineTo(width - 14, centerY);
-        traceContext.stroke();
-
-        const fontSize = size * 0.7;
-        traceContext.font = `${fontSize}px "KaiTi", "DFKai-SB", "標楷體", "BiauKai", serif`;
-        traceContext.textAlign = "center";
-        traceContext.textBaseline = "middle";
-        traceContext.fillStyle = "rgba(112, 130, 122, 0.045)";
-        traceContext.fillText(entry.character, centerX, centerY, size * 0.78);
-        traceContext.strokeStyle = "#71847a";
-        traceContext.lineWidth = Math.max(1.8, size * 0.006);
-        traceContext.setLineDash([3.5, 5.5]);
-        traceContext.strokeText(entry.character, centerX, centerY, size * 0.78);
-        traceContext.setLineDash([]);
-
-        characterStrokes.forEach(stroke => {
-            if (!stroke.length) return;
-
-            traceContext.beginPath();
-            traceContext.strokeStyle = "#168aad";
-            traceContext.fillStyle = "#168aad";
-            traceContext.lineWidth = Math.max(4, size * 0.018);
-            traceContext.lineCap = "round";
-            traceContext.lineJoin = "round";
-
-            const firstPoint = stroke[0];
-            traceContext.moveTo(firstPoint.x * width, firstPoint.y * height);
-            stroke.slice(1).forEach(point => {
-                traceContext.lineTo(point.x * width, point.y * height);
-            });
-
-            if (stroke.length === 1) {
-                traceContext.arc(
-                    firstPoint.x * width,
-                    firstPoint.y * height,
-                    traceContext.lineWidth / 2,
-                    0,
-                    Math.PI * 2
-                );
-                traceContext.fill();
-            } else {
-                traceContext.stroke();
-            }
-        });
-
-        traceContext.setLineDash([]);
-    }
-
-
-    function addTracePoint(event) {
-
-        if (!activeCharacterStroke) return;
-        const bounds = event.currentTarget.getBoundingClientRect();
-        activeCharacterStroke.push({
-            x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
-            y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height))
-        });
-        drawTraceCanvas();
-    }
-
-
-    function startCurrentCharacterQuiz(entry) {
-
-        if (!hanziWriterInstance || activeWriterCharacter !== entry.character) return;
-        hanziWriterInstance.quiz(getStrokeQuizCallbacks(entry));
-    }
-
-
+    // 國字筆順已改為教育部官方版本。以下函式保留名稱，避免舊版事件流程造成錯誤。
+    function ensureHanziWriterLoaded() { return Promise.resolve(null); }
+    function renderStrokeOrderNumbers() {}
+    function getStrokeQuizCallbacks() { return {}; }
+    function loadCharacterStrokeData() { return Promise.resolve(); }
+    function resizeTraceCanvas() {}
+    function drawTraceCanvas() {}
+    function addTracePoint() {}
+    function startCurrentCharacterQuiz() {}
     function clearCharacterStrokes() {
-
-        if (characterDemoActive) {
-            setStrokeFeedback("👀 老師正在示範筆順，請先觀察完成，再開始自己寫。", "");
-            return;
+        const entry = characterTestDeck[characterIndex];
+        if (entry) {
+            setStrokeFeedback(`請在教育部筆順頁面重新進入「筆順練習」：${entry.character}`, "");
         }
-
-        characterStrokes = [];
-        activeCharacterStroke = null;
-
-        if (hanziWriterInstance && characterCanGrade) {
-            characterCorrectStrokeCount = 0;
-            characterCompleted = false;
-            const entry = characterTestDeck[characterIndex];
-            hanziWriterInstance.cancelQuiz();
-            setStrokeFeedback("已重新開始本字，請再依筆順書寫。", "");
-            startCurrentCharacterQuiz(entry);
-            return;
-        }
-
-        drawTraceCanvas();
-        setStrokeFeedback("已清除筆跡，可以重新描寫。", "");
     }
-
-
-    function initializeTraceCanvas() {
-
-        const canvas = document.getElementById("traceCanvas");
-
-        canvas.addEventListener("pointerdown", event => {
-            event.preventDefault();
-            canvas.setPointerCapture(event.pointerId);
-            activeCharacterStroke = [];
-            characterStrokes.push(activeCharacterStroke);
-            addTracePoint(event);
-        });
-
-        canvas.addEventListener("pointermove", event => {
-            if (event.buttons) addTracePoint(event);
-        });
-
-        const endStroke = event => {
-            if (canvas.hasPointerCapture(event.pointerId)) {
-                canvas.releasePointerCapture(event.pointerId);
-            }
-            activeCharacterStroke = null;
-        };
-
-        canvas.addEventListener("pointerup", endStroke);
-        canvas.addEventListener("pointercancel", endStroke);
-        window.addEventListener("resize", resizeTraceCanvas);
-    }
+    function initializeTraceCanvas() {}
 
 
     // ==========================
@@ -5408,6 +5167,7 @@
         !("speechSynthesis" in window);
     initializeTraceCanvas();
     loadSavedSettings();
+    updateCharacterPoolHint();
     updateLevelHint();
     updateEnglishLevelHint();
     updatePracticeSettings();
