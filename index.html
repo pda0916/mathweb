@@ -939,6 +939,85 @@
             gap: 8px;
         }
 
+        .decomposition-visual {
+            width: min(100%, 430px);
+            margin: 0 auto;
+            padding: 18px;
+            border: 1px solid #dcebe2;
+            border-radius: 18px;
+            background: #f7fbf7;
+        }
+
+        .decomposition-title {
+            margin: 0 0 12px;
+            color: #365b46;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .decomposition-number {
+            color: #126e8a;
+            font-size: 52px;
+            font-weight: bold;
+            line-height: 1.1;
+        }
+
+        .decomposition-groups {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .decomposition-group {
+            min-width: 0;
+            padding: 10px;
+            border: 1px solid #d6e5df;
+            border-radius: 14px;
+            background: #fff;
+        }
+
+        .decomposition-group-label {
+            margin-bottom: 6px;
+            color: #526a73;
+            font-weight: bold;
+        }
+
+        .decomposition-plus {
+            color: #168aad;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .decomposition-prompt {
+            margin: 12px 0 0;
+            color: #684e1d;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .decomposition-blank {
+            display: inline-flex;
+            min-width: 56px;
+            min-height: 42px;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #9eb9ad;
+            border-radius: 10px;
+            background: #fff;
+            color: #168aad;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .decomposition-result {
+            margin-top: 12px;
+            color: #24734f;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
         @media (max-width: 650px) {
             .question-area {
                 grid-template-columns: 1fr;
@@ -1090,6 +1169,7 @@
                     <option value="subtraction">減法</option>
                     <option value="mixed" selected>加法＋減法混合</option>
                     <option value="multiplication">九九乘法入門</option>
+                    <option value="decomposition">數的合成與分解</option>
                 </select>
             </div>
 
@@ -1172,6 +1252,11 @@
                 </div>
                 <div class="multiplication-visual" id="multiplicationVisual" role="img" aria-label="" style="display: none;">
                     <div id="multiplicationGroups"></div>
+                </div>
+                <div class="decomposition-visual" id="decompositionVisual" role="img" aria-label="" style="display: none;">
+                    <p class="decomposition-title" id="decompositionTitle"></p>
+                    <div id="decompositionContent"></div>
+                    <p class="decomposition-prompt" id="decompositionPrompt"></p>
                 </div>
             </div>
 
@@ -1404,6 +1489,10 @@
     let currentLeftOperand = 0;
     let currentRightOperand = 0;
     let currentOperator = "+";
+    let decompositionMode = "split";
+    let decompositionTotal = 0;
+    let decompositionLeft = 0;
+    let decompositionRight = 0;
     let selectedMultiplicationTable = 1;
     let characterGrade = 1;
     let characterIndex = 0;
@@ -1704,10 +1793,18 @@
     function generateQuestion() {
 
         const operation = document.getElementById("operationSelect").value;
+
+        if (operation === "decomposition") {
+            generateDecompositionQuestion();
+            return;
+        }
+
         let a;
         let b;
         const isAddition = operation === "addition" ||
             (operation === "mixed" && Math.random() < 0.5);
+
+        document.getElementById("decompositionVisual").style.display = "none";
 
         if (operation === "multiplication") {
 
@@ -1779,6 +1876,165 @@
     }
 
 
+    function generateDecompositionQuestion() {
+
+        const upper = Math.min(maxNumber, 10);
+        decompositionTotal = randomNumber(4, Math.max(4, upper));
+        decompositionLeft = randomNumber(1, decompositionTotal - 1);
+        decompositionRight = decompositionTotal - decompositionLeft;
+        decompositionMode = Math.random() < 0.5 ? "split" : "combine";
+
+        document.getElementById("visualModel").style.display = "none";
+        document.getElementById("multiplicationVisual").style.display = "none";
+        document.getElementById("multiplicationHint").style.display = "none";
+        document.getElementById("decompositionVisual").style.display = "block";
+
+        currentLeftOperand = decompositionLeft;
+        currentRightOperand = decompositionRight;
+        currentOperator = "+";
+        correctAnswer = decompositionMode === "split"
+            ? decompositionLeft * 100 + decompositionRight
+            : decompositionTotal;
+
+        renderDecompositionVisual();
+        generateDecompositionAnswers();
+        speakQuestion();
+    }
+
+
+    function renderDecompositionVisual() {
+
+        const title = document.getElementById("decompositionTitle");
+        const content = document.getElementById("decompositionContent");
+        const prompt = document.getElementById("decompositionPrompt");
+        content.innerHTML = "";
+
+        if (decompositionMode === "split") {
+            title.textContent = "🔢 數的分解";
+            const total = document.createElement("div");
+            total.className = "decomposition-number";
+            total.textContent = decompositionTotal;
+            content.appendChild(total);
+            const apples = document.createElement("div");
+            apples.className = "apple-items";
+            apples.style.gridTemplateColumns = "repeat(5, 24px)";
+            for (let i = 0; i < decompositionTotal; i++) apples.appendChild(createAppleIcon());
+            content.appendChild(apples);
+            prompt.textContent = `${decompositionTotal} 可以分成哪兩個數？`;
+        } else {
+            title.textContent = "🔢 數的合成";
+            const groups = document.createElement("div");
+            groups.className = "decomposition-groups";
+            [decompositionLeft, decompositionRight].forEach((count, index) => {
+                const group = document.createElement("div");
+                group.className = "decomposition-group";
+                const label = document.createElement("div");
+                label.className = "decomposition-group-label";
+                label.textContent = `第 ${index + 1} 組：${count} 個`;
+                group.appendChild(label);
+                const apples = document.createElement("div");
+                apples.className = "apple-items";
+                for (let i = 0; i < count; i++) apples.appendChild(createAppleIcon());
+                group.appendChild(apples);
+                groups.appendChild(group);
+                if (index === 0) {
+                    const plus = document.createElement("div");
+                    plus.className = "decomposition-plus";
+                    plus.textContent = "+";
+                    groups.appendChild(plus);
+                }
+            });
+            content.appendChild(groups);
+            prompt.textContent = `${decompositionLeft} ＋ ${decompositionRight} 合起來是多少？`;
+        }
+    }
+
+
+    function generateDecompositionAnswers() {
+
+        const answers = [];
+        if (decompositionMode === "split") {
+            answers.push(`${decompositionLeft} ＋ ${decompositionRight}`);
+            if (decompositionLeft !== decompositionRight) {
+                answers.push(`${decompositionRight} ＋ ${decompositionLeft}`);
+            }
+            while (answers.length < 4) {
+                const a = randomNumber(1, Math.max(1, decompositionTotal - 1));
+                let b = randomNumber(1, Math.max(1, decompositionTotal - 1));
+                if (a + b === decompositionTotal) b = b === decompositionTotal - 1 ? 1 : b + 1;
+                const text = `${a} ＋ ${b}`;
+                if (!answers.includes(text)) answers.push(text);
+            }
+        } else {
+            answers.push(decompositionTotal);
+            while (answers.length < 4) {
+                const wrong = randomNumber(Math.max(1, decompositionTotal - 3), decompositionTotal + 3);
+                if (wrong !== decompositionTotal && !answers.includes(wrong)) answers.push(wrong);
+            }
+        }
+
+        answers.sort(() => Math.random() - 0.5);
+        const container = document.getElementById("answers");
+        container.innerHTML = "";
+        answers.forEach(answer => {
+            const button = document.createElement("button");
+            button.className = "answer-btn";
+            button.innerText = answer;
+            button.onclick = () => checkDecompositionAnswer(answer);
+            container.appendChild(button);
+        });
+    }
+
+
+    function checkDecompositionAnswer(answer) {
+
+        if (hasAnswered) return;
+        hasAnswered = true;
+        document.querySelectorAll("#answers .answer-btn").forEach(button => button.disabled = true);
+
+        const expected = decompositionMode === "split"
+            ? [`${decompositionLeft} ＋ ${decompositionRight}`, `${decompositionRight} ＋ ${decompositionLeft}`]
+            : [decompositionTotal];
+        const isCorrect = expected.includes(answer);
+        const message = document.getElementById("message");
+        const correctText = decompositionMode === "split"
+            ? `${decompositionTotal} 可以分成 ${decompositionLeft} 和 ${decompositionRight}`
+            : `${decompositionLeft} ＋ ${decompositionRight} ＝ ${decompositionTotal}`;
+
+        questionHistory.push({
+            question: decompositionMode === "split" ? `${decompositionTotal} 可以分成？` : `${decompositionLeft} ＋ ${decompositionRight} ＝？`,
+            selectedAnswer: answer,
+            correctAnswer: correctText,
+            isCorrect
+        });
+
+        if (isCorrect) {
+            score++;
+            streak++;
+            setChineseText(message, `白宸鈞，答對了！${correctText}，好棒！`);
+            message.style.color = "#2ecc71";
+        } else {
+            streak = 0;
+            setChineseText(message, `再想一下！正確答案是 ${correctText}`);
+            message.style.color = "#ff6b6b";
+        }
+
+        updateScore();
+        const advance = () => {
+            currentQuestion++;
+            if (currentQuestion >= totalQuestions) showResult();
+            else nextQuestion();
+        };
+        const utterance = speakText(isCorrect ? `答對了！${correctText}` : `正確答案是${correctText}`);
+        if (utterance) {
+            utterance.addEventListener("end", () => setTimeout(advance, 200), { once: true });
+            setTimeout(advance, 5000);
+        } else {
+            setTimeout(advance, 900);
+        }
+    }
+
+
     function numberToChinese(number) {
 
         const digits = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
@@ -1843,6 +2099,14 @@
 
 
     function speakQuestion() {
+
+        if (document.getElementById("operationSelect").value === "decomposition") {
+            const speech = decompositionMode === "split"
+                ? `${numberToChinese(decompositionTotal)}可以分成哪兩個數？`
+                : `${numberToChinese(decompositionLeft)}加${numberToChinese(decompositionRight)}合起來是多少？`;
+            speakText(speech);
+            return;
+        }
 
         const left = numberToChinese(currentLeftOperand);
         const right = numberToChinese(currentRightOperand);
@@ -2807,7 +3071,8 @@
             addition: "加法",
             subtraction: "減法",
             mixed: "加法＋減法混合",
-            multiplication: "九九乘法入門"
+            multiplication: "九九乘法入門",
+            decomposition: "數的合成與分解"
         };
         const operation = document.getElementById("operationSelect").value;
         selectedMultiplicationTable = Number(document.getElementById("multiplicationTable").value);
@@ -2820,6 +3085,7 @@
 
         document.getElementById("multiplicationHint").style.display =
             operation === "multiplication" ? "block" : "none";
+        document.getElementById("decompositionVisual").style.display = "none";
 
         updateScore();
 
