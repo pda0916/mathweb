@@ -991,31 +991,32 @@
             }
         }
 
-        /* 一年級結合韻課程 */
-        .phonics-intro-card { text-align: left; }
-        .phonics-intro-card p { margin: 6px 0; }
-        .phonics-final-list { color: #126e8a; font-weight: bold; line-height: 1.8; }
-        .phonics-stage-nav { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:4px 0 16px; }
-        .phonics-stage-btn { border:1px solid #c8dfe5; border-radius:12px; padding:10px 6px; background:#fff; color:#365665; font:inherit; font-weight:bold; cursor:pointer; }
-        .phonics-stage-btn.active { background:#168aad; color:#fff; border-color:#168aad; }
-        .phonics-stage-panel { display:none; }
-        .phonics-stage-panel.active { display:block; }
-        .phonics-card { padding:20px 16px; border:1px solid #dcebe2; border-radius:18px; background:#fffefa; }
-        .phonics-guide { margin:0 0 14px; color:#526a73; font-size:17px; line-height:1.6; }
-        .phonics-combine { display:flex; align-items:center; justify-content:center; gap:18px; min-height:180px; }
-        .phonics-parts { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:90px; padding:10px 18px; border:3px solid #cfe5d6; border-radius:16px; background:#f3faf4; }
-        .phonics-part { font-size:44px; line-height:1.05; font-weight:bold; color:#294853; }
-        .phonics-equals { font-size:40px; font-weight:bold; color:#168aad; }
-        .phonics-final { min-width:120px; padding:18px 20px; border-radius:16px; background:#e8f4f7; color:#126e8a; font-size:42px; font-weight:bold; }
-        .phonics-character-box { margin-top:12px; padding:16px; border-radius:14px; background:#f7fbf7; border:1px solid #dcebe2; line-height:1.8; }
-        .phonics-character { font-size:78px; line-height:1; color:#294853; font-weight:bold; }
-        .phonics-meaning { color:#526a73; }
-        .phonics-tip { margin:14px 0 0; padding:12px; border-radius:10px; background:#fff8e6; color:#684e1d; line-height:1.6; }
-        .vertical-question { min-height:150px; }
-        .vertical-question .phonics-parts { min-width:110px; }
-        .phonics-test-top { display:flex; justify-content:center; align-items:center; gap:10px; color:#526a73; font-weight:bold; }
-        .phonics-card .answer-btn { font-size:25px; }
-        @media(max-width:500px){ .phonics-stage-nav{grid-template-columns:repeat(2,1fr);} .phonics-combine{gap:8px;} .phonics-part{font-size:34px;} .phonics-final{font-size:34px; min-width:95px;} .phonics-character{font-size:64px;} }
+        /* 一年級結合韻六步驟課程 */
+        .phonics-six-nav { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin:4px 0 16px; }
+        .phonics-six-btn { border:1px solid #c8dfe5; border-radius:10px; padding:9px 4px; background:#fff; color:#365665; font:inherit; font-size:14px; font-weight:bold; cursor:pointer; }
+        .phonics-six-btn.active { background:#168aad; color:#fff; border-color:#168aad; }
+        .phonics-six-panel { display:none; }
+        .phonics-six-panel.active { display:block; }
+        .phonics-step-number { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:#e8f4f7; color:#126e8a; font-weight:bold; margin-right:6px; }
+        .phonics-large-guide { font-size:19px; line-height:1.7; color:#365665; margin:4px 0 16px; }
+        .phonics-breakdown { display:flex; flex-direction:column; align-items:center; gap:4px; margin:20px auto; }
+        .phonics-break-part { min-width:110px; padding:8px 20px; border:3px solid #cfe5d6; border-radius:14px; background:#f3faf4; color:#294853; font-size:46px; line-height:1.05; font-weight:bold; }
+        .phonics-plus { font-size:28px; color:#168aad; font-weight:bold; }
+        .phonics-synthesis { display:flex; align-items:center; justify-content:center; gap:16px; margin:20px auto; flex-wrap:wrap; }
+        .phonics-final-big { min-width:150px; padding:18px 22px; border-radius:18px; background:#e8f4f7; color:#126e8a; font-size:50px; font-weight:bold; }
+        .phonics-character-big { font-size:100px; line-height:1; color:#294853; font-weight:bold; }
+        .phonics-word-big { font-size:30px; color:#126e8a; font-weight:bold; margin:8px 0; }
+        .phonics-meaning-big { font-size:18px; line-height:1.7; color:#526a73; }
+        .phonics-speech-card { padding:24px 16px; border-radius:18px; background:#f7fbf7; border:1px solid #dcebe2; }
+        .phonics-speech-syllable { font-size:58px; color:#126e8a; font-weight:bold; margin:12px 0; }
+        .phonics-speech-line { font-size:21px; color:#365665; line-height:1.8; margin:8px 0; }
+        .phonics-choice-question { font-size:21px; color:#365665; font-weight:bold; margin:12px 0 18px; }
+        .phonics-choice-answer { font-size:28px !important; }
+        .phonics-test-score-note { margin-top:10px; color:#526a73; font-size:15px; }
+        .phonics-lesson-nav { display:flex; align-items:center; justify-content:center; gap:10px; margin:10px 0 14px; }
+        .phonics-lesson-count { min-width:110px; color:#526a73; font-weight:bold; }
+        @media(max-width:650px){ .phonics-six-nav{grid-template-columns:repeat(3,1fr);} }
+        @media(max-width:500px){ .phonics-break-part{font-size:38px; min-width:92px;} .phonics-final-big{font-size:42px; min-width:120px;} .phonics-character-big{font-size:78px;} .phonics-speech-syllable{font-size:48px;} }
     </style>
 </head>
 
@@ -1051,7 +1052,7 @@
                 <label class="setting-label" for="practiceMode">練習類型</label>
                 <select id="practiceMode">
                     <option value="math" selected>數學運算</option>
-                    <option value="characters">一年級注音拼讀・結合韻</option>
+                    <option value="characters">國字描寫</option>
                     <option value="english">英文單字</option>
                 </select>
             </div>
@@ -1116,8 +1117,9 @@
             <div class="character-settings" id="characterSettings" style="display: none;">
                 <div class="lesson-card phonics-intro-card">
                     <strong>📚 國小一年級：結合韻拼讀</strong>
-                    <p>把兩個韻母合在一起讀，例如「ㄧ＋ㄚ＝ㄧㄚ」。先看上下組合，再認識一個國字，最後用選擇題練習。</p>
-                    <p class="phonics-final-list">共 22 個結合韻：ㄧㄚ、ㄧㄛ、ㄧㄝ、ㄧㄞ、ㄧㄠ、ㄧㄡ、ㄧㄤ、ㄧㄢ、ㄧㄣ、ㄧㄥ、ㄨㄚ、ㄨㄛ、ㄨㄞ、ㄨㄟ、ㄨㄢ、ㄨㄣ、ㄨㄤ、ㄨㄥ、ㄩㄝ、ㄩㄢ、ㄩㄣ、ㄩㄥ</p>
+                    <p>依照六個步驟學習：<b>拆解 → 合成 → 國字／詞語 → 語音 → 選擇題 → 測驗</b>。</p>
+                    <p>共 22 個結合韻：ㄧ系列 10 個、ㄨ系列 8 個、ㄩ系列 4 個。</p>
+                    <p class="phonics-final-list">ㄧㄚ、ㄧㄛ、ㄧㄝ、ㄧㄞ、ㄧㄠ、ㄧㄡ、ㄧㄤ、ㄧㄢ、ㄧㄣ、ㄧㄥ、ㄨㄚ、ㄨㄛ、ㄨㄞ、ㄨㄟ、ㄨㄢ、ㄨㄣ、ㄨㄤ、ㄨㄥ、ㄩㄝ、ㄩㄢ、ㄩㄣ、ㄩㄥ</p>
                 </div>
             </div>
 
@@ -1192,75 +1194,103 @@
                 <button class="trace-button" type="button" onclick="backToSetup()">← 選擇其他練習</button>
             </div>
 
-            <div class="phonics-stage-nav">
-                <button class="phonics-stage-btn active" data-stage="teach" onclick="setPhonicsStage('teach')">① 教學</button>
-                <button class="phonics-stage-btn" data-stage="practice" onclick="setPhonicsStage('practice')">② 拼讀練習</button>
-                <button class="phonics-stage-btn" data-stage="test" onclick="setPhonicsStage('test')">③ 測驗</button>
-                <button class="phonics-stage-btn" data-stage="review" onclick="setPhonicsStage('review')">④ 錯題再練</button>
+            <div class="phonics-six-nav">
+                <button class="phonics-six-btn active" data-stage="breakdown" onclick="setPhonicsStage('breakdown')">① 拆解</button>
+                <button class="phonics-six-btn" data-stage="combine" onclick="setPhonicsStage('combine')">② 合成</button>
+                <button class="phonics-six-btn" data-stage="character" onclick="setPhonicsStage('character')">③ 國字/詞語</button>
+                <button class="phonics-six-btn" data-stage="voice" onclick="setPhonicsStage('voice')">④ 語音</button>
+                <button class="phonics-six-btn" data-stage="choice" onclick="setPhonicsStage('choice')">⑤ 選擇題</button>
+                <button class="phonics-six-btn" data-stage="test" onclick="setPhonicsStage('test')">⑥ 測驗</button>
             </div>
 
             <div class="progress"><div class="progress-bar" id="characterProgressBar"></div></div>
+            <div class="phonics-lesson-nav">
+                <button class="trace-button" type="button" onclick="changePhonicsEntry(-1)">← 上一個</button>
+                <span class="phonics-lesson-count" id="phonicsLessonCount">第 1 / 22 個</span>
+                <button class="trace-button" type="button" onclick="changePhonicsEntry(1)">下一個 →</button>
+            </div>
 
-            <div class="phonics-stage-panel active" id="phonicsTeachPanel">
-                <h2 class="english-teach-title">👩‍🏫 老師教學</h2>
+            <div class="phonics-six-panel active" id="phonicsBreakdownPanel">
                 <div class="phonics-card">
-                    <p class="phonics-guide">先看注音怎麼「合起來」，再認識這個音可以對應的國字。</p>
-                    <div class="phonics-combine">
-                        <div class="phonics-parts" id="phonicsTeachParts"></div>
-                        <div class="phonics-equals">＝</div>
-                        <div class="phonics-final" id="phonicsTeachFinal"></div>
-                    </div>
-                    <div class="phonics-character-box">
-                        <div class="phonics-character" id="phonicsTeachCharacter"></div>
-                        <div>國字例子：<strong id="phonicsTeachExampleWord"></strong></div>
-                        <div class="phonics-meaning" id="phonicsTeachMeaning"></div>
-                    </div>
-                    <p class="phonics-tip" id="phonicsTeachTip"></p>
+                    <h2 class="english-teach-title"><span class="phonics-step-number">1</span>拆解：先看兩個韻母</h2>
+                    <p class="phonics-large-guide">把一個結合韻拆開來看。先認識每一個注音，再準備把它們合起來。</p>
+                    <div class="phonics-breakdown" id="phonicsBreakdownParts"></div>
+                    <p class="phonics-tip" id="phonicsBreakdownTip"></p>
                     <div class="english-phase-actions">
-                        <button class="trace-button primary" type="button" onclick="speakCurrentCharacter()">🔊 聽老師念</button>
-                        <button class="trace-button" type="button" onclick="nextPhonicsTeaching()">下一個結合韻 →</button>
+                        <button class="trace-button primary" type="button" onclick="speakPhonicsParts()">🔊 聽兩個韻母</button>
+                        <button class="trace-button" type="button" onclick="setPhonicsStage('combine')">下一步：合成 →</button>
                     </div>
                 </div>
-                <p class="english-feedback" id="phonicsTeachFeedback">仔細看上下組合，跟著老師一起念。</p>
             </div>
 
-            <div class="phonics-stage-panel" id="phonicsPracticePanel">
-                <h2 class="english-teach-title">🎯 拼讀練習：不用計分</h2>
+            <div class="phonics-six-panel" id="phonicsCombinePanel">
                 <div class="phonics-card">
-                    <p class="phonics-guide">下面是上下組合，請選出合起來的結合韻。</p>
-                    <div class="phonics-combine vertical-question" id="phonicsPracticeParts"></div>
-                    <div class="answers" id="phonicsPracticeAnswers"></div>
-                    <p class="english-feedback" id="phonicsPracticeFeedback"></p>
-                </div>
-                <div class="english-phase-actions">
-                    <button class="trace-button" type="button" onclick="nextPhonicsPractice()">下一題 →</button>
-                    <button class="trace-button" type="button" onclick="setPhonicsStage('test')">我準備好了，開始測驗</button>
+                    <h2 class="english-teach-title"><span class="phonics-step-number">2</span>合成：把兩個韻母合起來</h2>
+                    <p class="phonics-large-guide">跟著老師，把上面的兩個韻母連在一起念。</p>
+                    <div class="phonics-synthesis" id="phonicsCombineView"></div>
+                    <p class="phonics-tip" id="phonicsCombineTip"></p>
+                    <div class="english-phase-actions">
+                        <button class="trace-button primary" type="button" onclick="speakPhonicsSynthesis()">🔊 聽合成發音</button>
+                        <button class="trace-button" type="button" onclick="setPhonicsStage('character')">下一步：認識國字 →</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="phonics-stage-panel" id="phonicsTestPanel">
-                <h2 class="english-teach-title">📝 測驗：10 題正式計分</h2>
+            <div class="phonics-six-panel" id="phonicsCharacterPanel">
                 <div class="phonics-card">
-                    <p class="phonics-guide">看上下組合，再選出正確的結合韻。</p>
-                    <div class="phonics-test-top"><span id="phonicsTestCounter"></span><button class="voice-button" id="replayCharacter" type="button" onclick="speakCurrentCharacter()" aria-label="聽題目">🔊</button></div>
+                    <h2 class="english-teach-title"><span class="phonics-step-number">3</span>國字／詞語：把聲音和字連起來</h2>
+                    <div class="phonics-character-box">
+                        <div class="phonics-character-big" id="phonicsCharacterGlyph"></div>
+                        <div class="phonics-word-big" id="phonicsCharacterWord"></div>
+                        <div class="phonics-meaning-big" id="phonicsCharacterMeaning"></div>
+                    </div>
+                    <p class="phonics-tip" id="phonicsCharacterTip"></p>
+                    <div class="english-phase-actions">
+                        <button class="trace-button primary" type="button" onclick="speakPhonicsCharacter()">🔊 聽國字與詞語</button>
+                        <button class="trace-button" type="button" onclick="setPhonicsStage('voice')">下一步：聽語音 →</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phonics-six-panel" id="phonicsVoicePanel">
+                <div class="phonics-card">
+                    <h2 class="english-teach-title"><span class="phonics-step-number">4</span>語音：跟老師念一次</h2>
+                    <div class="phonics-speech-card">
+                        <div class="phonics-speech-syllable" id="phonicsVoiceSyllable"></div>
+                        <p class="phonics-speech-line" id="phonicsVoiceSentence"></p>
+                        <p class="phonics-speech-line" id="phonicsVoiceExample"></p>
+                    </div>
+                    <div class="english-phase-actions">
+                        <button class="trace-button primary" type="button" onclick="speakPhonicsSynthesis()">🔊 正常速度</button>
+                        <button class="trace-button" type="button" onclick="speakPhonicsSynthesis(true)">🐢 慢速念一次</button>
+                        <button class="trace-button" type="button" onclick="setPhonicsStage('choice')">下一步：選擇題 →</button>
+                    </div>
+                    <p class="english-feedback" id="phonicsVoiceFeedback">先聽，再跟著老師說一次。</p>
+                </div>
+            </div>
+
+            <div class="phonics-six-panel" id="phonicsChoicePanel">
+                <div class="phonics-card">
+                    <h2 class="english-teach-title"><span class="phonics-step-number">5</span>選擇題：你會拼了嗎？</h2>
+                    <p class="phonics-choice-question" id="phonicsChoiceQuestion"></p>
+                    <div class="answers" id="phonicsChoiceAnswers"></div>
+                    <p class="english-feedback" id="phonicsChoiceFeedback"></p>
+                    <div class="english-phase-actions">
+                        <button class="trace-button" type="button" onclick="nextPhonicsChoice()">換一題 →</button>
+                        <button class="trace-button primary" type="button" onclick="setPhonicsStage('test')">我準備好了，開始測驗</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phonics-six-panel" id="phonicsTestPanel">
+                <div class="phonics-card">
+                    <h2 class="english-teach-title"><span class="phonics-step-number">6</span>測驗：10 題正式計分</h2>
+                    <p class="phonics-large-guide">看上下組合，選出正確的結合韻。這次會正式計分。</p>
+                    <div class="phonics-test-top"><span id="phonicsTestCounter"></span><button class="voice-button" id="replayCharacter" type="button" onclick="speakCurrentCharacter()" aria-label="聽題目" title="聽題目">🔊</button></div>
                     <div class="phonics-combine vertical-question" id="phonicsTestParts"></div>
                     <div class="answers" id="phonicsTestAnswers"></div>
                     <p class="english-feedback" id="phonicsTestFeedback"></p>
-                </div>
-            </div>
-
-            <div class="phonics-stage-panel" id="phonicsReviewPanel">
-                <h2 class="english-teach-title">🔁 錯題再練</h2>
-                <p class="english-feedback" id="phonicsReviewIntro"></p>
-                <div class="wrong-review-list" id="phonicsWrongList"></div>
-                <div class="english-phase-actions">
-                    <button class="trace-button primary" type="button" onclick="startPhonicsWrongReview()" id="startPhonicsWrongReviewButton">🔄 開始錯題練習</button>
-                    <button class="trace-button" type="button" onclick="setPhonicsStage('teach')">再學一次</button>
-                </div>
-                <div class="phonics-card" id="phonicsWrongQuestion" style="display:none; margin-top:14px;">
-                    <div class="phonics-combine vertical-question" id="phonicsWrongParts"></div>
-                    <div class="answers" id="phonicsWrongAnswers"></div>
-                    <p class="english-feedback" id="phonicsWrongFeedback"></p>
+                    <p class="phonics-test-score-note">每題 10 分，共 100 分。測驗完成後會顯示每一題的結果。</p>
                 </div>
             </div>
         </section>
@@ -1371,10 +1401,10 @@
 
     <div class="result" id="characterResult">
         <div class="emoji">✍️🌟</div>
-        <h1>注音結合韻測驗完成</h1>
+        <h1>國字描寫測驗完成</h1>
         <div class="character-result-score"><span id="characterFinalScore">0</span> / 100</div>
         <p class="character-result-summary" id="characterResultSummary"></p>
-        <div class="answer-review" id="characterResultList" aria-label="結合韻測驗結果"></div>
+        <div class="answer-review" id="characterResultList" aria-label="每字筆順與描寫結果"></div>
         <button class="restart" type="button" onclick="startCharacterPractice()">🔄 再測一次</button>
         <button class="trace-button" type="button" onclick="backToSetup()">選擇其他練習</button>
     </div>
@@ -1411,6 +1441,22 @@
     let currentRightOperand = 0;
     let currentOperator = "+";
     let selectedMultiplicationTable = 1;
+    let characterGrade = 1;
+    let characterIndex = 0;
+    let characterTestDeck = [];
+    let characterTestResults = [];
+    let characterStrokes = [];
+    let activeCharacterStroke = null;
+    let traceContext = null;
+    let characterCorrectStrokeCount = 0;
+    let characterMistakeCount = 0;
+    let characterStrokeCount = 0;
+    let characterCompleted = false;
+    let hanziWriterLoadPromise = null;
+    let hanziWriterInstance = null;
+    let activeCharacterData = null;
+    let characterCanGrade = false;
+    let activeWriterCharacter = "";
     let englishAgeBand = null;
     let englishIndex = 0;
     let englishScore = 0;
@@ -1516,731 +1562,8 @@
         knowledge: { syllables: "2 音節", phonics: "kn 開頭的 k 不發音；字尾是特殊拼法，需要整體記憶。", tip: "knowledge 是常見的不規則拼字。" }
     };
 
-    const zhuyinByCharacter = {
-        "幼": "ㄧㄡˋ", "兒": "ㄦˊ", "數": "ㄕㄨˋ", "學": "ㄒㄩㄝˊ",
-        "老": "ㄌㄠˇ", "師": "ㄕ", "選": "ㄒㄩㄢˇ", "擇": "ㄗㄜˊ",
-        "適": "ㄕˋ", "合": "ㄏㄜˊ", "自": "ㄗˋ", "己": "ㄐㄧˇ",
-        "練": "ㄌㄧㄢˋ", "習": "ㄒㄧˊ", "今": "ㄐㄧㄣ", "天": "ㄊㄧㄢ",
-        "挑": "ㄊㄧㄠˇ", "戰": "ㄓㄢˋ", "題": "ㄊㄧˊ", "年": "ㄋㄧㄢˊ",
-        "齡": "ㄌㄧㄥˊ", "目": "ㄇㄨˋ", "前": "ㄑㄧㄢˊ", "難": "ㄋㄢˊ",
-        "度": "ㄉㄨˋ", "字": "ㄗˋ", "減": "ㄐㄧㄢˇ", "法": "ㄈㄚˇ",
-        "不": "ㄅㄨˋ", "會": "ㄏㄨㄟˋ", "出": "ㄔㄨ", "現": "ㄒㄧㄢˋ",
-        "負": "ㄈㄨˋ", "顯": "ㄒㄧㄢˇ", "示": "ㄕˋ", "注": "ㄓㄨˋ",
-        "音": "ㄧㄣ", "歲": "ㄙㄨㄟˋ", "加": "ㄐㄧㄚ", "混": "ㄏㄨㄣˋ",
-        "第": "ㄉㄧˋ", "一": "ㄧ", "組": "ㄗㄨˇ", "顆": "ㄎㄜ",
-        "原": "ㄩㄢˊ", "有": "ㄧㄡˇ", "拿": "ㄋㄚˊ", "走": "ㄗㄡˇ",
-        "上": "ㄕㄤˋ", "去": "ㄑㄩˋ", "得": "ㄉㄜˊ", "分": "ㄈㄣ",
-        "連": "ㄌㄧㄢˊ", "續": "ㄒㄩˋ", "太": "ㄊㄞˋ", "棒": "ㄅㄤˋ",
-        "答": "ㄉㄚˊ", "對": "ㄉㄨㄟˋ", "好": "ㄏㄠˇ", "厲": "ㄌㄧˋ",
-        "害": "ㄏㄞˋ", "做": "ㄗㄨㄛˋ", "很": "ㄏㄣˇ", "強": "ㄑㄧㄤˊ",
-        "沒": "ㄇㄟˊ", "關": "ㄍㄨㄢ", "係": "ㄒㄧˋ", "再": "ㄗㄞˋ",
-        "想": "ㄒㄧㄤˇ", "下": "ㄒㄧㄚˋ", "案": "ㄢˋ", "是": "ㄕˋ",
-        "完": "ㄨㄢˊ", "成": "ㄔㄥˊ", "表": "ㄅㄧㄠˇ", "非": "ㄈㄟ",
-        "常": "ㄔㄤˊ", "保": "ㄅㄠˇ", "持": "ㄔˊ", "錯": "ㄘㄨㄛˋ",
-        "進": "ㄐㄧㄣˋ", "步": "ㄅㄨˋ", "更": "ㄍㄥˋ", "玩": "ㄨㄢˊ",
-        "的": "ㄉㄜ˙", "你": "ㄋㄧˇ", "小": "ㄒㄧㄠˇ", "才": "ㄘㄞˊ",
-        "內": "ㄋㄟˋ", "容": "ㄖㄨㄥˊ", "開": "ㄎㄞ", "始": "ㄕˇ",
-        "了": "ㄌㄜ˙", "油": "ㄧㄡˊ", "繼": "ㄐㄧˋ",
-        "次": "ㄘˋ", "就": "ㄐㄧㄡˋ"
-    };
-
-
-    function annotateText(container) {
-
-        const walker = document.createTreeWalker(
-            container,
-            NodeFilter.SHOW_TEXT,
-            {
-                acceptNode(node) {
-                    const parent = node.parentElement;
-                    if (!parent || parent.closest("script, style, svg, option, rt, ruby")) {
-                        return NodeFilter.FILTER_REJECT;
-                    }
-                    return NodeFilter.FILTER_ACCEPT;
-                }
-            }
-        );
-        const textNodes = [];
-        let node;
-
-        while ((node = walker.nextNode())) {
-            textNodes.push(node);
-        }
-
-        textNodes.forEach(textNode => {
-            const fragment = document.createDocumentFragment();
-            let changed = false;
-
-            const characters = Array.from(textNode.nodeValue);
-            for (let index = 0; index < characters.length; index++) {
-                const character = characters[index];
-                const zhuyin = character === "一" && characters[index + 1] === "次"
-                    ? "ㄧˊ"
-                    : zhuyinByCharacter[character];
-                if (!zhuyin) {
-                    fragment.appendChild(document.createTextNode(character));
-                    continue;
-                }
-
-                const annotatedCharacter = document.createElement("span");
-                annotatedCharacter.className = "zhuyin-char";
-                annotatedCharacter.dataset.zhuyin = "true";
-                annotatedCharacter.dataset.original = character;
-
-                const base = document.createElement("span");
-                base.className = "zhuyin-base";
-                base.innerText = character;
-                annotatedCharacter.appendChild(base);
-
-                const reading = document.createElement("span");
-                reading.className = "zhuyin-reading";
-                reading.setAttribute("aria-hidden", "true");
-
-                const symbols = Array.from(zhuyin);
-                const toneMarks = ["ˊ", "ˇ", "ˋ", "˙"];
-                const tone = toneMarks.includes(symbols[symbols.length - 1])
-                    ? symbols.pop()
-                    : "";
-
-                symbols.forEach(symbol => {
-                    const symbolElement = document.createElement("span");
-                    symbolElement.className = "zhuyin-symbol";
-                    symbolElement.innerText = symbol;
-                    reading.appendChild(symbolElement);
-                });
-
-                if (tone) {
-                    const toneElement = document.createElement("span");
-                    toneElement.className = tone === "˙"
-                        ? "zhuyin-tone zhuyin-tone-neutral"
-                        : "zhuyin-tone";
-                    toneElement.innerText = tone;
-                    reading.appendChild(toneElement);
-                }
-
-                annotatedCharacter.appendChild(reading);
-                fragment.appendChild(annotatedCharacter);
-                changed = true;
-            }
-
-            if (changed) textNode.replaceWith(fragment);
-        });
-    }
-
-
-    function refreshZhuyin() {
-
-        const container = document.querySelector(".container");
-        container.querySelectorAll('.zhuyin-char[data-zhuyin="true"]').forEach(annotated => {
-            annotated.replaceWith(document.createTextNode(annotated.dataset.original));
-        });
-
-        if (document.getElementById("zhuyinToggle").checked) {
-            container.querySelectorAll(".learning-text").forEach(annotateText);
-        }
-    }
-
-
-    function setChineseText(element, text) {
-
-        element.textContent = text;
-        if (
-            document.getElementById("zhuyinToggle").checked &&
-            element.classList.contains("learning-text")
-        ) {
-            annotateText(element);
-        }
-    }
-
-
     // ==========================
-    // 隨機數字
-    // ==========================
-
-    function randomNumber(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-
-    // ==========================
-    // 產生題目
-    // ==========================
-
-    function generateQuestion() {
-
-        const operation = document.getElementById("operationSelect").value;
-        let a;
-        let b;
-        const isAddition = operation === "addition" ||
-            (operation === "mixed" && Math.random() < 0.5);
-
-        if (operation === "multiplication") {
-
-            a = selectedMultiplicationTable;
-            b = currentQuestion + 1;
-            currentOperator = "×";
-            correctAnswer = a * b;
-
-            document.getElementById("question").innerText =
-                `${a} × ${b} = ?`;
-
-            document.getElementById("visualModel").style.display = "none";
-            document.getElementById("multiplicationVisual").style.display = "block";
-            renderMultiplicationModel(a, b);
-
-            const repeatedAddition = Array(a).fill(b).join(" + ");
-            setChineseText(
-                document.getElementById("multiplicationHint"),
-                `${a} × ${b} 表示 ${a} 組、每組 ${b} 個，也就是 ${repeatedAddition}。數數看一共有幾個？`
-            );
-        } else if (isAddition) {
-
-            a = randomNumber(1, maxNumber);
-            b = randomNumber(1, maxNumber);
-            document.getElementById("visualModel").style.display = "grid";
-            document.getElementById("multiplicationVisual").style.display = "none";
-            document.getElementById("multiplicationHint").style.display = "none";
-
-            currentOperator = "+";
-            correctAnswer = a + b;
-
-            document.getElementById("question").innerText =
-                `${a} + ${b} = ?`;
-
-        } else {
-
-            a = randomNumber(1, maxNumber);
-            b = randomNumber(1, maxNumber);
-            while (a === b) {
-                b = randomNumber(1, maxNumber);
-            }
-
-            document.getElementById("visualModel").style.display = "grid";
-            document.getElementById("multiplicationVisual").style.display = "none";
-            document.getElementById("multiplicationHint").style.display = "none";
-
-            currentOperator = "-";
-            if (a < b) {
-                let temp = a;
-                a = b;
-                b = temp;
-            }
-
-            correctAnswer = a - b;
-
-            document.getElementById("question").innerText =
-                `${a} - ${b} = ?`;
-        }
-
-        currentLeftOperand = a;
-        currentRightOperand = b;
-
-        if (operation !== "multiplication") {
-            renderVisualModel(a, b, isAddition);
-        }
-
-        generateAnswers();
-        speakQuestion();
-    }
-
-
-    function numberToChinese(number) {
-
-        const digits = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
-        if (number < 10) return digits[number];
-        if (number < 20) return `十${number % 10 ? digits[number % 10] : ""}`;
-        if (number < 100) {
-            const tens = Math.floor(number / 10);
-            const ones = number % 10;
-            return `${digits[tens]}十${ones ? digits[ones] : ""}`;
-        }
-
-        const hundreds = Math.floor(number / 100);
-        const remainder = number % 100;
-        if (remainder === 0) return `${digits[hundreds]}百`;
-        if (remainder < 10) return `${digits[hundreds]}百零${digits[remainder]}`;
-        return `${digits[hundreds]}百${numberToChinese(remainder)}`;
-    }
-
-
-    function speakText(text) {
-
-        if (
-            !document.getElementById("voiceToggle").checked ||
-            !("speechSynthesis" in window) ||
-            !("SpeechSynthesisUtterance" in window)
-        ) return;
-
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = "zh-TW";
-        utterance.rate = 0.88;
-
-        const voices = window.speechSynthesis.getVoices();
-        utterance.voice = voices.find(voice => voice.lang.toLowerCase() === "zh-tw") ||
-            voices.find(voice => voice.lang.toLowerCase().startsWith("zh")) || null;
-
-        window.speechSynthesis.speak(utterance);
-        return utterance;
-    }
-
-
-    function speakEnglishText(text) {
-
-        if (
-            !document.getElementById("voiceToggle").checked ||
-            !("speechSynthesis" in window) ||
-            !("SpeechSynthesisUtterance" in window)
-        ) return;
-
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = "en-US";
-        utterance.rate = 0.78;
-
-        const voices = window.speechSynthesis.getVoices();
-        utterance.voice = voices.find(voice => voice.lang.toLowerCase() === "en-us") ||
-            voices.find(voice => voice.lang.toLowerCase().startsWith("en")) || null;
-
-        window.speechSynthesis.speak(utterance);
-        return utterance;
-    }
-
-
-    function speakQuestion() {
-
-        const left = numberToChinese(currentLeftOperand);
-        const right = numberToChinese(currentRightOperand);
-        const speech = currentOperator === "×"
-            ? `${left}乘以${right}，是${left}組、每組${right}個，合起來有多少個？`
-            : `${left}${currentOperator === "+" ? "加" : "減"}${right}等於多少？`;
-        speakText(speech);
-    }
-
-
-    function speakCurrentCharacter() {
-
-        const entry = characterTestDeck[characterIndex];
-        if (!entry) return;
-        speakText(
-            `今天要學的字是${entry.character}。它念作${entry.character}。意思是：${entry.meaning}`
-        );
-    }
-
-
-    function speakAnswer(isCorrect, selectedAnswer, praise) {
-
-        const operatorText = currentOperator === "+"
-            ? "加"
-            : currentOperator === "-"
-                ? "減"
-                : "乘以";
-        const equation =
-            `${numberToChinese(currentLeftOperand)}${operatorText}${numberToChinese(currentRightOperand)}等於${numberToChinese(correctAnswer)}`;
-        const feedback = isCorrect
-            ? `${equation}。${praise}`
-            : `${equation}。${getChildName()}，你的答案是${numberToChinese(selectedAnswer)}，再聽一次正確答案。`;
-
-        return speakText(feedback);
-    }
-
-
-    function renderMultiplicationModel(groupCount, applesPerGroup) {
-
-        const container = document.getElementById("multiplicationGroups");
-        container.innerHTML = "";
-
-        for (let group = 1; group <= groupCount; group++) {
-            const row = document.createElement("div");
-            row.className = "multiplication-row";
-
-            const label = document.createElement("span");
-            label.className = "multiplication-row-label";
-            label.innerText = `第 ${group} 組`;
-            row.appendChild(label);
-
-            const apples = document.createElement("span");
-            apples.className = "multiplication-row-apples";
-            apples.setAttribute("aria-hidden", "true");
-            for (let apple = 0; apple < applesPerGroup; apple++) {
-                apples.appendChild(createAppleIcon());
-            }
-            row.appendChild(apples);
-            container.appendChild(row);
-        }
-
-        document.getElementById("multiplicationVisual").setAttribute(
-            "aria-label",
-            `${groupCount} 組，每組 ${applesPerGroup} 個`
-        );
-    }
-
-
-    function renderVisualModel(a, b, isAddition) {
-
-        const labelA = isAddition ? `第一組 ${a} 顆` : `原有 ${a} 顆`;
-        const labelB = isAddition ? `第二組 ${b} 顆` : `拿走 ${b} 顆`;
-
-        setChineseText(document.getElementById("visualLabelA"), labelA);
-        setChineseText(document.getElementById("visualLabelB"), labelB);
-        document.getElementById("visualOperation").innerText = isAddition ? "+" : "−";
-        document.getElementById("visualModel").setAttribute(
-            "aria-label",
-            `${labelA}，${isAddition ? "加上" : "減去"}${labelB}`
-        );
-
-        renderAppleCount("visualItemsA", a);
-        renderAppleCount("visualItemsB", b);
-    }
-
-
-    function renderAppleCount(containerId, count) {
-
-        const container = document.getElementById(containerId);
-        container.innerHTML = "";
-
-        if (count === 0) {
-            const zero = document.createElement("span");
-            zero.className = "zero-count";
-            zero.innerText = "0 顆";
-            container.appendChild(zero);
-            return;
-        }
-
-        const iconCount = count > 20 ? Math.floor(count / 10) : count;
-        const remainder = count > 20 ? count % 10 : 0;
-
-        for (let index = 0; index < iconCount; index++) {
-            if (count > 20) {
-                const bundle = document.createElement("span");
-                bundle.className = "apple-bundle";
-                bundle.appendChild(createAppleIcon());
-
-                const label = document.createElement("span");
-                label.innerText = "×10";
-                bundle.appendChild(label);
-                container.appendChild(bundle);
-            } else {
-                container.appendChild(createAppleIcon());
-            }
-        }
-
-        for (let index = 0; index < remainder; index++) {
-            container.appendChild(createAppleIcon());
-        }
-    }
-
-
-    function createAppleIcon() {
-
-        const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-        icon.setAttribute("class", "apple-icon");
-        icon.setAttribute("aria-hidden", "true");
-        use.setAttribute("href", "#appleSymbol");
-        icon.appendChild(use);
-        return icon;
-    }
-
-
-    // ==========================
-    // 產生四個答案
-    // ==========================
-
-    function generateAnswers() {
-
-        let answers = [correctAnswer];
-        const answerLimit =
-            document.getElementById("operationSelect").value === "multiplication"
-                ? 90
-                : maxNumber * 2;
-
-        while (answers.length < 4) {
-
-            let wrongAnswer = randomNumber(
-                Math.max(0, correctAnswer - 5),
-                Math.min(answerLimit, correctAnswer + 5)
-            );
-
-            if (!answers.includes(wrongAnswer)) {
-                answers.push(wrongAnswer);
-            }
-        }
-
-        // 打亂答案
-        answers.sort(() => Math.random() - 0.5);
-
-        const container =
-            document.getElementById("answers");
-
-        container.innerHTML = "";
-
-        answers.forEach(answer => {
-
-            const button =
-                document.createElement("button");
-
-            button.className = "answer-btn";
-
-            button.innerText = answer;
-
-            button.onclick = () =>
-                checkAnswer(answer);
-
-            container.appendChild(button);
-        });
-    }
-
-
-    // ==========================
-    // 判斷答案
-    // ==========================
-
-    function checkAnswer(answer) {
-
-        if (hasAnswered) return;
-        hasAnswered = true;
-        document.querySelectorAll(".answer-btn").forEach(button => {
-            button.disabled = true;
-        });
-
-        const message =
-            document.getElementById("message");
-        const isCorrect = answer === correctAnswer;
-        const praise = isCorrect ? getCorrectMessage() : "";
-
-        const questionText = document.getElementById("question").innerText;
-        questionHistory.push({
-            question: questionText.replace(" = ?", ""),
-            selectedAnswer: answer,
-            correctAnswer,
-            isCorrect: answer === correctAnswer
-        });
-
-        if (isCorrect) {
-
-            score++;
-            streak++;
-
-            setChineseText(message, praise);
-
-            message.style.color = "#2ecc71";
-
-            document
-                .getElementById("question")
-                .classList.add("correct");
-
-            setTimeout(() => {
-
-                document
-                    .getElementById("question")
-                    .classList.remove("correct");
-
-            }, 300);
-
-        } else {
-
-            streak = 0;
-
-            setChineseText(message, `😊 再想一下！答案是 ${correctAnswer}`);
-
-            message.style.color = "#ff6b6b";
-        }
-
-        const feedbackUtterance = speakAnswer(isCorrect, answer, praise);
-
-
-        updateScore();
-
-        let hasAdvanced = false;
-        let fallbackTimer;
-
-        const advanceQuestion = () => {
-
-            if (hasAdvanced) return;
-            hasAdvanced = true;
-            clearTimeout(fallbackTimer);
-
-            currentQuestion++;
-
-            if (currentQuestion >= totalQuestions) {
-
-                showResult();
-
-            } else {
-
-                nextQuestion();
-
-            }
-
-        };
-
-        if (feedbackUtterance) {
-            feedbackUtterance.addEventListener("end", () => {
-                setTimeout(advanceQuestion, 200);
-            }, { once: true });
-            feedbackUtterance.addEventListener("error", advanceQuestion, { once: true });
-            fallbackTimer = setTimeout(advanceQuestion, 8000);
-        } else {
-            setTimeout(advanceQuestion, 900);
-        }
-    }
-
-
-    // ==========================
-    // 鼓勵文字
-    // ==========================
-
-    function getChildName() {
-
-        return document.getElementById("childName").value.trim() || "小朋友";
-    }
-
-
-    function getCorrectMessage() {
-
-        const name = getChildName();
-        const messages = [
-            `${name}，答對了，好棒喔！你真的很厲害！`,
-            `${name}，你又答對了！太驚人了，答得真漂亮！`,
-            `${name}，答對了！你專心想一想，就找到答案了！`,
-            `${name}，答對了！你用的方法真聰明，太棒了！`,
-            `${name}，答對了！你觀察得好仔細，真是數學高手！`,
-            `${name}，又答對了！你越練越熟，進步超級快！`,
-            `${name}，答對了！這麼難的題目也被你解開了，太強啦！`,
-            `${name}，答對了！你認真思考的樣子真的好棒！`,
-            `${name}，答對了！你的解題方法很棒，繼續發光！`,
-            `${name}，連續答對真不簡單！你是超級數學小高手！`
-        ];
-
-        return messages[randomNumber(0, messages.length - 1)];
-    }
-
-
-    // ==========================
-    // 下一題
-    // ==========================
-
-    function nextQuestion() {
-
-        hasAnswered = false;
-        document.getElementById("message").innerText = "";
-
-        document.getElementById("questionNumber")
-            .innerText = currentQuestion + 1;
-
-        updateProgress();
-
-        generateQuestion();
-    }
-
-
-    // ==========================
-    // 更新分數
-    // ==========================
-
-    function updateScore() {
-
-        document.getElementById("score")
-            .innerText = score;
-
-        document.getElementById("streak")
-            .innerText = streak;
-    }
-
-
-    // ==========================
-    // 進度條
-    // ==========================
-
-    function updateProgress() {
-
-        const percentage =
-            (currentQuestion / totalQuestions) * 100;
-
-        document.getElementById("progressBar")
-            .style.width = percentage + "%";
-    }
-
-
-    // ==========================
-    // 顯示結果
-    // ==========================
-
-    function showResult() {
-
-        document.getElementById("setup").style.display = "none";
-        document.getElementById("quiz").style.display = "none";
-        document.getElementById("game")
-            .style.display = "none";
-
-        document.getElementById("result")
-            .style.display = "block";
-
-        document.getElementById("finalScore")
-            .innerText = score;
-
-        let message = "";
-
-        if (score === 10) {
-
-            message =
-                "🏆 太厲害了！你是數學小天才！";
-
-        } else if (score >= 8) {
-
-            message =
-                "🌟 表現非常棒！繼續保持！";
-
-        } else if (score >= 6) {
-
-            message =
-                "👍 很不錯！再練習一下會更厲害！";
-
-        } else {
-
-            message =
-                "💪 沒關係，再玩一次就會進步！";
-        }
-
-        setChineseText(document.getElementById("resultMessage"), message);
-        renderAnswerReview();
-    }
-
-
-    function renderAnswerReview() {
-
-        const container = document.getElementById("answerReview");
-        container.innerHTML = "";
-
-        questionHistory.forEach((entry, index) => {
-            const row = document.createElement("div");
-            row.className = `review-item${entry.isCorrect ? "" : " is-wrong"}`;
-
-            const question = document.createElement("span");
-            question.className = "review-question";
-            question.innerText = `${index + 1}. ${entry.question} = ${entry.correctAnswer}`;
-            row.appendChild(question);
-
-            const status = document.createElement("span");
-            status.className = "review-status learning-text";
-            setChineseText(status, entry.isCorrect ? "答對" : "答錯");
-            row.appendChild(status);
-
-            if (!entry.isCorrect) {
-                const answer = document.createElement("span");
-                answer.className = "review-answer learning-text";
-                setChineseText(answer, `你的答案：${entry.selectedAnswer}，正確答案：${entry.correctAnswer}`);
-                row.appendChild(answer);
-            }
-
-            container.appendChild(row);
-        });
-    }
-
-
-    // ==========================
-    // 一年級注音：22 個結合韻
+    // 一年級注音：22 個結合韻六步驟課程
     // ==========================
     const firstGradeCombinedRhymes = [
         { syllable:"ㄧㄚ", parts:["ㄧ","ㄚ"], character:"壓", example:"壓力", meaning:"往下用力，或把東西壓住。", tip:"ㄧ 和 ㄚ 合起來，就是 ㄧㄚ。" },
@@ -2269,191 +1592,128 @@
 
     let phonicsDeck = [];
     let phonicsIndex = 0;
-    let phonicsPracticeEntry = null;
+    let phonicsCurrentEntry = null;
+    let phonicsChoiceEntry = null;
     let phonicsTestDeck = [];
     let phonicsTestIndex = 0;
     let phonicsTestScore = 0;
     let phonicsTestResults = [];
-    let phonicsWrongWords = [];
-    let phonicsWrongIndex = 0;
-    let phonicsWrongAnswered = false;
-    let phonicsCurrentEntry = null;
+    let phonicsTestStarted = false;
 
     function shufflePhonics(items) {
         const a = [...items];
-        for (let i=a.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
         return a;
     }
 
-    function renderPhonicsParts(container, entry) {
-        container.innerHTML = "";
-        const parts = document.createElement("div");
-        parts.className = "phonics-parts";
-        entry.parts.forEach(p => { const el=document.createElement("span"); el.className="phonics-part"; el.textContent=p; parts.appendChild(el); });
-        container.appendChild(parts);
-    }
+    function getPhonicsEntry() { return phonicsDeck[phonicsIndex] || firstGradeCombinedRhymes[0]; }
 
-    function renderPhonicsChoiceButtons(container, correct, callback) {
-        container.innerHTML = "";
-        const others = shufflePhonics(firstGradeCombinedRhymes.filter(x=>x.syllable!==correct.syllable)).slice(0,3);
-        shufflePhonics([correct,...others]).forEach(entry => {
-            const btn=document.createElement("button"); btn.className="answer-btn"; btn.type="button"; btn.textContent=entry.syllable;
-            btn.addEventListener("click",()=>callback(entry)); container.appendChild(btn);
+    function renderPhonicsEntryAll() {
+        const entry = getPhonicsEntry();
+        phonicsCurrentEntry = entry;
+        updatePhonicsProgress("", phonicsIndex, phonicsDeck.length);
+        const breakdown = document.getElementById("phonicsBreakdownParts");
+        breakdown.innerHTML = "";
+        entry.parts.forEach((part, i) => {
+            if (i > 0) { const plus=document.createElement("div"); plus.className="phonics-plus"; plus.textContent="＋"; breakdown.appendChild(plus); }
+            const el=document.createElement("div"); el.className="phonics-break-part"; el.textContent=part; breakdown.appendChild(el);
         });
+        document.getElementById("phonicsBreakdownTip").textContent=entry.tip;
+        const combine=document.getElementById("phonicsCombineView");
+        combine.innerHTML=`<div class="phonics-breakdown" style="margin:0">${entry.parts.map(p=>`<div class="phonics-break-part">${p}</div>`).join('<div class="phonics-plus">＋</div>')}</div><div class="phonics-equals">＝</div><div class="phonics-final-big">${entry.syllable}</div>`;
+        document.getElementById("phonicsCombineTip").textContent=`把「${entry.parts[0]}」和「${entry.parts[1]}」連起來念，就是「${entry.syllable}」。`;
+        document.getElementById("phonicsCharacterGlyph").textContent=entry.character;
+        document.getElementById("phonicsCharacterWord").textContent=`${entry.example}（${entry.syllable}）`;
+        document.getElementById("phonicsCharacterMeaning").textContent=entry.meaning;
+        document.getElementById("phonicsCharacterTip").textContent=`看到「${entry.character}」，可以想到「${entry.example}」，再把讀音和「${entry.syllable}」連起來。`;
+        document.getElementById("phonicsVoiceSyllable").textContent=entry.syllable;
+        document.getElementById("phonicsVoiceSentence").textContent=`先念：${entry.parts[0]}、${entry.parts[1]}。合起來念：${entry.syllable}。`;
+        document.getElementById("phonicsVoiceExample").textContent=`國字：${entry.character}　詞語：${entry.example}`;
     }
 
-    function speakPhonicsEntry(entry) {
-        if (!entry) return;
-        speakText(`結合韻 ${entry.parts.join("加")}，合起來是 ${entry.syllable}。國字例子是 ${entry.character}，${entry.example}。`);
+    function speakPhonicsParts(){ const e=getPhonicsEntry(); speakText(`先念兩個韻母：${e.parts[0]}、${e.parts[1]}。`); }
+    function speakPhonicsSynthesis(slow=false){
+        const e=getPhonicsEntry(); if(!document.getElementById("voiceToggle")?.checked || !("speechSynthesis" in window)) return;
+        window.speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(`${e.parts[0]}和${e.parts[1]}合起來，念作${e.syllable}。再念一次：${e.syllable}。`);
+        u.lang="zh-TW"; u.rate=slow?0.55:0.78; const voices=window.speechSynthesis.getVoices();
+        u.voice=voices.find(v=>v.lang.toLowerCase()==="zh-tw")||voices.find(v=>v.lang.toLowerCase().startsWith("zh"))||null; window.speechSynthesis.speak(u);
+    }
+    function speakPhonicsCharacter(){ const e=getPhonicsEntry(); speakText(`國字是${e.character}。詞語是${e.example}。${e.syllable}，${e.example}。`); }
+    function speakCurrentCharacter(){ if(phonicsCurrentEntry) speakPhonicsSynthesis(); }
+    function updatePhonicsProgress(label,index,total){ const t=total||22,i=Math.min(index+1,t); document.getElementById("characterProgress").textContent=`國小一年級・結合韻 ${i} / ${t}${label?`・${label}`:""}`; document.getElementById("characterProgressBar").style.width=`${(i/t)*100}%`; const counter=document.getElementById("phonicsLessonCount"); if(counter)counter.textContent=`第 ${i} / ${t} 個`; }
+
+    function changePhonicsEntry(delta){
+        phonicsIndex=(phonicsIndex+delta+phonicsDeck.length)%phonicsDeck.length;
+        phonicsCurrentEntry=getPhonicsEntry(); phonicsChoiceEntry=phonicsCurrentEntry; renderPhonicsEntryAll();
+        const active=document.querySelector(".phonics-six-btn.active")?.dataset.stage;
+        if(active==="choice") renderPhonicsChoice();
+        if(active==="breakdown") speakPhonicsParts();
+        if(active==="combine" || active==="voice") speakPhonicsSynthesis();
+        if(active==="character") speakPhonicsCharacter();
     }
 
-    function speakCurrentCharacter() {
-        const entry = phonicsCurrentEntry || phonicsDeck[phonicsIndex] || phonicsTestDeck[phonicsTestIndex] || phonicsWrongWords[phonicsWrongIndex];
-        speakPhonicsEntry(entry);
-    }
-
-    function setPhonicsStage(stage) {
-        document.querySelectorAll(".phonics-stage-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.stage===stage));
-        document.querySelectorAll(".phonics-stage-panel").forEach(panel=>panel.classList.remove("active"));
+    function setPhonicsStage(stage){
+        document.querySelectorAll(".phonics-six-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.stage===stage));
+        document.querySelectorAll(".phonics-six-panel").forEach(panel=>panel.classList.remove("active"));
         const panel=document.getElementById(`phonics${stage.charAt(0).toUpperCase()+stage.slice(1)}Panel`); if(panel) panel.classList.add("active");
-        if(stage==='teach') renderPhonicsTeaching();
-        if(stage==='practice') startPhonicsPractice();
-        if(stage==='test') startPhonicsTest();
-        if(stage==='review') renderPhonicsReview();
+        renderPhonicsEntryAll();
+        if(stage==="breakdown") speakPhonicsParts();
+        if(stage==="combine") speakPhonicsSynthesis();
+        if(stage==="character") speakPhonicsCharacter();
+        if(stage==="voice") speakPhonicsSynthesis();
+        if(stage==="choice") startPhonicsChoice();
+        if(stage==="test") startPhonicsTest();
     }
 
-    function updatePhonicsProgress(label, index, total) {
-        document.getElementById("characterProgress").textContent=`國小一年級・結合韻${label} ${Math.min(index+1,total)} / ${total}`;
-        document.getElementById("characterProgressBar").style.width=`${total ? ((index+1)/total)*100 : 0}%`;
+    function startPhonicsChoice(){ phonicsChoiceEntry=phonicsChoiceEntry||getPhonicsEntry(); renderPhonicsChoice(); }
+    function renderPhonicsChoice(){
+        const e=phonicsChoiceEntry||getPhonicsEntry(); document.getElementById("phonicsChoiceQuestion").textContent=`「${e.parts[0]} ＋ ${e.parts[1]}」合起來是哪一個結合韻？`;
+        const box=document.getElementById("phonicsChoiceAnswers"); box.innerHTML=""; box.dataset.locked="0"; document.getElementById("phonicsChoiceFeedback").textContent="";
+        shufflePhonics([e,...shufflePhonics(firstGradeCombinedRhymes.filter(x=>x.syllable!==e.syllable)).slice(0,3)]).forEach(choice=>{ const b=document.createElement("button"); b.className="answer-btn phonics-choice-answer"; b.type="button"; b.textContent=choice.syllable; b.onclick=()=>answerPhonicsChoice(choice); box.appendChild(b); });
     }
-
-    function renderPhonicsTeaching() {
-        const entry=phonicsDeck[phonicsIndex]; if(!entry)return;
-        phonicsCurrentEntry=entry;
-        updatePhonicsProgress("教學",phonicsIndex,phonicsDeck.length);
-        renderPhonicsParts(document.getElementById("phonicsTeachParts"),entry);
-        document.getElementById("phonicsTeachFinal").textContent=entry.syllable;
-        document.getElementById("phonicsTeachCharacter").textContent=entry.character;
-        document.getElementById("phonicsTeachExampleWord").textContent=entry.example;
-        document.getElementById("phonicsTeachMeaning").textContent=entry.meaning;
-        document.getElementById("phonicsTeachTip").textContent=entry.tip;
-        document.getElementById("phonicsTeachFeedback").textContent=`跟老師念：${entry.syllable}。再看看國字「${entry.character}」。`;
+    function answerPhonicsChoice(answer){
+        const e=phonicsChoiceEntry||getPhonicsEntry(),box=document.getElementById("phonicsChoiceAnswers"); if(box.dataset.locked==="1") return; box.dataset.locked="1";
+        const ok=answer.syllable===e.syllable; document.querySelectorAll("#phonicsChoiceAnswers .answer-btn").forEach(b=>b.disabled=true);
+        document.getElementById("phonicsChoiceFeedback").textContent=ok?`🌟 答對了！${e.parts[0]}＋${e.parts[1]}＝${e.syllable}。`:`😊 再想一下！正確答案是 ${e.syllable}。`;
+        speakText(ok?`答對了！${e.syllable}。`:`再想一下。正確答案是${e.syllable}。`); setTimeout(()=>box.dataset.locked="0",600);
     }
+    function nextPhonicsChoice(){ phonicsChoiceEntry=shufflePhonics(firstGradeCombinedRhymes)[0]; const idx=phonicsDeck.findIndex(x=>x.syllable===phonicsChoiceEntry.syllable); if(idx>=0)phonicsIndex=idx; renderPhonicsEntryAll(); renderPhonicsChoice(); }
 
-    function nextPhonicsTeaching() {
-        phonicsIndex++;
-        if(phonicsIndex>=phonicsDeck.length){ phonicsIndex=0; setPhonicsStage('practice'); return; }
-        renderPhonicsTeaching(); speakPhonicsEntry(phonicsDeck[phonicsIndex]);
-    }
-
-    function startPhonicsPractice() {
-        phonicsPracticeEntry=phonicsPracticeEntry || shufflePhonics(phonicsDeck)[0];
-        updatePhonicsProgress("練習",0,1);
-        renderPhonicsParts(document.getElementById("phonicsPracticeParts"),phonicsPracticeEntry);
-        renderPhonicsChoiceButtons(document.getElementById("phonicsPracticeAnswers"),phonicsPracticeEntry,(answer)=>{
-            const ok=answer.syllable===phonicsPracticeEntry.syllable;
-            document.getElementById("phonicsPracticeFeedback").textContent=ok?`🌟 答對了！${answer.syllable} 就是 ${phonicsPracticeEntry.parts.join("＋")}。`:`😊 再想一下！正確答案是 ${phonicsPracticeEntry.syllable}。`;
-            if(ok) speakText(`答對了！${answer.syllable}。`); else speakText(`再想一下。正確答案是${phonicsPracticeEntry.syllable}。`);
-        });
-    }
-
-    function nextPhonicsPractice(){ phonicsPracticeEntry=shufflePhonics(firstGradeCombinedRhymes)[0]; startPhonicsPractice(); }
-
-    function startPhonicsTest() {
-        if(!phonicsTestDeck.length || phonicsTestIndex>=phonicsTestDeck.length){
-            phonicsTestDeck=shufflePhonics(firstGradeCombinedRhymes).slice(0,10); phonicsTestIndex=0; phonicsTestScore=0; phonicsTestResults=[];
-        }
+    function startPhonicsTest(){
+        if(!phonicsTestStarted){ phonicsTestDeck=shufflePhonics(firstGradeCombinedRhymes).slice(0,10); phonicsTestIndex=0; phonicsTestScore=0; phonicsTestResults=[]; phonicsTestStarted=true; }
         showPhonicsTestQuestion();
     }
-
-    function showPhonicsTestQuestion() {
-        const entry=phonicsTestDeck[phonicsTestIndex]; if(!entry)return;
-        phonicsCurrentEntry=entry;
-        updatePhonicsProgress("測驗",phonicsTestIndex,phonicsTestDeck.length);
+    function showPhonicsTestQuestion(){
+        const e=phonicsTestDeck[phonicsTestIndex]; if(!e)return; phonicsCurrentEntry=e;
+        document.getElementById("characterProgress").textContent=`國小一年級・結合韻測驗 ${phonicsTestIndex+1} / ${phonicsTestDeck.length}`;
+        document.getElementById("characterProgressBar").style.width=`${((phonicsTestIndex+1)/phonicsTestDeck.length)*100}%`;
         document.getElementById("phonicsTestCounter").textContent=`第 ${phonicsTestIndex+1} / ${phonicsTestDeck.length} 題`;
-        renderPhonicsParts(document.getElementById("phonicsTestParts"),entry);
-        renderPhonicsChoiceButtons(document.getElementById("phonicsTestAnswers"),entry,answer=>answerPhonicsTest(answer));
-        document.getElementById("phonicsTestFeedback").textContent="";
-        speakPhonicsEntry(entry);
+        const c=document.getElementById("phonicsTestParts"); c.innerHTML=""; const parts=document.createElement("div"); parts.className="phonics-parts";
+        e.parts.forEach(p=>{const el=document.createElement("span");el.className="phonics-part";el.textContent=p;parts.appendChild(el);}); c.appendChild(parts);
+        const box=document.getElementById("phonicsTestAnswers"); box.innerHTML=""; box.dataset.locked="0";
+        shufflePhonics([e,...shufflePhonics(firstGradeCombinedRhymes.filter(x=>x.syllable!==e.syllable)).slice(0,3)]).forEach(choice=>{const b=document.createElement("button");b.className="answer-btn phonics-choice-answer";b.type="button";b.textContent=choice.syllable;b.onclick=()=>answerPhonicsTest(choice);box.appendChild(b);});
+        document.getElementById("phonicsTestFeedback").textContent=""; speakText(`請聽題目。${e.parts[0]}和${e.parts[1]}合起來是哪一個結合韻？`);
     }
-
     function answerPhonicsTest(answer){
-        if(document.getElementById("phonicsTestAnswers").dataset.locked==='1')return;
-        document.getElementById("phonicsTestAnswers").dataset.locked='1';
-        const entry=phonicsTestDeck[phonicsTestIndex], ok=answer.syllable===entry.syllable;
-        if(ok)phonicsTestScore++;
-        phonicsTestResults.push({entry,selected:answer,isCorrect:ok});
-        document.getElementById("phonicsTestFeedback").textContent=ok?"🌟 答對了！":"😊 再想一下，正確答案是「"+entry.syllable+"」。";
-        speakText(ok?`答對了！${entry.syllable}。`:`再想一下。正確答案是${entry.syllable}。`);
-        setTimeout(()=>{document.getElementById("phonicsTestAnswers").dataset.locked='0'; phonicsTestIndex++; if(phonicsTestIndex>=phonicsTestDeck.length) showPhonicsResult(); else showPhonicsTestQuestion();},850);
+        const box=document.getElementById("phonicsTestAnswers"); if(box.dataset.locked==="1")return; box.dataset.locked="1"; const e=phonicsTestDeck[phonicsTestIndex],ok=answer.syllable===e.syllable;
+        if(ok)phonicsTestScore++; phonicsTestResults.push({entry:e,selected:answer,isCorrect:ok}); document.querySelectorAll("#phonicsTestAnswers .answer-btn").forEach(b=>b.disabled=true);
+        document.getElementById("phonicsTestFeedback").textContent=ok?`🌟 答對了！${e.parts[0]}＋${e.parts[1]}＝${e.syllable}。`:`😊 再想一下！正確答案是「${e.syllable}」，國字例子是「${e.character}」。`;
+        speakText(ok?`答對了！${e.syllable}。`:`再想一下。正確答案是${e.syllable}。`);
+        setTimeout(()=>{phonicsTestIndex++;if(phonicsTestIndex>=phonicsTestDeck.length)showPhonicsResult();else showPhonicsTestQuestion();},850);
     }
-
-    function renderPhonicsReview(){
-        const list=document.getElementById("phonicsWrongList"); list.innerHTML="";
-        const wrong=phonicsTestResults.filter(x=>!x.isCorrect).map(x=>x.entry); phonicsWrongWords=wrong;
-        document.getElementById("phonicsReviewIntro").textContent=wrong.length?`這次有 ${wrong.length} 題需要再練習。把它們再看一次，就會更熟！`:`🎉 全部答對！沒有錯題，太棒了！`;
-        wrong.forEach((entry,i)=>{const row=document.createElement("div");row.className="review-item is-wrong";row.innerHTML=`<span class="review-question">${i+1}. ${entry.syllable}　國字：${entry.character}</span><span class="review-status">再練習</span><span class="review-answer">例子：${entry.example}　${entry.meaning}</span>`;list.appendChild(row);});
-        document.getElementById("startPhonicsWrongReviewButton").style.display=wrong.length?'inline-block':'none';
-    }
-
-    function startPhonicsWrongReview(){
-        phonicsWrongIndex=0; phonicsWrongAnswered=false;
-        if(!phonicsWrongWords.length)return;
-        document.getElementById("phonicsWrongQuestion").style.display='block'; showPhonicsWrongQuestion();
-    }
-
-    function showPhonicsWrongQuestion(){
-        const entry=phonicsWrongWords[phonicsWrongIndex]; if(!entry)return;
-        phonicsCurrentEntry=entry;
-        renderPhonicsParts(document.getElementById("phonicsWrongParts"),entry);
-        renderPhonicsChoiceButtons(document.getElementById("phonicsWrongAnswers"),entry,answer=>{
-            if(phonicsWrongAnswered)return; phonicsWrongAnswered=true;
-            const ok=answer.syllable===entry.syllable;
-            document.getElementById("phonicsWrongFeedback").textContent=ok?"🌟 這次答對了！":"再練一次，正確答案是「"+entry.syllable+"」。";
-            setTimeout(()=>{phonicsWrongIndex++;phonicsWrongAnswered=false;if(phonicsWrongIndex>=phonicsWrongWords.length){document.getElementById("phonicsWrongFeedback").textContent="🎉 錯題都練完了！";}else showPhonicsWrongQuestion();},700);
-        });
-    }
-
     function startCharacterPractice(){
-        phonicsDeck=shufflePhonics(firstGradeCombinedRhymes);
-        phonicsIndex=0; phonicsPracticeEntry=null; phonicsCurrentEntry=phonicsDeck[0]; phonicsTestDeck=[]; phonicsWrongWords=[];
-        document.getElementById("setup").style.display="none";
-        document.getElementById("quiz").style.display="none";
-        document.getElementById("result").style.display="none";
-        document.getElementById("characterResult").style.display="none";
-        document.getElementById("englishPractice").style.display="none";
-        document.getElementById("englishResult").style.display="none";
-        document.getElementById("characterPractice").style.display="block";
-        setPhonicsStage('teach');
-        speakPhonicsEntry(phonicsDeck[0]);
+        phonicsDeck=[...firstGradeCombinedRhymes]; phonicsIndex=0; phonicsCurrentEntry=phonicsDeck[0]; phonicsChoiceEntry=null; phonicsTestDeck=[]; phonicsTestIndex=0; phonicsTestScore=0; phonicsTestResults=[]; phonicsTestStarted=false;
+        document.getElementById("setup").style.display="none"; document.getElementById("quiz").style.display="none"; document.getElementById("result").style.display="none"; document.getElementById("characterResult").style.display="none"; document.getElementById("englishPractice").style.display="none"; document.getElementById("englishResult").style.display="none"; document.getElementById("characterPractice").style.display="block"; setPhonicsStage("breakdown");
     }
-
-    function backToSetup(){
-        if(window.speechSynthesis)window.speechSynthesis.cancel();
-        document.getElementById("game").style.display="block";
-        document.getElementById("setup").style.display="grid";
-        document.getElementById("quiz").style.display="none";
-        document.getElementById("characterPractice").style.display="none";
-        document.getElementById("englishPractice").style.display="none";
-        document.getElementById("result").style.display="none";
-        document.getElementById("characterResult").style.display="none";
-        document.getElementById("englishResult").style.display="none";
-    }
-
     function showPhonicsResult(){
-        const finalScore=phonicsTestScore*10;
-        phonicsWrongWords=phonicsTestResults.filter(x=>!x.isCorrect).map(x=>x.entry);
-        document.getElementById("game").style.display="none";
-        document.getElementById("characterResult").style.display="block";
-        document.getElementById("characterFinalScore").textContent=finalScore;
-        document.getElementById("characterResultSummary").textContent=`本次結合韻測驗答對 ${phonicsTestScore} / 10 題。${phonicsWrongWords.length?`有 ${phonicsWrongWords.length} 題可以到「錯題再練」加強。`:"全部答對，太棒了！"}`;
-        const list=document.getElementById("characterResultList"); list.innerHTML="";
-        phonicsTestResults.forEach((r,i)=>{const row=document.createElement("div");row.className=`review-item${r.isCorrect?'':' is-wrong'}`;row.innerHTML=`<span class="review-question">${i+1}. ${r.entry.syllable}　國字：${r.entry.character}</span><span class="review-status">${r.isCorrect?'答對':'答錯'}</span><span class="review-answer">你的答案：${r.selected.syllable}　正確答案：${r.entry.syllable}</span>`;list.appendChild(row);});
+        const score=phonicsTestScore*10; document.getElementById("game").style.display="none"; document.getElementById("characterResult").style.display="block"; document.getElementById("characterFinalScore").textContent=score;
+        const wrong=phonicsTestResults.filter(x=>!x.isCorrect).length; document.getElementById("characterResultSummary").textContent=`本次結合韻測驗答對 ${phonicsTestScore} / 10 題。${wrong?`有 ${wrong} 題需要再練習。`:"全部答對，太棒了！"}`;
+        const list=document.getElementById("characterResultList"); list.innerHTML=""; phonicsTestResults.forEach((r,i)=>{const row=document.createElement("div");row.className=`review-item${r.isCorrect?"":" is-wrong"}`;row.innerHTML=`<span class="review-question">${i+1}. ${r.entry.syllable}　國字：${r.entry.character}</span><span class="review-status">${r.isCorrect?"答對":"答錯"}</span><span class="review-answer">你的答案：${r.selected.syllable}　正確答案：${r.entry.syllable}　詞語：${r.entry.example}</span>`;list.appendChild(row);});
     }
-
-    // 保留原程式初始化呼叫名稱，避免破壞其他模組；新版不需要描寫畫布。
     function initializeTraceCanvas() {}
-
     // ==========================
     // 英文學習：教學 → 練習 → 測驗 → 錯題再練
     // ==========================
@@ -2770,7 +2030,7 @@
             isEnglishPractice ? "grid" : "none";
 
         document.getElementById("startButton").innerText =
-            isCharacterPractice ? "開始注音拼讀" :
+            isCharacterPractice ? "開始描寫" :
             isEnglishPractice ? "開始英文練習" : "開始練習";
 
         if (isCharacterPractice || isEnglishPractice) {
