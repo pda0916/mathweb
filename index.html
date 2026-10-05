@@ -1,0 +1,2566 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI 數學與國字練習</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            background: linear-gradient(135deg, #fff7d6, #dff5ff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 780px;
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 34px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .setup {
+            display: grid;
+            gap: 18px;
+            text-align: left;
+            margin-top: 28px;
+        }
+
+        .setting-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #d6e8ee;
+            border-radius: 12px;
+            background: #fff;
+            color: #263238;
+            font: inherit;
+            font-size: 18px;
+        }
+
+        .zhuyin-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .zhuyin-toggle input {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            accent-color: #168aad;
+        }
+
+        .zhuyin-char {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin: 0 0.22em 0.12em 0;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .zhuyin-reading {
+            position: relative;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 0.72em;
+            min-width: 13px;
+            transform: none;
+            padding: 2px 1px;
+            border-radius: 3px;
+            background: #e6f0f3;
+            color: #294853;
+            font-size: max(0.56em, 11px);
+            font-weight: normal;
+            line-height: 1.02;
+        }
+
+        .zhuyin-symbol {
+            display: block;
+        }
+
+        .zhuyin-tone {
+            position: absolute;
+            top: 50%;
+            right: -0.48em;
+            font-size: 0.9em;
+            line-height: 1;
+            transform: translateY(-50%);
+        }
+
+        .zhuyin-tone-neutral {
+            top: -0.3em;
+            right: -0.3em;
+            transform: none;
+        }
+
+        .level-hint {
+            min-height: 24px;
+            margin: -10px 0 0;
+            color: #57727c;
+            font-size: 14px;
+        }
+
+        .start-button {
+            border: 0;
+            border-radius: 14px;
+            padding: 16px 24px;
+            background: #168aad;
+            color: white;
+            font: inherit;
+            font-size: 21px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            background: #126e8a;
+        }
+
+        .settings-summary {
+            margin-top: 12px;
+            color: #57727c;
+            font-size: 15px;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #d6e8ee;
+            border-radius: 12px;
+            font: inherit;
+            font-size: 18px;
+        }
+
+        .multiplication-settings,
+        .lesson-card {
+            padding: 14px;
+            border: 1px solid #cfe5d6;
+            border-radius: 12px;
+            background: #f3faf4;
+        }
+
+        .lesson-card {
+            color: #365b46;
+            line-height: 1.7;
+        }
+
+        .lesson-hint {
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 10px;
+            background: #fff8e6;
+            color: #684e1d;
+            line-height: 1.6;
+        }
+
+        .progress {
+            height: 12px;
+            background: #eee;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #5ac8fa;
+            transition: width 0.3s;
+        }
+
+        .question-area {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+            align-items: center;
+            gap: 18px;
+            margin: 28px 0;
+        }
+
+        .question {
+            font-size: 55px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .question-prompt {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .voice-button {
+            flex: 0 0 44px;
+            width: 44px;
+            height: 44px;
+            border: 1px solid #c8dfe5;
+            border-radius: 50%;
+            background: #f2fafb;
+            color: #126e8a;
+            font-size: 21px;
+            cursor: pointer;
+        }
+
+        .voice-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .visual-model {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
+            align-items: center;
+            gap: 6px;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid #dcebe2;
+            border-radius: 16px;
+            background: #f7fbf7;
+        }
+
+        .visual-group {
+            min-width: 0;
+        }
+
+        .visual-group-label {
+            min-height: 38px;
+            margin-bottom: 8px;
+            color: #405b4b;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .apple-items {
+            display: grid;
+            grid-template-columns: repeat(5, 24px);
+            justify-content: center;
+            gap: 5px;
+            min-height: 24px;
+        }
+
+        .apple-icon {
+            display: block;
+            width: 24px;
+            height: 24px;
+        }
+
+        .apple-bundle {
+            grid-column: span 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            min-width: 0;
+            color: #8a3e31;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .apple-bundle .apple-icon {
+            width: 21px;
+            height: 21px;
+        }
+
+        .visual-operation {
+            color: #168aad;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .multiplication-visual {
+            width: min(100%, 390px);
+            max-height: 300px;
+            margin: 0 auto;
+            overflow-y: auto;
+            padding: 12px;
+            border: 1px solid #dcebe2;
+            border-radius: 16px;
+            background: #f7fbf7;
+        }
+
+        .multiplication-row {
+            display: grid;
+            grid-template-columns: 52px minmax(0, 1fr);
+            align-items: center;
+            gap: 8px;
+            min-height: 34px;
+            padding: 3px 0;
+        }
+
+        .multiplication-row-label {
+            color: #405b4b;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .multiplication-row-apples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .math-settings,
+        .character-settings {
+            display: grid;
+            gap: 18px;
+        }
+
+        .character-settings {
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid #cfe5d6;
+            border-radius: 12px;
+            background: #f3faf4;
+        }
+
+        .character-source-note {
+            margin: 0;
+            color: #526a73;
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .character-source-note a,
+        .dictionary-link {
+            color: #126e8a;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .character-practice {
+            margin-top: 22px;
+        }
+
+        .character-practice-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .character-progress {
+            margin: 0;
+            color: #526a73;
+            font-size: 15px;
+        }
+
+        .character-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(190px, 0.85fr);
+            align-items: stretch;
+            gap: 18px;
+        }
+
+        .trace-panel {
+            min-width: 0;
+        }
+
+        .trace-canvas {
+            display: block;
+            width: min(100%, 420px);
+            aspect-ratio: 1;
+            margin: 0 auto;
+            border: 1px solid #d6e5df;
+            border-radius: 14px;
+            background: #fffefa;
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        .trace-stage {
+            position: relative;
+            width: min(100%, 420px);
+            aspect-ratio: 1;
+            margin: 0 auto;
+            overflow: hidden;
+            border: 1px solid #d6e5df;
+            border-radius: 14px;
+            background: #fffefa;
+            touch-action: none;
+        }
+
+        .trace-stage .trace-canvas,
+        .hanzi-writer-target,
+        .stroke-number-layer {
+            position: absolute;
+            inset: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .trace-stage .trace-canvas {
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 0;
+        }
+
+        .hanzi-writer-target {
+            z-index: 2;
+            touch-action: none;
+        }
+
+        .hanzi-writer-target svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        .stroke-number-layer {
+            z-index: 3;
+            overflow: visible;
+            pointer-events: none;
+        }
+
+        .stroke-number-badge {
+            fill: #fff;
+            stroke: #42675a;
+            stroke-width: 1.5;
+        }
+
+        .stroke-number-text {
+            fill: #234b3f;
+            font-size: 10px;
+            font-weight: 700;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+
+        .stroke-number-leader {
+            stroke: #82968c;
+            stroke-width: 1;
+            stroke-dasharray: 2 2;
+        }
+
+        .stroke-guide-path {
+            fill: none;
+            stroke: #889991;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 2.5 4;
+        }
+
+        .stroke-feedback {
+            min-height: 28px;
+            margin: 8px 0 0;
+            color: #526a73;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .stroke-feedback.is-error {
+            color: #b34235;
+            font-weight: 700;
+        }
+
+        .stroke-feedback.is-success {
+            color: #24734f;
+            font-weight: 700;
+        }
+
+        .character-result-score {
+            margin: 12px 0 6px;
+            color: #126e8a;
+            font-size: 46px;
+            font-weight: bold;
+        }
+
+        .character-result-summary {
+            color: #526a73;
+            line-height: 1.6;
+        }
+
+        .trace-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .trace-button {
+            min-height: 44px;
+            padding: 9px 14px;
+            border: 1px solid #cbded7;
+            border-radius: 10px;
+            background: #fff;
+            color: #294853;
+            font: inherit;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .trace-button.primary {
+            border-color: #168aad;
+            background: #168aad;
+            color: #fff;
+        }
+
+        .trace-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .character-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 22px 16px;
+            border: 1px solid #dcebe2;
+            border-radius: 14px;
+            background: #f7fbf7;
+            text-align: center;
+        }
+
+        .character-reading-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            min-height: 130px;
+        }
+
+        .character-info-glyph {
+            color: #294853;
+            font-size: 88px;
+            line-height: 1;
+        }
+
+        .character-info-zhuyin {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 34px;
+            padding: 8px 5px;
+            border-radius: 7px;
+            background: #e6f0f3;
+            color: #294853;
+            font-size: 26px;
+            line-height: 1.2;
+        }
+
+        .character-info-zhuyin .zhuyin-tone {
+            right: -0.58em;
+            font-size: 0.8em;
+        }
+
+        .character-info-zhuyin .zhuyin-tone-neutral {
+            right: -0.42em;
+        }
+
+        .meaning-label {
+            width: 100%;
+            margin: 20px 0 6px;
+            padding-top: 14px;
+            border-top: 1px solid #dcebe2;
+            color: #526a73;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .character-meaning {
+            width: 100%;
+            min-height: 72px;
+            margin: 0 0 14px;
+            color: #263c35;
+            font-size: 18px;
+            line-height: 1.65;
+            text-align: left;
+        }
+
+        .character-writing-tip {
+            margin: 12px 0 0;
+            color: #64746d;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .zero-count {
+            grid-column: 1 / -1;
+            align-self: center;
+            color: #7b8d83;
+            font-size: 14px;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .answer-btn {
+            border: none;
+            border-radius: 20px;
+            padding: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            background: #eaf7ff;
+            transition: 0.15s;
+        }
+
+        .answer-btn:hover {
+            transform: scale(1.05);
+            background: #d6f0ff;
+        }
+
+        .answer-btn:active {
+            transform: scale(0.95);
+        }
+
+        .message {
+            min-height: 50px;
+            margin-top: 20px;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .score {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .result {
+            display: none;
+        }
+
+        .result-score {
+            font-size: 60px;
+            font-weight: bold;
+            margin: 30px;
+        }
+
+        .answer-review {
+            display: grid;
+            gap: 8px;
+            max-height: 42vh;
+            margin: 20px 0;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .review-item {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 5px 12px;
+            align-items: center;
+            padding: 12px 14px;
+            border-left: 4px solid #248a64;
+            border-radius: 8px;
+            background: #f1f8f3;
+        }
+
+        .review-item.is-wrong {
+            border-left-color: #d85a4a;
+            background: #fff4f1;
+        }
+
+        .review-question {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .review-status {
+            color: #24734f;
+            font-weight: bold;
+        }
+
+        .is-wrong .review-status {
+            color: #b34235;
+        }
+
+        .review-answer {
+            grid-column: 1 / -1;
+            color: #526a73;
+            font-size: 15px;
+        }
+
+        .restart {
+            border: none;
+            background: #ffb703;
+            color: white;
+            padding: 18px 35px;
+            border-radius: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .restart:hover {
+            background: #f39c00;
+        }
+
+        .correct {
+            animation: pop 0.3s;
+        }
+
+        @keyframes pop {
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        .emoji {
+            font-size: 50px;
+        }
+
+        .icon-library {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        @media (max-width: 650px) {
+            .question-area {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin: 20px 0;
+            }
+
+            .visual-model {
+                width: min(100%, 390px);
+                margin: 0 auto;
+            }
+
+            .character-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .character-info {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                align-items: center;
+                column-gap: 18px;
+                text-align: left;
+            }
+
+            .character-reading-row {
+                grid-row: span 2;
+                min-height: 100px;
+            }
+
+            .meaning-label {
+                margin-top: 4px;
+            }
+
+            .character-meaning {
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .question {
+                font-size: 42px;
+            }
+
+            .answer-btn {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<svg class="icon-library" aria-hidden="true" focusable="false">
+    <symbol id="appleSymbol" viewBox="0 0 48 48">
+        <path d="M24 15c-4-5-13-4-16 3-4 9 4 23 12 24 2 0 3-1 4-1s3 1 5 1c8-1 16-15 12-24-3-7-12-8-17-3Z" fill="#d94b42"/>
+        <path d="M23 14c0-5 2-8 6-10" fill="none" stroke="#72523a" stroke-linecap="round" stroke-width="3"/>
+        <path d="M27 7c5-5 11-3 12 1-3 4-8 5-12 2" fill="#4f9a62"/>
+        <path d="M13 22c1-3 3-5 6-6" fill="none" stroke="#f58b76" stroke-linecap="round" stroke-width="2"/>
+    </symbol>
+</svg>
+
+<div class="container">
+
+    <!-- 遊戲畫面 -->
+    <div id="game">
+
+        <div class="emoji">🧒🔢</div>
+
+        <h1>AI 數學與國字練習</h1>
+
+        <div class="subtitle">選擇年級與練習內容，開始學習吧！</div>
+
+        <label class="zhuyin-toggle" id="voicePreference">
+            <input id="voiceToggle" type="checkbox" checked>
+            語音播報
+        </label>
+
+        <div class="setup" id="setup">
+            <div>
+                <label class="setting-label" for="practiceMode">練習類型</label>
+                <select id="practiceMode">
+                    <option value="math" selected>數學運算</option>
+                    <option value="characters">國字描寫</option>
+                </select>
+            </div>
+
+            <div class="math-settings" id="mathSettings">
+            <div>
+                <label class="setting-label" for="ageSelect">選擇年齡</label>
+                <select id="ageSelect">
+                    <option value="4">4 歲</option>
+                    <option value="5">5 歲</option>
+                    <option value="6" selected>6 歲</option>
+                    <option value="7">7 歲</option>
+                    <option value="8">8 歲</option>
+                    <option value="9">9 歲</option>
+                    <option value="10">10 歲</option>
+                    <option value="11">11 歲</option>
+                    <option value="12">12 歲</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="setting-label" for="childName">孩子的名字</label>
+                    <input class="name-input" id="childName" type="text" value="小朋友" maxlength="16" autocomplete="off">
+            </div>
+
+            <p class="level-hint" id="levelHint" aria-live="polite"></p>
+
+            <label class="zhuyin-toggle">
+                <input id="zhuyinToggle" type="checkbox" checked>
+                題目與回饋注音
+            </label>
+
+            <div>
+                <label class="setting-label" for="operationSelect">練習內容</label>
+                <select id="operationSelect">
+                    <option value="addition">加法</option>
+                    <option value="subtraction">減法</option>
+                    <option value="mixed" selected>加法＋減法混合</option>
+                    <option value="multiplication">九九乘法入門</option>
+                </select>
+            </div>
+
+            <div class="multiplication-settings" id="multiplicationSettings" style="display: none;">
+                <label class="setting-label" for="multiplicationTable">選擇要練習的乘法表</label>
+                <select id="multiplicationTable">
+                    <option value="1" selected>1 的乘法表</option>
+                    <option value="2">2 的乘法表</option>
+                    <option value="3">3 的乘法表</option>
+                    <option value="4">4 的乘法表</option>
+                    <option value="5">5 的乘法表</option>
+                    <option value="6">6 的乘法表</option>
+                    <option value="7">7 的乘法表</option>
+                    <option value="8">8 的乘法表</option>
+                    <option value="9">9 的乘法表</option>
+                </select>
+                <div class="lesson-card">
+                    乘法就是相同數量重複相加。選定乘法表後，會從乘以 1 開始，一題一題練到乘以 10；蘋果圖會幫你看懂「幾組、每組幾個」。
+                </div>
+            </div>
+            </div>
+
+            <div class="character-settings" id="characterSettings" style="display: none;">
+                <div>
+                    <label class="setting-label" for="gradeSelect">選擇國小年級</label>
+                    <select id="gradeSelect">
+                        <option value="1" selected>國小一年級</option>
+                        <option value="2">國小二年級</option>
+                        <option value="3">國小三年級</option>
+                        <option value="4">國小四年級</option>
+                        <option value="5">國小五年級</option>
+                        <option value="6">國小六年級</option>
+                    </select>
+                </div>
+                <p class="character-source-note">
+                    字庫為年級參考練習，並非教育部逐年級指定生字表。教育部課綱以一至二、三至四、五至六年級分學習階段訂識字目標；實際課本生字依出版社版本而異。<br>
+                    <a href="https://www.naer.edu.tw/PageSyllabus?fid=52" target="_blank" rel="noreferrer">查看國家教育研究院公布的課程綱要</a>
+                </p>
+            </div>
+
+            <button class="start-button" id="startButton" onclick="startGame()">開始練習</button>
+        </div>
+
+        <div id="quiz" style="display: none;">
+            <div class="settings-summary" id="settingsSummary"></div>
+            <div class="lesson-hint" id="multiplicationHint" style="display: none;"></div>
+
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div>
+                第 <span id="questionNumber">1</span> / 10 題
+            </div>
+
+            <div class="question-area">
+                <div class="question-prompt">
+                    <div class="question" id="question">3 + 2 = ?</div>
+                    <button class="voice-button" id="replayQuestion" type="button" onclick="speakQuestion()" aria-label="重播題目語音" title="重播題目語音">🔊</button>
+                </div>
+                <div class="visual-model" id="visualModel" role="img" aria-label="">
+                    <div class="visual-group">
+                        <div class="visual-group-label learning-text" id="visualLabelA"></div>
+                        <div class="apple-items" id="visualItemsA" aria-hidden="true"></div>
+                    </div>
+                    <div class="visual-operation" id="visualOperation" aria-hidden="true">+</div>
+                    <div class="visual-group">
+                        <div class="visual-group-label learning-text" id="visualLabelB"></div>
+                        <div class="apple-items" id="visualItemsB" aria-hidden="true"></div>
+                    </div>
+                </div>
+                <div class="multiplication-visual" id="multiplicationVisual" role="img" aria-label="" style="display: none;">
+                    <div id="multiplicationGroups"></div>
+                </div>
+            </div>
+
+            <div class="answers" id="answers"></div>
+
+            <div class="message learning-text" id="message" aria-live="polite"></div>
+
+            <div class="score">
+                <div>⭐ 得分：<span id="score">0</span></div>
+                <div>🔥 連續：<span id="streak">0</span></div>
+            </div>
+        </div>
+
+        <section class="character-practice" id="characterPractice" style="display: none;" aria-label="國字描寫練習">
+            <div class="character-practice-header">
+                <p class="character-progress" id="characterProgress"></p>
+                <button class="trace-button" type="button" onclick="backToSetup()">← 選擇其他練習</button>
+            </div>
+
+            <div class="character-layout">
+                <div class="trace-panel">
+                    <div class="trace-stage" id="traceStage">
+                        <canvas class="trace-canvas" id="traceCanvas" aria-label="在虛線國字上描寫，可以用手指或觸控筆書寫"></canvas>
+                        <div class="hanzi-writer-target" id="hanziWriterTarget" style="display: none;"></div>
+                        <svg class="stroke-number-layer" id="strokeNumberLayer" aria-hidden="true" style="display: none;"></svg>
+                    </div>
+                    <div class="trace-actions">
+                        <button class="trace-button" type="button" onclick="clearCharacterStrokes()">↻ 重來本字</button>
+                        <button class="trace-button primary" id="nextCharacterButton" type="button" onclick="changeCharacter(1)">下一個字 →</button>
+                    </div>
+                    <p class="stroke-feedback" id="strokeFeedback" aria-live="polite"></p>
+                    <p class="character-writing-tip">依序照著筆畫編號描寫，可用手指或觸控筆；正確筆畫比例計入分數，每次筆順或偏線錯誤扣 5 分，十字取平均。</p>
+                </div>
+
+                <aside class="character-info">
+                    <div class="character-reading-row">
+                        <div class="character-info-glyph" id="characterGlyph"></div>
+                        <div class="character-info-zhuyin" id="characterZhuyin" aria-label="注音"></div>
+                        <button class="voice-button" id="replayCharacter" type="button" onclick="speakCurrentCharacter()" aria-label="朗讀國字與字義" title="朗讀國字與字義">🔊</button>
+                    </div>
+                    <h2 class="meaning-label">這個字的意思</h2>
+                    <p class="character-meaning" id="characterMeaning"></p>
+                    <a class="dictionary-link" id="dictionaryLink" href="https://dict.concised.moe.edu.tw/" target="_blank" rel="noreferrer">查教育部《國語辭典簡編本》</a>
+                </aside>
+            </div>
+        </section>
+
+    </div>
+
+
+    <!-- 結果畫面 -->
+    <div class="result" id="result">
+
+        <div class="emoji">🎉🏆🎉</div>
+
+        <h1>挑戰完成！</h1>
+
+        <div class="result-score">
+            <span id="finalScore">0</span> / 10
+        </div>
+
+        <div id="resultMessage" class="learning-text"></div>
+
+        <div class="answer-review" id="answerReview" aria-label="逐題作答結果"></div>
+
+        <br>
+
+        <button class="restart" onclick="startGame()">
+            🔄 再玩一次
+        </button>
+
+    </div>
+
+    <div class="result" id="characterResult">
+        <div class="emoji">✍️🌟</div>
+        <h1>國字描寫測驗完成</h1>
+        <div class="character-result-score"><span id="characterFinalScore">0</span> / 100</div>
+        <p class="character-result-summary" id="characterResultSummary"></p>
+        <div class="answer-review" id="characterResultList" aria-label="每字筆順與描寫結果"></div>
+        <button class="restart" type="button" onclick="startCharacterPractice()">🔄 再測一次</button>
+        <button class="trace-button" type="button" onclick="backToSetup()">選擇其他練習</button>
+    </div>
+
+</div>
+
+
+<script>
+
+    // ==========================
+    // 遊戲設定
+    // ==========================
+
+    const totalQuestions = 10;
+
+    let currentQuestion = 0;
+    let score = 0;
+    let streak = 0;
+    let correctAnswer = 0;
+    let maxNumber = 10;
+    let hasAnswered = false;
+    let questionHistory = [];
+    let currentLeftOperand = 0;
+    let currentRightOperand = 0;
+    let currentOperator = "+";
+    let selectedMultiplicationTable = 1;
+    let characterGrade = 1;
+    let characterIndex = 0;
+    let characterTestDeck = [];
+    let characterTestResults = [];
+    let characterStrokes = [];
+    let activeCharacterStroke = null;
+    let traceContext = null;
+    let characterCorrectStrokeCount = 0;
+    let characterMistakeCount = 0;
+    let characterStrokeCount = 0;
+    let characterCompleted = false;
+    let hanziWriterLoadPromise = null;
+    let hanziWriterInstance = null;
+    let activeCharacterData = null;
+    let characterCanGrade = false;
+    let activeWriterCharacter = "";
+
+    const characterPracticeByGrade = {
+        1: [
+            { character: "人", zhuyin: "ㄖㄣˊ", meaning: "能思考、說話和做事情的人。" },
+            { character: "口", zhuyin: "ㄎㄡˇ", meaning: "嘴巴，也可以表示出入口。" },
+            { character: "手", zhuyin: "ㄕㄡˇ", meaning: "身體的一部分，可以拿東西和做事。" },
+            { character: "日", zhuyin: "ㄖˋ", meaning: "太陽，也用來表示一天。" },
+            { character: "月", zhuyin: "ㄩㄝˋ", meaning: "夜晚常看見的月亮，也表示月份。" },
+            { character: "山", zhuyin: "ㄕㄢ", meaning: "地面高起的地方。" },
+            { character: "水", zhuyin: "ㄕㄨㄟˇ", meaning: "透明無色的液體，河水和雨水都是水。" },
+            { character: "火", zhuyin: "ㄏㄨㄛˇ", meaning: "燃燒時發出的光和熱。" },
+            { character: "天", zhuyin: "ㄊㄧㄢ", meaning: "頭頂上方廣大的空間，也表示一天。" },
+            { character: "中", zhuyin: "ㄓㄨㄥ", meaning: "裡面的位置，也表示不偏向兩邊。" }
+        ],
+        2: [
+            { character: "木", zhuyin: "ㄇㄨˋ", meaning: "樹木，也指木頭。" },
+            { character: "林", zhuyin: "ㄌㄧㄣˊ", meaning: "許多樹木長在一起的地方。" },
+            { character: "田", zhuyin: "ㄊㄧㄢˊ", meaning: "種植稻米或蔬菜的土地。" },
+            { character: "花", zhuyin: "ㄏㄨㄚ", meaning: "植物開出的美麗部分。" },
+            { character: "草", zhuyin: "ㄘㄠˇ", meaning: "一種常見的綠色植物。" },
+            { character: "雨", zhuyin: "ㄩˇ", meaning: "從雲裡落下來的水滴。" },
+            { character: "明", zhuyin: "ㄇㄧㄥˊ", meaning: "光亮，也有清楚、懂得的意思。" },
+            { character: "家", zhuyin: "ㄐㄧㄚ", meaning: "家人一起生活的地方。" },
+            { character: "門", zhuyin: "ㄇㄣˊ", meaning: "房子或圍牆出入的地方。" },
+            { character: "開", zhuyin: "ㄎㄞ", meaning: "把關閉的東西打開。" }
+        ],
+        3: [
+            { character: "讀", zhuyin: "ㄉㄨˊ", meaning: "看著文字並了解它的意思。" },
+            { character: "寫", zhuyin: "ㄒㄧㄝˇ", meaning: "用筆把文字或想法記錄下來。" },
+            { character: "聽", zhuyin: "ㄊㄧㄥ", meaning: "用耳朵接收聲音。" },
+            { character: "說", zhuyin: "ㄕㄨㄛ", meaning: "用話語表達自己的想法。" },
+            { character: "想", zhuyin: "ㄒㄧㄤˇ", meaning: "在心裡思考或回憶事情。" },
+            { character: "海", zhuyin: "ㄏㄞˇ", meaning: "面積很大的鹹水水域。" },
+            { character: "河", zhuyin: "ㄏㄜˊ", meaning: "水流經過的地方。" },
+            { character: "路", zhuyin: "ㄌㄨˋ", meaning: "人或車可以通行的道路。" },
+            { character: "亮", zhuyin: "ㄌㄧㄤˋ", meaning: "光線充足，容易看清楚。" },
+            { character: "橋", zhuyin: "ㄑㄧㄠˊ", meaning: "架在河上或道路上，讓人車通過的建築。" }
+        ],
+        4: [
+            { character: "植", zhuyin: "ㄓˊ", meaning: "把植物種進土裡。" },
+            { character: "物", zhuyin: "ㄨˋ", meaning: "存在的東西，也可指生物。" },
+            { character: "觀", zhuyin: "ㄍㄨㄢ", meaning: "觀看，也有看法、想法的意思。" },
+            { character: "察", zhuyin: "ㄔㄚˊ", meaning: "仔細查看，留意事物的變化。" },
+            { character: "環", zhuyin: "ㄏㄨㄢˊ", meaning: "圍繞，也指環形的東西。" },
+            { character: "境", zhuyin: "ㄐㄧㄥˋ", meaning: "周圍的情況或地方。" },
+            { character: "保", zhuyin: "ㄅㄠˇ", meaning: "保護、照顧，使事物不受傷害。" },
+            { character: "護", zhuyin: "ㄏㄨˋ", meaning: "保衛和照顧。" },
+            { character: "形", zhuyin: "ㄒㄧㄥˊ", meaning: "物體外面的樣子。" },
+            { character: "狀", zhuyin: "ㄓㄨㄤˋ", meaning: "樣子或情形。" }
+        ],
+        5: [
+            { character: "推", zhuyin: "ㄊㄨㄟ", meaning: "用力使物體向前移動，也可指推想。" },
+            { character: "論", zhuyin: "ㄌㄨㄣˋ", meaning: "說明看法或討論事情。" },
+            { character: "證", zhuyin: "ㄓㄥˋ", meaning: "可以證明事情真實的資料或理由。" },
+            { character: "據", zhuyin: "ㄐㄩˋ", meaning: "作為判斷或說明的依據。" },
+            { character: "資", zhuyin: "ㄗ", meaning: "可供使用的材料或條件。" },
+            { character: "源", zhuyin: "ㄩㄢˊ", meaning: "水流開始的地方，也指事物的來源。" },
+            { character: "責", zhuyin: "ㄗㄜˊ", meaning: "應該完成的事情或需要承擔的責任。" },
+            { character: "任", zhuyin: "ㄖㄣˋ", meaning: "承擔工作或責任。" },
+            { character: "計", zhuyin: "ㄐㄧˋ", meaning: "計算，也指安排事情的方法。" },
+            { character: "畫", zhuyin: "ㄏㄨㄚˋ", meaning: "用線條和顏色描繪，也指圖畫。" }
+        ],
+        6: [
+            { character: "研", zhuyin: "ㄧㄢˊ", meaning: "仔細研究、探討事情。" },
+            { character: "究", zhuyin: "ㄐㄧㄡˋ", meaning: "深入探查事情的原因或結果。" },
+            { character: "探", zhuyin: "ㄊㄢˋ", meaning: "尋找、查看或深入了解。" },
+            { character: "索", zhuyin: "ㄙㄨㄛˇ", meaning: "尋找，也可指繩子。" },
+            { character: "權", zhuyin: "ㄑㄩㄢˊ", meaning: "依法可以行使的資格或力量。" },
+            { character: "益", zhuyin: "ㄧˋ", meaning: "好處、幫助，也有增加的意思。" },
+            { character: "創", zhuyin: "ㄔㄨㄤˋ", meaning: "開始做出新的事物或方法。" },
+            { character: "新", zhuyin: "ㄒㄧㄣ", meaning: "剛出現、以前沒有的事物。" },
+            { character: "議", zhuyin: "ㄧˋ", meaning: "討論事情，提出看法。" },
+            { character: "願", zhuyin: "ㄩㄢˋ", meaning: "心裡希望實現的事情。" }
+        ]
+    };
+
+    const zhuyinByCharacter = {
+        "幼": "ㄧㄡˋ", "兒": "ㄦˊ", "數": "ㄕㄨˋ", "學": "ㄒㄩㄝˊ",
+        "老": "ㄌㄠˇ", "師": "ㄕ", "選": "ㄒㄩㄢˇ", "擇": "ㄗㄜˊ",
+        "適": "ㄕˋ", "合": "ㄏㄜˊ", "自": "ㄗˋ", "己": "ㄐㄧˇ",
+        "練": "ㄌㄧㄢˋ", "習": "ㄒㄧˊ", "今": "ㄐㄧㄣ", "天": "ㄊㄧㄢ",
+        "挑": "ㄊㄧㄠˇ", "戰": "ㄓㄢˋ", "題": "ㄊㄧˊ", "年": "ㄋㄧㄢˊ",
+        "齡": "ㄌㄧㄥˊ", "目": "ㄇㄨˋ", "前": "ㄑㄧㄢˊ", "難": "ㄋㄢˊ",
+        "度": "ㄉㄨˋ", "字": "ㄗˋ", "減": "ㄐㄧㄢˇ", "法": "ㄈㄚˇ",
+        "不": "ㄅㄨˋ", "會": "ㄏㄨㄟˋ", "出": "ㄔㄨ", "現": "ㄒㄧㄢˋ",
+        "負": "ㄈㄨˋ", "顯": "ㄒㄧㄢˇ", "示": "ㄕˋ", "注": "ㄓㄨˋ",
+        "音": "ㄧㄣ", "歲": "ㄙㄨㄟˋ", "加": "ㄐㄧㄚ", "混": "ㄏㄨㄣˋ",
+        "第": "ㄉㄧˋ", "一": "ㄧ", "組": "ㄗㄨˇ", "顆": "ㄎㄜ",
+        "原": "ㄩㄢˊ", "有": "ㄧㄡˇ", "拿": "ㄋㄚˊ", "走": "ㄗㄡˇ",
+        "上": "ㄕㄤˋ", "去": "ㄑㄩˋ", "得": "ㄉㄜˊ", "分": "ㄈㄣ",
+        "連": "ㄌㄧㄢˊ", "續": "ㄒㄩˋ", "太": "ㄊㄞˋ", "棒": "ㄅㄤˋ",
+        "答": "ㄉㄚˊ", "對": "ㄉㄨㄟˋ", "好": "ㄏㄠˇ", "厲": "ㄌㄧˋ",
+        "害": "ㄏㄞˋ", "做": "ㄗㄨㄛˋ", "很": "ㄏㄣˇ", "強": "ㄑㄧㄤˊ",
+        "沒": "ㄇㄟˊ", "關": "ㄍㄨㄢ", "係": "ㄒㄧˋ", "再": "ㄗㄞˋ",
+        "想": "ㄒㄧㄤˇ", "下": "ㄒㄧㄚˋ", "案": "ㄢˋ", "是": "ㄕˋ",
+        "完": "ㄨㄢˊ", "成": "ㄔㄥˊ", "表": "ㄅㄧㄠˇ", "非": "ㄈㄟ",
+        "常": "ㄔㄤˊ", "保": "ㄅㄠˇ", "持": "ㄔˊ", "錯": "ㄘㄨㄛˋ",
+        "進": "ㄐㄧㄣˋ", "步": "ㄅㄨˋ", "更": "ㄍㄥˋ", "玩": "ㄨㄢˊ",
+        "的": "ㄉㄜ˙", "你": "ㄋㄧˇ", "小": "ㄒㄧㄠˇ", "才": "ㄘㄞˊ",
+        "內": "ㄋㄟˋ", "容": "ㄖㄨㄥˊ", "開": "ㄎㄞ", "始": "ㄕˇ",
+        "了": "ㄌㄜ˙", "油": "ㄧㄡˊ", "繼": "ㄐㄧˋ",
+        "次": "ㄘˋ", "就": "ㄐㄧㄡˋ"
+    };
+
+
+    function annotateText(container) {
+
+        const walker = document.createTreeWalker(
+            container,
+            NodeFilter.SHOW_TEXT,
+            {
+                acceptNode(node) {
+                    const parent = node.parentElement;
+                    if (!parent || parent.closest("script, style, svg, option, rt, ruby")) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+            }
+        );
+        const textNodes = [];
+        let node;
+
+        while ((node = walker.nextNode())) {
+            textNodes.push(node);
+        }
+
+        textNodes.forEach(textNode => {
+            const fragment = document.createDocumentFragment();
+            let changed = false;
+
+            const characters = Array.from(textNode.nodeValue);
+            for (let index = 0; index < characters.length; index++) {
+                const character = characters[index];
+                const zhuyin = character === "一" && characters[index + 1] === "次"
+                    ? "ㄧˊ"
+                    : zhuyinByCharacter[character];
+                if (!zhuyin) {
+                    fragment.appendChild(document.createTextNode(character));
+                    continue;
+                }
+
+                const annotatedCharacter = document.createElement("span");
+                annotatedCharacter.className = "zhuyin-char";
+                annotatedCharacter.dataset.zhuyin = "true";
+                annotatedCharacter.dataset.original = character;
+
+                const base = document.createElement("span");
+                base.className = "zhuyin-base";
+                base.innerText = character;
+                annotatedCharacter.appendChild(base);
+
+                const reading = document.createElement("span");
+                reading.className = "zhuyin-reading";
+                reading.setAttribute("aria-hidden", "true");
+
+                const symbols = Array.from(zhuyin);
+                const toneMarks = ["ˊ", "ˇ", "ˋ", "˙"];
+                const tone = toneMarks.includes(symbols[symbols.length - 1])
+                    ? symbols.pop()
+                    : "";
+
+                symbols.forEach(symbol => {
+                    const symbolElement = document.createElement("span");
+                    symbolElement.className = "zhuyin-symbol";
+                    symbolElement.innerText = symbol;
+                    reading.appendChild(symbolElement);
+                });
+
+                if (tone) {
+                    const toneElement = document.createElement("span");
+                    toneElement.className = tone === "˙"
+                        ? "zhuyin-tone zhuyin-tone-neutral"
+                        : "zhuyin-tone";
+                    toneElement.innerText = tone;
+                    reading.appendChild(toneElement);
+                }
+
+                annotatedCharacter.appendChild(reading);
+                fragment.appendChild(annotatedCharacter);
+                changed = true;
+            }
+
+            if (changed) textNode.replaceWith(fragment);
+        });
+    }
+
+
+    function refreshZhuyin() {
+
+        const container = document.querySelector(".container");
+        container.querySelectorAll('.zhuyin-char[data-zhuyin="true"]').forEach(annotated => {
+            annotated.replaceWith(document.createTextNode(annotated.dataset.original));
+        });
+
+        if (document.getElementById("zhuyinToggle").checked) {
+            container.querySelectorAll(".learning-text").forEach(annotateText);
+        }
+    }
+
+
+    function setChineseText(element, text) {
+
+        element.textContent = text;
+        if (
+            document.getElementById("zhuyinToggle").checked &&
+            element.classList.contains("learning-text")
+        ) {
+            annotateText(element);
+        }
+    }
+
+
+    // ==========================
+    // 隨機數字
+    // ==========================
+
+    function randomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+    // ==========================
+    // 產生題目
+    // ==========================
+
+    function generateQuestion() {
+
+        const operation = document.getElementById("operationSelect").value;
+        let a;
+        let b;
+        const isAddition = operation === "addition" ||
+            (operation === "mixed" && Math.random() < 0.5);
+
+        if (operation === "multiplication") {
+
+            a = selectedMultiplicationTable;
+            b = currentQuestion + 1;
+            currentOperator = "×";
+            correctAnswer = a * b;
+
+            document.getElementById("question").innerText =
+                `${a} × ${b} = ?`;
+
+            document.getElementById("visualModel").style.display = "none";
+            document.getElementById("multiplicationVisual").style.display = "block";
+            renderMultiplicationModel(a, b);
+
+            const repeatedAddition = Array(a).fill(b).join(" + ");
+            setChineseText(
+                document.getElementById("multiplicationHint"),
+                `${a} × ${b} 表示 ${a} 組、每組 ${b} 個，也就是 ${repeatedAddition}。數數看一共有幾個？`
+            );
+        } else if (isAddition) {
+
+            a = randomNumber(1, maxNumber);
+            b = randomNumber(1, maxNumber);
+            document.getElementById("visualModel").style.display = "grid";
+            document.getElementById("multiplicationVisual").style.display = "none";
+            document.getElementById("multiplicationHint").style.display = "none";
+
+            currentOperator = "+";
+            correctAnswer = a + b;
+
+            document.getElementById("question").innerText =
+                `${a} + ${b} = ?`;
+
+        } else {
+
+            a = randomNumber(1, maxNumber);
+            b = randomNumber(1, maxNumber);
+            while (a === b) {
+                b = randomNumber(1, maxNumber);
+            }
+
+            document.getElementById("visualModel").style.display = "grid";
+            document.getElementById("multiplicationVisual").style.display = "none";
+            document.getElementById("multiplicationHint").style.display = "none";
+
+            currentOperator = "-";
+            if (a < b) {
+                let temp = a;
+                a = b;
+                b = temp;
+            }
+
+            correctAnswer = a - b;
+
+            document.getElementById("question").innerText =
+                `${a} - ${b} = ?`;
+        }
+
+        currentLeftOperand = a;
+        currentRightOperand = b;
+
+        if (operation !== "multiplication") {
+            renderVisualModel(a, b, isAddition);
+        }
+
+        generateAnswers();
+        speakQuestion();
+    }
+
+
+    function numberToChinese(number) {
+
+        const digits = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+        if (number < 10) return digits[number];
+        if (number < 20) return `十${number % 10 ? digits[number % 10] : ""}`;
+        if (number < 100) {
+            const tens = Math.floor(number / 10);
+            const ones = number % 10;
+            return `${digits[tens]}十${ones ? digits[ones] : ""}`;
+        }
+
+        const hundreds = Math.floor(number / 100);
+        const remainder = number % 100;
+        if (remainder === 0) return `${digits[hundreds]}百`;
+        if (remainder < 10) return `${digits[hundreds]}百零${digits[remainder]}`;
+        return `${digits[hundreds]}百${numberToChinese(remainder)}`;
+    }
+
+
+    function speakText(text) {
+
+        if (
+            !document.getElementById("voiceToggle").checked ||
+            !("speechSynthesis" in window) ||
+            !("SpeechSynthesisUtterance" in window)
+        ) return;
+
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "zh-TW";
+        utterance.rate = 0.88;
+
+        const voices = window.speechSynthesis.getVoices();
+        utterance.voice = voices.find(voice => voice.lang.toLowerCase() === "zh-tw") ||
+            voices.find(voice => voice.lang.toLowerCase().startsWith("zh")) || null;
+
+        window.speechSynthesis.speak(utterance);
+        return utterance;
+    }
+
+
+    function speakQuestion() {
+
+        const left = numberToChinese(currentLeftOperand);
+        const right = numberToChinese(currentRightOperand);
+        const speech = currentOperator === "×"
+            ? `${left}乘以${right}，是${left}組、每組${right}個，合起來有多少個？`
+            : `${left}${currentOperator === "+" ? "加" : "減"}${right}等於多少？`;
+        speakText(speech);
+    }
+
+
+    function speakCurrentCharacter() {
+
+        const entry = characterTestDeck[characterIndex];
+        if (!entry) return;
+        speakText(`${entry.character}。${entry.meaning}`);
+    }
+
+
+    function speakAnswer(isCorrect, selectedAnswer, praise) {
+
+        const operatorText = currentOperator === "+"
+            ? "加"
+            : currentOperator === "-"
+                ? "減"
+                : "乘以";
+        const equation =
+            `${numberToChinese(currentLeftOperand)}${operatorText}${numberToChinese(currentRightOperand)}等於${numberToChinese(correctAnswer)}`;
+        const feedback = isCorrect
+            ? `${equation}。${praise}`
+            : `${equation}。${getChildName()}，你的答案是${numberToChinese(selectedAnswer)}，再聽一次正確答案。`;
+
+        return speakText(feedback);
+    }
+
+
+    function renderMultiplicationModel(groupCount, applesPerGroup) {
+
+        const container = document.getElementById("multiplicationGroups");
+        container.innerHTML = "";
+
+        for (let group = 1; group <= groupCount; group++) {
+            const row = document.createElement("div");
+            row.className = "multiplication-row";
+
+            const label = document.createElement("span");
+            label.className = "multiplication-row-label";
+            label.innerText = `第 ${group} 組`;
+            row.appendChild(label);
+
+            const apples = document.createElement("span");
+            apples.className = "multiplication-row-apples";
+            apples.setAttribute("aria-hidden", "true");
+            for (let apple = 0; apple < applesPerGroup; apple++) {
+                apples.appendChild(createAppleIcon());
+            }
+            row.appendChild(apples);
+            container.appendChild(row);
+        }
+
+        document.getElementById("multiplicationVisual").setAttribute(
+            "aria-label",
+            `${groupCount} 組，每組 ${applesPerGroup} 個`
+        );
+    }
+
+
+    function renderVisualModel(a, b, isAddition) {
+
+        const labelA = isAddition ? `第一組 ${a} 顆` : `原有 ${a} 顆`;
+        const labelB = isAddition ? `第二組 ${b} 顆` : `拿走 ${b} 顆`;
+
+        setChineseText(document.getElementById("visualLabelA"), labelA);
+        setChineseText(document.getElementById("visualLabelB"), labelB);
+        document.getElementById("visualOperation").innerText = isAddition ? "+" : "−";
+        document.getElementById("visualModel").setAttribute(
+            "aria-label",
+            `${labelA}，${isAddition ? "加上" : "減去"}${labelB}`
+        );
+
+        renderAppleCount("visualItemsA", a);
+        renderAppleCount("visualItemsB", b);
+    }
+
+
+    function renderAppleCount(containerId, count) {
+
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+
+        if (count === 0) {
+            const zero = document.createElement("span");
+            zero.className = "zero-count";
+            zero.innerText = "0 顆";
+            container.appendChild(zero);
+            return;
+        }
+
+        const iconCount = count > 20 ? Math.floor(count / 10) : count;
+        const remainder = count > 20 ? count % 10 : 0;
+
+        for (let index = 0; index < iconCount; index++) {
+            if (count > 20) {
+                const bundle = document.createElement("span");
+                bundle.className = "apple-bundle";
+                bundle.appendChild(createAppleIcon());
+
+                const label = document.createElement("span");
+                label.innerText = "×10";
+                bundle.appendChild(label);
+                container.appendChild(bundle);
+            } else {
+                container.appendChild(createAppleIcon());
+            }
+        }
+
+        for (let index = 0; index < remainder; index++) {
+            container.appendChild(createAppleIcon());
+        }
+    }
+
+
+    function createAppleIcon() {
+
+        const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        icon.setAttribute("class", "apple-icon");
+        icon.setAttribute("aria-hidden", "true");
+        use.setAttribute("href", "#appleSymbol");
+        icon.appendChild(use);
+        return icon;
+    }
+
+
+    // ==========================
+    // 產生四個答案
+    // ==========================
+
+    function generateAnswers() {
+
+        let answers = [correctAnswer];
+        const answerLimit =
+            document.getElementById("operationSelect").value === "multiplication"
+                ? 90
+                : maxNumber * 2;
+
+        while (answers.length < 4) {
+
+            let wrongAnswer = randomNumber(
+                Math.max(0, correctAnswer - 5),
+                Math.min(answerLimit, correctAnswer + 5)
+            );
+
+            if (!answers.includes(wrongAnswer)) {
+                answers.push(wrongAnswer);
+            }
+        }
+
+        // 打亂答案
+        answers.sort(() => Math.random() - 0.5);
+
+        const container =
+            document.getElementById("answers");
+
+        container.innerHTML = "";
+
+        answers.forEach(answer => {
+
+            const button =
+                document.createElement("button");
+
+            button.className = "answer-btn";
+
+            button.innerText = answer;
+
+            button.onclick = () =>
+                checkAnswer(answer);
+
+            container.appendChild(button);
+        });
+    }
+
+
+    // ==========================
+    // 判斷答案
+    // ==========================
+
+    function checkAnswer(answer) {
+
+        if (hasAnswered) return;
+        hasAnswered = true;
+        document.querySelectorAll(".answer-btn").forEach(button => {
+            button.disabled = true;
+        });
+
+        const message =
+            document.getElementById("message");
+        const isCorrect = answer === correctAnswer;
+        const praise = isCorrect ? getCorrectMessage() : "";
+
+        const questionText = document.getElementById("question").innerText;
+        questionHistory.push({
+            question: questionText.replace(" = ?", ""),
+            selectedAnswer: answer,
+            correctAnswer,
+            isCorrect: answer === correctAnswer
+        });
+
+        if (isCorrect) {
+
+            score++;
+            streak++;
+
+            setChineseText(message, praise);
+
+            message.style.color = "#2ecc71";
+
+            document
+                .getElementById("question")
+                .classList.add("correct");
+
+            setTimeout(() => {
+
+                document
+                    .getElementById("question")
+                    .classList.remove("correct");
+
+            }, 300);
+
+        } else {
+
+            streak = 0;
+
+            setChineseText(message, `😊 再想一下！答案是 ${correctAnswer}`);
+
+            message.style.color = "#ff6b6b";
+        }
+
+        const feedbackUtterance = speakAnswer(isCorrect, answer, praise);
+
+
+        updateScore();
+
+        let hasAdvanced = false;
+        let fallbackTimer;
+
+        const advanceQuestion = () => {
+
+            if (hasAdvanced) return;
+            hasAdvanced = true;
+            clearTimeout(fallbackTimer);
+
+            currentQuestion++;
+
+            if (currentQuestion >= totalQuestions) {
+
+                showResult();
+
+            } else {
+
+                nextQuestion();
+
+            }
+
+        };
+
+        if (feedbackUtterance) {
+            feedbackUtterance.addEventListener("end", () => {
+                setTimeout(advanceQuestion, 200);
+            }, { once: true });
+            feedbackUtterance.addEventListener("error", advanceQuestion, { once: true });
+            fallbackTimer = setTimeout(advanceQuestion, 8000);
+        } else {
+            setTimeout(advanceQuestion, 900);
+        }
+    }
+
+
+    // ==========================
+    // 鼓勵文字
+    // ==========================
+
+    function getChildName() {
+
+        return document.getElementById("childName").value.trim() || "小朋友";
+    }
+
+
+    function getCorrectMessage() {
+
+        const name = getChildName();
+        const messages = [
+            `${name}，答對了，好棒喔！你真的很厲害！`,
+            `${name}，你又答對了！太驚人了，答得真漂亮！`,
+            `${name}，答對了！你專心想一想，就找到答案了！`,
+            `${name}，答對了！你用的方法真聰明，太棒了！`,
+            `${name}，答對了！你觀察得好仔細，真是數學高手！`,
+            `${name}，又答對了！你越練越熟，進步超級快！`,
+            `${name}，答對了！這麼難的題目也被你解開了，太強啦！`,
+            `${name}，答對了！你認真思考的樣子真的好棒！`,
+            `${name}，答對了！你的解題方法很棒，繼續發光！`,
+            `${name}，連續答對真不簡單！你是超級數學小高手！`
+        ];
+
+        return messages[randomNumber(0, messages.length - 1)];
+    }
+
+
+    // ==========================
+    // 下一題
+    // ==========================
+
+    function nextQuestion() {
+
+        hasAnswered = false;
+        document.getElementById("message").innerText = "";
+
+        document.getElementById("questionNumber")
+            .innerText = currentQuestion + 1;
+
+        updateProgress();
+
+        generateQuestion();
+    }
+
+
+    // ==========================
+    // 更新分數
+    // ==========================
+
+    function updateScore() {
+
+        document.getElementById("score")
+            .innerText = score;
+
+        document.getElementById("streak")
+            .innerText = streak;
+    }
+
+
+    // ==========================
+    // 進度條
+    // ==========================
+
+    function updateProgress() {
+
+        const percentage =
+            (currentQuestion / totalQuestions) * 100;
+
+        document.getElementById("progressBar")
+            .style.width = percentage + "%";
+    }
+
+
+    // ==========================
+    // 顯示結果
+    // ==========================
+
+    function showResult() {
+
+        document.getElementById("setup").style.display = "none";
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("game")
+            .style.display = "none";
+
+        document.getElementById("result")
+            .style.display = "block";
+
+        document.getElementById("finalScore")
+            .innerText = score;
+
+        let message = "";
+
+        if (score === 10) {
+
+            message =
+                "🏆 太厲害了！你是數學小天才！";
+
+        } else if (score >= 8) {
+
+            message =
+                "🌟 表現非常棒！繼續保持！";
+
+        } else if (score >= 6) {
+
+            message =
+                "👍 很不錯！再練習一下會更厲害！";
+
+        } else {
+
+            message =
+                "💪 沒關係，再玩一次就會進步！";
+        }
+
+        setChineseText(document.getElementById("resultMessage"), message);
+        renderAnswerReview();
+    }
+
+
+    function renderAnswerReview() {
+
+        const container = document.getElementById("answerReview");
+        container.innerHTML = "";
+
+        questionHistory.forEach((entry, index) => {
+            const row = document.createElement("div");
+            row.className = `review-item${entry.isCorrect ? "" : " is-wrong"}`;
+
+            const question = document.createElement("span");
+            question.className = "review-question";
+            question.innerText = `${index + 1}. ${entry.question} = ${entry.correctAnswer}`;
+            row.appendChild(question);
+
+            const status = document.createElement("span");
+            status.className = "review-status learning-text";
+            setChineseText(status, entry.isCorrect ? "答對" : "答錯");
+            row.appendChild(status);
+
+            if (!entry.isCorrect) {
+                const answer = document.createElement("span");
+                answer.className = "review-answer learning-text";
+                setChineseText(answer, `你的答案：${entry.selectedAnswer}，正確答案：${entry.correctAnswer}`);
+                row.appendChild(answer);
+            }
+
+            container.appendChild(row);
+        });
+    }
+
+
+    function getCurrentCharacterList() {
+
+        return characterPracticeByGrade[characterGrade];
+    }
+
+
+    function renderCharacterReading(reading) {
+
+        const container = document.getElementById("characterZhuyin");
+        container.innerHTML = "";
+
+        const symbols = Array.from(reading);
+        const toneMarks = ["ˊ", "ˇ", "ˋ", "˙"];
+        const tone = toneMarks.includes(symbols[symbols.length - 1])
+            ? symbols.pop()
+            : "";
+
+        symbols.forEach(symbol => {
+            const symbolElement = document.createElement("span");
+            symbolElement.className = "zhuyin-symbol";
+            symbolElement.innerText = symbol;
+            container.appendChild(symbolElement);
+        });
+
+        if (tone) {
+            const toneElement = document.createElement("span");
+            toneElement.className = tone === "˙"
+                ? "zhuyin-tone zhuyin-tone-neutral"
+                : "zhuyin-tone";
+            toneElement.innerText = tone;
+            container.appendChild(toneElement);
+        }
+    }
+
+
+    function showCurrentCharacter() {
+
+        const entry = characterTestDeck[characterIndex];
+        if (hanziWriterInstance) {
+            hanziWriterInstance.cancelQuiz();
+            hanziWriterInstance = null;
+        }
+
+        document.getElementById("characterProgress").innerText =
+            `國小${["", "一", "二", "三", "四", "五", "六"][characterGrade]}年級・測驗第 ${characterIndex + 1} / 10 字`;
+        document.getElementById("characterGlyph").innerText = entry.character;
+        document.getElementById("characterMeaning").innerText = entry.meaning;
+        document.getElementById("dictionaryLink").href =
+            `https://dict.concised.moe.edu.tw/search.jsp?md=1&word=${encodeURIComponent(entry.character)}`;
+
+        characterStrokes = [];
+        activeCharacterStroke = null;
+        characterCorrectStrokeCount = 0;
+        characterMistakeCount = 0;
+        characterStrokeCount = 0;
+        characterCompleted = false;
+        characterCanGrade = false;
+        activeCharacterData = null;
+        activeWriterCharacter = entry.character;
+
+        document.getElementById("traceCanvas").style.display = "block";
+        document.getElementById("hanziWriterTarget").style.display = "none";
+        document.getElementById("strokeNumberLayer").style.display = "none";
+        document.getElementById("hanziWriterTarget").innerHTML = "";
+        document.getElementById("strokeNumberLayer").innerHTML = "";
+        document.getElementById("nextCharacterButton").innerText =
+            characterIndex === 9 ? "查看測驗結果 →" : "下一個字 →";
+
+        renderCharacterReading(entry.zhuyin);
+        setStrokeFeedback("正在載入正確筆順資料…", "");
+        requestAnimationFrame(resizeTraceCanvas);
+        loadCharacterStrokeData(entry);
+    }
+
+
+    function startCharacterPractice() {
+
+        characterGrade = Number(document.getElementById("gradeSelect").value);
+        characterTestDeck = shuffleCharacters([...getCurrentCharacterList()]);
+        characterTestResults = Array(10).fill(null);
+        characterIndex = 0;
+
+        document.getElementById("result").style.display = "none";
+        document.getElementById("characterResult").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        document.getElementById("setup").style.display = "none";
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("characterPractice").style.display = "block";
+
+        showCurrentCharacter();
+        requestAnimationFrame(resizeTraceCanvas);
+    }
+
+
+    function backToSetup() {
+
+        if (hanziWriterInstance) hanziWriterInstance.cancelQuiz();
+        document.getElementById("result").style.display = "none";
+        document.getElementById("characterResult").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        document.getElementById("setup").style.display = "grid";
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("characterPractice").style.display = "none";
+    }
+
+
+    function changeCharacter(direction) {
+
+        if (direction < 0) return;
+
+        saveCurrentCharacterResult();
+        if (characterIndex === 9) {
+            showCharacterResult();
+            return;
+        }
+
+        characterIndex++;
+        showCurrentCharacter();
+    }
+
+
+    function shuffleCharacters(characters) {
+
+        for (let index = characters.length - 1; index > 0; index--) {
+            const swapIndex = randomNumber(0, index);
+            [characters[index], characters[swapIndex]] =
+                [characters[swapIndex], characters[index]];
+        }
+        return characters;
+    }
+
+
+    function saveCurrentCharacterResult() {
+
+        const entry = characterTestDeck[characterIndex];
+        const rawScore = characterStrokeCount
+            ? (characterCorrectStrokeCount / characterStrokeCount) * 100
+            : 0;
+        const score = characterCanGrade
+            ? Math.max(0, Math.round(rawScore - characterMistakeCount * 5))
+            : null;
+
+        characterTestResults[characterIndex] = {
+            character: entry.character,
+            correctStrokes: characterCorrectStrokeCount,
+            totalStrokes: characterStrokeCount,
+            mistakes: characterMistakeCount,
+            completed: characterCompleted,
+            score
+        };
+    }
+
+
+    function showCharacterResult() {
+
+        const gradedResults = characterTestResults.filter(result => result && result.score !== null);
+        const totalMistakes = characterTestResults.reduce(
+            (total, result) => total + (result?.mistakes || 0),
+            0
+        );
+        const completedCount = characterTestResults.filter(result => result?.completed).length;
+        const finalScore = gradedResults.length
+            ? Math.round(gradedResults.reduce((total, result) => total + result.score, 0) / gradedResults.length)
+            : 0;
+
+        document.getElementById("game").style.display = "none";
+        document.getElementById("result").style.display = "none";
+        document.getElementById("characterResult").style.display = "block";
+        document.getElementById("characterFinalScore").innerText = finalScore;
+        document.getElementById("characterResultSummary").innerText =
+            `完成 ${completedCount} / 10 字・評分 ${gradedResults.length} / 10 字・筆順或偏線錯誤 ${totalMistakes} 次`;
+
+        const list = document.getElementById("characterResultList");
+        list.innerHTML = "";
+        characterTestResults.forEach((result, index) => {
+            const row = document.createElement("div");
+            row.className = `review-item${result && result.score === 100 ? "" : " is-wrong"}`;
+
+            const label = document.createElement("span");
+            label.className = "review-question";
+            label.innerText = `${index + 1}. ${result?.character || characterTestDeck[index].character}`;
+            row.appendChild(label);
+
+            const points = document.createElement("span");
+            points.className = "review-status";
+            points.innerText = result?.score === null || !result
+                ? "未能評分"
+                : `${result.score} 分`;
+            row.appendChild(points);
+
+            const detail = document.createElement("span");
+            detail.className = "review-answer";
+            detail.innerText = result
+                ? `正確筆畫 ${result.correctStrokes} / ${result.totalStrokes}・錯誤 ${result.mistakes} 次・${result.completed ? "完成" : "未完成"}`
+                : "未作答";
+            row.appendChild(detail);
+            list.appendChild(row);
+        });
+    }
+
+
+    function setStrokeFeedback(message, status) {
+
+        const feedback = document.getElementById("strokeFeedback");
+        feedback.textContent = message;
+        feedback.className = `stroke-feedback${status ? ` is-${status}` : ""}`;
+    }
+
+
+    function ensureHanziWriterLoaded() {
+
+        if (window.HanziWriter) return Promise.resolve(window.HanziWriter);
+        if (hanziWriterLoadPromise) return hanziWriterLoadPromise;
+
+        hanziWriterLoadPromise = new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = "https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js";
+            script.async = true;
+            script.onload = () => resolve(window.HanziWriter);
+            script.onerror = () => reject(new Error("無法載入筆順評量工具"));
+            document.head.appendChild(script);
+        });
+
+        return hanziWriterLoadPromise;
+    }
+
+
+    function renderStrokeOrderNumbers(characterData) {
+
+        const stage = document.getElementById("traceStage");
+        const overlay = document.getElementById("strokeNumberLayer");
+        const stageSize = Math.round(stage.getBoundingClientRect().width);
+        if (!stageSize || !window.HanziWriter) return;
+
+        overlay.innerHTML = "";
+        overlay.setAttribute("viewBox", `0 0 ${stageSize} ${stageSize}`);
+        overlay.setAttribute("preserveAspectRatio", "none");
+
+        const padding = Math.max(36, Math.round(stageSize * 0.12));
+        const scaling = window.HanziWriter.getScalingTransform(stageSize, stageSize, padding);
+        const placedLabels = [];
+        const offsets = [[0, 0]];
+
+        for (let radius = 14; radius <= 74; radius += 10) {
+            for (let angle = 0; angle < 360; angle += 30) {
+                const radians = angle * Math.PI / 180;
+                offsets.push([
+                    Math.cos(radians) * radius,
+                    Math.sin(radians) * radius
+                ]);
+            }
+        }
+
+        characterData.medians.forEach((median, index) => {
+            const firstPoint = median[0];
+            if (!firstPoint) return;
+
+            const guide = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+            const guidePoints = median.map(([x, y]) => {
+                const scaledX = scaling.x + x * scaling.scale;
+                const scaledY = stageSize - scaling.y - y * scaling.scale;
+                return `${scaledX},${scaledY}`;
+            });
+            guide.setAttribute("class", "stroke-guide-path");
+            guide.setAttribute("points", guidePoints.join(" "));
+            overlay.appendChild(guide);
+
+            const originX = scaling.x + firstPoint[0] * scaling.scale;
+            const originY = stageSize - scaling.y - firstPoint[1] * scaling.scale;
+            let labelPosition = null;
+
+            for (const offset of offsets) {
+                const candidate = {
+                    x: originX + offset[0],
+                    y: originY + offset[1]
+                };
+                const inBounds = candidate.x >= 10 && candidate.x <= stageSize - 10 &&
+                    candidate.y >= 10 && candidate.y <= stageSize - 10;
+                const separated = placedLabels.every(label =>
+                    Math.hypot(label.x - candidate.x, label.y - candidate.y) >= 19
+                );
+
+                if (inBounds && separated) {
+                    labelPosition = candidate;
+                    break;
+                }
+            }
+
+            if (!labelPosition) {
+                labelPosition = {
+                    x: Math.max(10, Math.min(stageSize - 10, originX)),
+                    y: Math.max(10, Math.min(stageSize - 10, originY))
+                };
+            }
+            placedLabels.push(labelPosition);
+
+            if (Math.hypot(labelPosition.x - originX, labelPosition.y - originY) > 10) {
+                const leader = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                leader.setAttribute("class", "stroke-number-leader");
+                leader.setAttribute("x1", originX);
+                leader.setAttribute("y1", originY);
+                leader.setAttribute("x2", labelPosition.x);
+                leader.setAttribute("y2", labelPosition.y);
+                overlay.appendChild(leader);
+            }
+
+            const badge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            badge.setAttribute("class", "stroke-number-badge");
+            badge.setAttribute("cx", labelPosition.x);
+            badge.setAttribute("cy", labelPosition.y);
+            badge.setAttribute("r", "8");
+            overlay.appendChild(badge);
+
+            const number = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            number.setAttribute("class", "stroke-number-text");
+            number.setAttribute("x", labelPosition.x);
+            number.setAttribute("y", labelPosition.y);
+            number.textContent = String(index + 1);
+            overlay.appendChild(number);
+        });
+
+        overlay.style.display = "block";
+    }
+
+
+    function getStrokeQuizCallbacks(entry) {
+
+        return {
+            leniency: 0.75,
+            showHintAfterMisses: 2,
+            onMistake(strokeData) {
+                if (activeWriterCharacter !== entry.character) return;
+                characterMistakeCount++;
+                setStrokeFeedback(
+                    `第 ${strokeData.strokeNum + 1} 筆偏離範本太多或筆順不符（錯誤 ${characterMistakeCount} 次），請看編號再描一次。`,
+                    "error"
+                );
+            },
+            onCorrectStroke(strokeData) {
+                if (activeWriterCharacter !== entry.character) return;
+                characterCorrectStrokeCount = Math.max(
+                    characterCorrectStrokeCount,
+                    strokeData.strokeNum + 1
+                );
+                setStrokeFeedback(
+                    `第 ${strokeData.strokeNum + 1} 筆正確，還剩 ${strokeData.strokesRemaining} 筆。`,
+                    "success"
+                );
+            },
+            onComplete(summaryData) {
+                if (activeWriterCharacter !== entry.character) return;
+                characterCompleted = true;
+                characterCorrectStrokeCount = characterStrokeCount;
+                const nextAction = characterIndex === 9 ? "查看測驗結果" : "下一個字";
+                setStrokeFeedback(
+                    `這個字完成了！本字錯誤 ${characterMistakeCount} 次，按「${nextAction}」繼續。`,
+                    characterMistakeCount ? "error" : "success"
+                );
+            }
+        };
+    }
+
+
+    async function loadCharacterStrokeData(entry) {
+
+        try {
+            setStrokeFeedback("正在載入正確筆順資料…", "");
+            const writerLibrary = await ensureHanziWriterLoaded();
+            const characterData = await writerLibrary.loadCharacterData(entry.character);
+            if (activeWriterCharacter !== entry.character) return;
+
+            activeCharacterData = characterData;
+            characterStrokeCount = characterData.strokes.length;
+            characterCanGrade = true;
+
+            const target = document.getElementById("hanziWriterTarget");
+            const stageSize = Math.round(document.getElementById("traceStage").getBoundingClientRect().width);
+            const padding = Math.max(36, Math.round(stageSize * 0.12));
+
+            if (hanziWriterInstance) hanziWriterInstance.cancelQuiz();
+            target.innerHTML = "";
+            document.getElementById("traceCanvas").style.display = "none";
+            target.style.display = "block";
+
+            hanziWriterInstance = writerLibrary.create(target, entry.character, {
+                width: stageSize,
+                height: stageSize,
+                padding,
+                showCharacter: false,
+                showOutline: false,
+                drawingColor: "#168aad",
+                drawingWidth: 6,
+                showHintAfterMisses: 2,
+                charDataLoader(character, onComplete) {
+                    if (character === entry.character) {
+                        onComplete(characterData);
+                    } else {
+                        writerLibrary.loadCharacterData(character).then(onComplete);
+                    }
+                }
+            });
+
+            renderStrokeOrderNumbers(characterData);
+            setStrokeFeedback(
+                `共 ${characterStrokeCount} 筆，請依序照著 1、2、3…描寫；偏離筆畫或順序錯誤會提醒並扣分。`,
+                ""
+            );
+            startCurrentCharacterQuiz(entry);
+        } catch (error) {
+            if (activeWriterCharacter !== entry.character) return;
+
+            characterCanGrade = false;
+            characterStrokeCount = 0;
+            activeCharacterData = null;
+            document.getElementById("hanziWriterTarget").style.display = "none";
+            document.getElementById("strokeNumberLayer").style.display = "none";
+            document.getElementById("traceCanvas").style.display = "block";
+            requestAnimationFrame(resizeTraceCanvas);
+            setStrokeFeedback(
+                "筆順資料目前無法載入，仍可自由描字，但本字不計入筆順分數。請確認網路後重試。",
+                "error"
+            );
+        }
+    }
+
+
+    function resizeTraceCanvas() {
+
+        const canvas = document.getElementById("traceCanvas");
+        const stage = document.getElementById("traceStage");
+        const bounds = stage.getBoundingClientRect();
+        if (!bounds.width || !bounds.height) return;
+
+        const pixelRatio = window.devicePixelRatio || 1;
+        canvas.width = Math.round(bounds.width * pixelRatio);
+        canvas.height = Math.round(bounds.height * pixelRatio);
+        traceContext = canvas.getContext("2d");
+        traceContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+        if (hanziWriterInstance && activeCharacterData) {
+            const size = Math.round(bounds.width);
+            const padding = Math.max(36, Math.round(size * 0.12));
+            hanziWriterInstance.updateDimensions({ width: size, height: size, padding });
+            renderStrokeOrderNumbers(activeCharacterData);
+        }
+
+        drawTraceCanvas();
+    }
+
+
+    function drawTraceCanvas() {
+
+        const canvas = document.getElementById("traceCanvas");
+        if (!traceContext || !canvas.clientWidth || canvas.style.display === "none") return;
+
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        const size = Math.min(width, height);
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const entry = characterTestDeck[characterIndex] || getCurrentCharacterList()[characterIndex];
+
+        traceContext.clearRect(0, 0, width, height);
+        traceContext.fillStyle = "#fffefa";
+        traceContext.fillRect(0, 0, width, height);
+
+        traceContext.strokeStyle = "#e8eeea";
+        traceContext.lineWidth = 1;
+        traceContext.setLineDash([4, 7]);
+        traceContext.beginPath();
+        traceContext.moveTo(centerX, 14);
+        traceContext.lineTo(centerX, height - 14);
+        traceContext.moveTo(14, centerY);
+        traceContext.lineTo(width - 14, centerY);
+        traceContext.stroke();
+
+        const fontSize = size * 0.7;
+        traceContext.font = `${fontSize}px "KaiTi", "DFKai-SB", "標楷體", "BiauKai", serif`;
+        traceContext.textAlign = "center";
+        traceContext.textBaseline = "middle";
+        traceContext.fillStyle = "rgba(112, 130, 122, 0.045)";
+        traceContext.fillText(entry.character, centerX, centerY, size * 0.78);
+        traceContext.strokeStyle = "#71847a";
+        traceContext.lineWidth = Math.max(1.8, size * 0.006);
+        traceContext.setLineDash([3.5, 5.5]);
+        traceContext.strokeText(entry.character, centerX, centerY, size * 0.78);
+        traceContext.setLineDash([]);
+
+        characterStrokes.forEach(stroke => {
+            if (!stroke.length) return;
+
+            traceContext.beginPath();
+            traceContext.strokeStyle = "#168aad";
+            traceContext.fillStyle = "#168aad";
+            traceContext.lineWidth = Math.max(4, size * 0.018);
+            traceContext.lineCap = "round";
+            traceContext.lineJoin = "round";
+
+            const firstPoint = stroke[0];
+            traceContext.moveTo(firstPoint.x * width, firstPoint.y * height);
+            stroke.slice(1).forEach(point => {
+                traceContext.lineTo(point.x * width, point.y * height);
+            });
+
+            if (stroke.length === 1) {
+                traceContext.arc(
+                    firstPoint.x * width,
+                    firstPoint.y * height,
+                    traceContext.lineWidth / 2,
+                    0,
+                    Math.PI * 2
+                );
+                traceContext.fill();
+            } else {
+                traceContext.stroke();
+            }
+        });
+
+        traceContext.setLineDash([]);
+    }
+
+
+    function addTracePoint(event) {
+
+        if (!activeCharacterStroke) return;
+        const bounds = event.currentTarget.getBoundingClientRect();
+        activeCharacterStroke.push({
+            x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
+            y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height))
+        });
+        drawTraceCanvas();
+    }
+
+
+    function startCurrentCharacterQuiz(entry) {
+
+        if (!hanziWriterInstance || activeWriterCharacter !== entry.character) return;
+        hanziWriterInstance.quiz(getStrokeQuizCallbacks(entry));
+    }
+
+
+    function clearCharacterStrokes() {
+
+        characterStrokes = [];
+        activeCharacterStroke = null;
+
+        if (hanziWriterInstance && characterCanGrade) {
+            characterCorrectStrokeCount = 0;
+            characterCompleted = false;
+            const entry = characterTestDeck[characterIndex];
+            hanziWriterInstance.cancelQuiz();
+            setStrokeFeedback("已重新開始本字，前面的錯誤仍會計入測驗。", "");
+            startCurrentCharacterQuiz(entry);
+            return;
+        }
+
+        drawTraceCanvas();
+        setStrokeFeedback("已清除筆跡，可以重新描寫。", "");
+    }
+
+
+    function initializeTraceCanvas() {
+
+        const canvas = document.getElementById("traceCanvas");
+
+        canvas.addEventListener("pointerdown", event => {
+            event.preventDefault();
+            canvas.setPointerCapture(event.pointerId);
+            activeCharacterStroke = [];
+            characterStrokes.push(activeCharacterStroke);
+            addTracePoint(event);
+        });
+
+        canvas.addEventListener("pointermove", event => {
+            if (event.buttons) addTracePoint(event);
+        });
+
+        const endStroke = event => {
+            if (canvas.hasPointerCapture(event.pointerId)) {
+                canvas.releasePointerCapture(event.pointerId);
+            }
+            activeCharacterStroke = null;
+        };
+
+        canvas.addEventListener("pointerup", endStroke);
+        canvas.addEventListener("pointercancel", endStroke);
+        window.addEventListener("resize", resizeTraceCanvas);
+    }
+
+
+    // ==========================
+    // 開始遊戲
+    // ==========================
+
+    function startGame() {
+
+        if (document.getElementById("practiceMode").value === "characters") {
+            startCharacterPractice();
+            return;
+        }
+
+        const age = Number(document.getElementById("ageSelect").value);
+        const ageGroup = getAgeGroup(age);
+        maxNumber = ageGroup.maxNumber;
+
+        currentQuestion = 0;
+        score = 0;
+        streak = 0;
+        hasAnswered = false;
+        questionHistory = [];
+
+        document.getElementById("game")
+            .style.display = "block";
+        document.getElementById("setup").style.display = "none";
+        document.getElementById("quiz").style.display = "block";
+        document.getElementById("characterPractice").style.display = "none";
+
+        document.getElementById("result")
+            .style.display = "none";
+
+        const operationNames = {
+            addition: "加法",
+            subtraction: "減法",
+            mixed: "加法＋減法混合",
+            multiplication: "九九乘法入門"
+        };
+        const operation = document.getElementById("operationSelect").value;
+        selectedMultiplicationTable = Number(document.getElementById("multiplicationTable").value);
+        setChineseText(
+            document.getElementById("settingsSummary"),
+            operation === "multiplication"
+                ? `${getChildName()}・${selectedMultiplicationTable} 的乘法表`
+                : `${getChildName()}・${age} 歲・${ageGroup.label}・${operationNames[operation]}`
+        );
+
+        document.getElementById("multiplicationHint").style.display =
+            operation === "multiplication" ? "block" : "none";
+
+        updateScore();
+
+        nextQuestion();
+    }
+
+
+    function getAgeGroup(age) {
+
+        if (age <= 5) return { label: "數字 0–5", maxNumber: 5 };
+        if (age <= 7) return { label: "數字 0–10", maxNumber: 10 };
+        if (age <= 9) return { label: "數字 0–20", maxNumber: 20 };
+        return { label: "數字 0–100", maxNumber: 100 };
+    }
+
+
+    function updateLevelHint() {
+
+        const age = Number(document.getElementById("ageSelect").value);
+        const ageGroup = getAgeGroup(age);
+        setChineseText(
+            document.getElementById("levelHint"),
+            `目前難度：${ageGroup.label}，減法不會出現負數。`
+        );
+    }
+
+
+    function updatePracticeSettings() {
+
+        const isCharacterPractice =
+            document.getElementById("practiceMode").value === "characters";
+        document.getElementById("mathSettings").style.display =
+            isCharacterPractice ? "none" : "grid";
+        document.getElementById("characterSettings").style.display =
+            isCharacterPractice ? "grid" : "none";
+        document.getElementById("startButton").innerText =
+            isCharacterPractice ? "開始描寫" : "開始練習";
+
+        if (isCharacterPractice) return;
+
+        const isMultiplication =
+            document.getElementById("operationSelect").value === "multiplication";
+        document.getElementById("multiplicationSettings").style.display =
+            isMultiplication ? "grid" : "none";
+        document.getElementById("levelHint").style.display =
+            isMultiplication ? "none" : "block";
+    }
+
+
+    // ==========================
+    // 顯示年齡對應難度
+    // ==========================
+
+    document.getElementById("ageSelect")
+        .addEventListener("change", updateLevelHint);
+    document.getElementById("practiceMode")
+        .addEventListener("change", updatePracticeSettings);
+    document.getElementById("operationSelect")
+        .addEventListener("change", updatePracticeSettings);
+    document.getElementById("zhuyinToggle")
+        .addEventListener("change", refreshZhuyin);
+    document.getElementById("replayQuestion").disabled =
+        !("speechSynthesis" in window);
+    document.getElementById("replayCharacter").disabled =
+        !("speechSynthesis" in window);
+    initializeTraceCanvas();
+    updateLevelHint();
+    updatePracticeSettings();
+    refreshZhuyin();
+
+</script>
+
+</body>
+</html>
+```
