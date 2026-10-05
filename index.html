@@ -2492,6 +2492,7 @@
             hanziWriterInstance.cancelQuiz();
             hanziWriterInstance = null;
         }
+        characterDemoActive = false;
 
         document.getElementById("characterProgress").innerText =
             `國小${["", "一", "二", "三", "四", "五", "六"][characterGrade]}年級・測驗第 ${characterIndex + 1} / 10 字`;
@@ -2874,17 +2875,26 @@
                 onComplete() {
                     if (activeWriterCharacter !== entry.character) return;
 
-                    // 示範完成後清空動畫筆跡，只留下虛線筆畫與筆順編號。
-                    characterDemoActive = false;
-                    target.innerHTML = "";
-                    document.getElementById("nextCharacterButton").disabled = false;
+                    // 示範完成後，不要清空 HanziWriter 的 SVG。
+                    // 原本清空 target.innerHTML 會把可供孩子書寫/判定的 SVG 一起刪掉，
+                    // 因此之後雖然顯示「可以開始寫」，實際上沒有可操作的筆順畫布。
+                    // 改成把示範字隱藏，再直接進入 HanziWriter quiz。
+                    hanziWriterInstance.hideCharacter({
+                        duration: 200,
+                        onComplete() {
+                            if (activeWriterCharacter !== entry.character) return;
 
-                    setStrokeFeedback(
-                        `✍️ 示範完成！現在請你自己依照 1、2、3…的筆順寫一次。`,
-                        ""
-                    );
+                            characterDemoActive = false;
+                            document.getElementById("nextCharacterButton").disabled = false;
 
-                    startCurrentCharacterQuiz(entry);
+                            setStrokeFeedback(
+                                `✍️ 示範完成！現在請你自己依照 1、2、3…的筆順寫一次。`,
+                                "success"
+                            );
+
+                            startCurrentCharacterQuiz(entry);
+                        }
+                    });
                 }
             });
         } catch (error) {
