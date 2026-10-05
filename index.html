@@ -211,10 +211,51 @@
             letter-spacing: 0.04em;
         }
 
-        .english-phonetic {
+        
+        .english-zhuyin {
+            margin: 0 0 4px;
+            color: #126e8a;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .english-zhuyin-label {
+            font-size: 13px;
+            color: #6d7f86;
+            margin-right: 6px;
+            font-weight: 600;
+        }
+
+.english-phonetic {
             margin: 8px 0 0;
             color: #526a73;
             font-size: 18px;
+        }
+
+
+        /* 英文練習：英文單字本身不顯示注音；中文選項另以注音標示。 */
+        .english-zhuyin { display: none !important; }
+        .english-answer-zhuyin {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.05;
+            vertical-align: middle;
+            margin: 0 1px;
+        }
+        .english-answer-zhuyin small {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.1;
+            color: #168aad;
+            min-height: 15px;
+        }
+        .english-answer-zhuyin b {
+            font-size: 25px;
+            line-height: 1.15;
+            font-weight: 700;
         }
 
         .english-meaning {
@@ -296,6 +337,31 @@
             margin: 10px 0;
             color: #526a73;
             font-weight: bold;
+        }
+
+        #englishPracticeAnswers,
+        #englishTestAnswers,
+        #englishWrongAnswers {
+            min-height: 110px;
+        }
+
+        .english-answer-zhuyin {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 3px;
+            line-height: 1.05;
+        }
+
+        .english-answer-zhuyin small {
+            font-size: 13px;
+            font-weight: normal;
+            color: #526a73;
+            min-height: 16px;
+        }
+
+        .english-answer-zhuyin b {
+            font-size: 24px;
         }
         .wrong-review-list {
             display: grid;
@@ -700,10 +766,133 @@
             min-height: 130px;
         }
 
+        .teacher-demo-card {
+            width: 100%;
+            margin-bottom: 14px;
+            padding: 12px;
+            border: 1px solid #d6e5df;
+            border-radius: 14px;
+            background: #fffefa;
+            box-sizing: border-box;
+        }
+
+        .teacher-demo-title {
+            margin-bottom: 8px;
+            color: #294853;
+            font-size: 17px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .teacher-demo-stage {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            min-height: 220px;
+            max-height: 330px;
+            border: 1px solid #dce9e3;
+            border-radius: 12px;
+            background: #fffefa;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .teacher-demo-stage .hanzi-writer-target,
+        .teacher-demo-stage .hanzi-writer-target canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .teacher-demo-status {
+            margin: 8px 0 0;
+            color: #526a73;
+            font-size: 13px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .character-info-glyph-wrap {
+            position: relative;
+            width: 92px;
+            height: 92px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 92px;
+        }
+
         .character-info-glyph {
+            position: relative;
+            z-index: 1;
             color: #294853;
             font-size: 88px;
             line-height: 1;
+        }
+
+        .character-stroke-order-list {
+            margin: 8px auto 0;
+            padding: 8px 10px;
+            border: 1px solid #d6e5df;
+            border-radius: 12px;
+            background: #fffefa;
+            max-width: 250px;
+            text-align: center;
+        }
+
+        .character-stroke-order-title {
+            color: #526a73;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .character-stroke-order-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .character-stroke-order-item {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 1px solid #168aad;
+            color: #126e8a;
+            background: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            box-sizing: border-box;
+        }
+
+        .character-stroke-order-item.is-current {
+            background: #168aad;
+            color: #fff;
+            transform: scale(1.08);
+        }
+
+        .character-stroke-order-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .character-stroke-order-overlay .stroke-number-badge {
+            fill: rgba(255, 255, 255, 0.94);
+            stroke: #168aad;
+            stroke-width: 1.2;
+        }
+
+        .character-stroke-order-overlay .stroke-number-text {
+            fill: #126e8a;
+            font-size: 5px;
+            font-weight: 800;
         }
 
         .character-info-zhuyin {
@@ -1194,6 +1383,7 @@
         <section class="character-practice" id="characterPractice" style="display: none;" aria-label="國字描寫練習">
             <div class="character-practice-header">
                 <p class="character-progress" id="characterProgress"></p>
+                <p class="character-progress-note">💾 進度會自動記住，下次開啟會從上次學到的地方繼續。</p>
                 <button class="trace-button" type="button" onclick="backToSetup()">← 選擇其他練習</button>
             </div>
 
@@ -1201,7 +1391,6 @@
                 <div class="trace-panel">
                     <div class="trace-stage" id="traceStage">
                         <canvas class="trace-canvas" id="traceCanvas" aria-label="在虛線國字上描寫，可以用手指或觸控筆書寫"></canvas>
-                        <div class="hanzi-writer-target" id="hanziWriterTarget" style="display: none;"></div>
                         <svg class="stroke-number-layer" id="strokeNumberLayer" aria-hidden="true" style="display: none;"></svg>
                     </div>
                     <div class="trace-actions">
@@ -1209,12 +1398,21 @@
                         <button class="trace-button primary" id="nextCharacterButton" type="button" onclick="changeCharacter(1)">下一個字 →</button>
                     </div>
                     <p class="stroke-feedback" id="strokeFeedback" aria-live="polite"></p>
-                    <p class="character-writing-tip">先觀察老師示範一次完整筆順，再依照 1、2、3…自己書寫；可用手指或觸控筆。正式書寫時，筆順與偏線錯誤會計入評分。</p>
+                    <p class="character-writing-tip">左邊是小朋友自己寫字；右邊是老師連續示範完整筆順。請先看老師示範，再在左邊自己寫。可用滑鼠、手指或觸控筆。</p>
                 </div>
 
                 <aside class="character-info">
+                    <div class="teacher-demo-card">
+                        <div class="teacher-demo-title">👩‍🏫 老師示範</div>
+                        <div class="teacher-demo-stage" id="teacherDemoStage">
+                            <div class="hanzi-writer-target" id="hanziWriterTarget"></div>
+                        </div>
+                        <p class="teacher-demo-status" id="teacherDemoStatus">老師會先示範完整筆順</p>
+                    </div>
                     <div class="character-reading-row">
-                        <div class="character-info-glyph" id="characterGlyph"></div>
+                        <div class="character-info-glyph-wrap">
+                            <div class="character-info-glyph" id="characterGlyph"></div>
+                        </div>
                         <div class="character-info-zhuyin" id="characterZhuyin" aria-label="注音"></div>
                         <button class="voice-button" id="replayCharacter" type="button" onclick="speakCurrentCharacter()" aria-label="朗讀國字與字義" title="朗讀國字與字義">🔊</button>
                     </div>
@@ -1244,6 +1442,7 @@
                 <h2 class="english-teach-title">👩‍🏫 老師教學</h2>
                 <div class="english-word-card">
                     <div class="english-emoji" id="englishTeachEmoji">📚</div>
+                    <p class="english-zhuyin" id="englishTeachZhuyin"><span class="english-zhuyin-label">發音提示</span></p>
                     <div class="english-word-big" id="englishTeachWord"></div>
                     <p class="english-phonetic" id="englishTeachPhonetic"></p>
                     <p class="english-meaning" id="englishTeachMeaning"></p>
@@ -1266,6 +1465,7 @@
             <div class="english-stage-panel" id="englishPracticePanel">
                 <h2 class="english-teach-title">🎯 練習：不用計分，先熟悉單字</h2>
                 <div class="english-word-card">
+                    <p class="english-zhuyin" id="englishPracticeZhuyin"><span class="english-zhuyin-label">發音提示</span></p>
                     <div class="question-prompt"><h2 class="english-word" id="englishPracticeWord"></h2><button class="voice-button" type="button" onclick="speakPracticeWord()">🔊</button></div>
                     <p class="english-phonetic" id="englishPracticePhonetic"></p>
                     <p class="english-choice-note" id="englishPracticePrompt"></p>
@@ -1278,6 +1478,7 @@
             <div class="english-stage-panel" id="englishTestPanel">
                 <h2 class="english-teach-title">📝 測驗：這次才正式計分</h2>
                 <div class="english-word-card">
+                    <p class="english-zhuyin" id="englishTestZhuyin"><span class="english-zhuyin-label">發音提示</span></p>
                     <div class="question-prompt"><h2 class="english-word" id="englishTestWord"></h2><button class="voice-button" type="button" onclick="speakTestQuestion()">🔊</button></div>
                     <p class="english-phonetic" id="englishTestPhonetic"></p>
                     <p class="english-choice-note" id="englishTestPrompt">聽一次英文，再選出正確答案。</p>
@@ -1295,6 +1496,7 @@
                     <button class="trace-button" type="button" onclick="setEnglishStage('teach')">再學一次</button>
                 </div>
                 <div class="english-word-card" id="englishWrongQuestion" style="display:none; margin-top:14px;">
+                    <p class="english-zhuyin" id="englishWrongZhuyin"><span class="english-zhuyin-label">發音提示</span></p>
                     <div class="question-prompt"><h2 class="english-word" id="englishWrongWord"></h2><button class="voice-button" type="button" onclick="speakWrongWord()">🔊</button></div>
                     <p class="english-phonetic" id="englishWrongPhonetic"></p>
                     <div class="answers" id="englishWrongAnswers"></div>
@@ -1513,6 +1715,7 @@
 
     const characterPracticeByGrade = {
         1: [
+
             { character: "一", zhuyin: "ㄧ", meaning: "常用國字" },
             { character: "二", zhuyin: "ㄦˋ", meaning: "常用國字" },
             { character: "三", zhuyin: "ㄙㄢ", meaning: "常用國字" },
@@ -1813,6 +2016,7 @@
             { character: "皮", zhuyin: "ㄆㄧˊ", meaning: "常用國字" },
             { character: "尺", zhuyin: "ㄔㄧˇ", meaning: "常用國字" },
             { character: "剪", zhuyin: "ㄐㄧㄢˇ", meaning: "常用國字" }
+        
         ],
         2: [
             { character: "一", zhuyin: "ㄧ", meaning: "常用國字" },
@@ -3355,6 +3559,75 @@
     };
 
 
+
+    const englishMeaningZhuyin = {
+        "貓":"ㄇㄠ", "狗":"ㄍㄡˇ", "蘋":"ㄆㄧㄥˊ", "果":"ㄍㄨㄛˇ",
+        "球":"ㄑㄧㄡˊ", "紅":"ㄏㄨㄥˊ", "色":"ㄙㄜˋ", "藍":"ㄌㄢˊ",
+        "太":"ㄊㄞˋ", "陽":"ㄧㄤˊ", "牛":"ㄋㄧㄡˊ", "奶":"ㄋㄞˇ",
+        "媽":"ㄇㄚ", "媽":"ㄇㄚ", "書":"ㄕㄨ", "朋":"ㄆㄥˊ", "友":"ㄧㄡˇ",
+        "學":"ㄒㄩㄝˊ", "校":"ㄒㄧㄠˋ", "水":"ㄕㄨㄟˇ", "快":"ㄎㄨㄞˋ",
+        "樂":"ㄌㄜˋ", "跳":"ㄊㄧㄠˋ", "睡":"ㄕㄨㄟˋ", "覺":"ㄐㄩㄝˊ",
+        "家":"ㄐㄧㄚ", "人":"ㄖㄣˊ", "老":"ㄌㄠˇ", "師":"ㄕ", "小":"ㄒㄧㄠˇ",
+        "的":"ㄉㄜ˙", "早":"ㄗㄠˇ", "晨":"ㄔㄣˊ", "因":"ㄧㄣ", "為":"ㄨㄟˋ",
+        "重":"ㄓㄨㄥˋ", "要":"ㄧㄠˋ", "不":"ㄅㄨˋ", "同":"ㄊㄨㄥˊ",
+        "心":"ㄒㄧㄣ", "天":"ㄊㄧㄢ", "氣":"ㄑㄧˋ", "圖":"ㄊㄨˊ", "片":"ㄆㄧㄢˋ",
+        "問":"ㄨㄣˋ", "題":"ㄊㄧˊ", "答":"ㄉㄚˊ", "案":"ㄢˋ", "一":"ㄧ",
+        "起":"ㄑㄧˇ", "練":"ㄌㄧㄢˋ", "習":"ㄒㄧˊ", "環":"ㄏㄨㄢˊ", "境":"ㄐㄧㄥˋ",
+        "回":"ㄏㄨㄟˊ", "收":"ㄕㄡ", "健":"ㄐㄧㄢˋ", "康":"ㄎㄤ", "決":"ㄐㄩㄝˊ",
+        "定":"ㄉㄧㄥˋ", "發":"ㄈㄚ", "現":"ㄒㄧㄢˋ", "改":"ㄍㄞˇ", "善":"ㄕㄢˋ",
+        "負":"ㄈㄨˋ", "責":"ㄗㄜˊ", "任":"ㄖㄣˋ", "社":"ㄕㄜˋ", "區":"ㄑㄩ",
+        "挑":"ㄊㄧㄠˇ", "戰":"ㄓㄢˋ", "知":"ㄓ", "識":"ㄕˋ", "常":"ㄔㄤˊ",
+        "用":"ㄩㄥˋ", "裡":"ㄌㄧˇ", "面":"ㄇㄧㄢˋ", "位":"ㄨㄟˋ", "置":"ㄓˋ",
+        "能":"ㄋㄥˊ", "思":"ㄙ", "考":"ㄎㄠˇ", "說":"ㄕㄨㄛ", "話":"ㄏㄨㄚˋ",
+        "做":"ㄗㄨㄛˋ", "事":"ㄕˋ", "情":"ㄑㄧㄥˊ", "空":"ㄎㄨㄥ", "間":"ㄐㄧㄢ",
+        "月":"ㄩㄝˋ", "亮":"ㄌㄧㄤˋ", "光":"ㄍㄨㄤ", "明":"ㄇㄧㄥˊ", "地":"ㄉㄧˋ",
+        "面":"ㄇㄧㄢˋ", "高":"ㄍㄠ", "山":"ㄕㄢ", "樹":"ㄕㄨˋ", "木":"ㄇㄨˋ",
+        "米":"ㄇㄧˇ", "稻":"ㄉㄠˋ", "菜":"ㄘㄞˋ", "花":"ㄏㄨㄚ", "植":"ㄓˊ",
+        "物":"ㄨˋ", "綠":"ㄌㄩˋ", "色":"ㄙㄜˋ", "嘴":"ㄗㄨㄟˇ", "巴":"ㄅㄚ",
+        "身":"ㄕㄣ", "體":"ㄊㄧˇ", "手":"ㄕㄡˇ", "耳":"ㄦˇ", "聲":"ㄕㄥ",
+        "道":"ㄉㄠˋ", "路":"ㄌㄨˋ", "橋":"ㄑㄧㄠˊ", "門":"ㄇㄣˊ", "牆":"ㄑㄧㄤˊ",
+        "雨":"ㄩˇ", "雲":"ㄩㄣˊ", "滴":"ㄉㄧ", "熱":"ㄖㄜˋ", "燃":"ㄖㄢˊ",
+        "燒":"ㄕㄠ", "源":"ㄩㄢˊ", "流":"ㄌㄧㄡˊ", "河":"ㄏㄜˊ", "海":"ㄏㄞˇ",
+        "清":"ㄑㄧㄥ", "新":"ㄒㄧㄣ", "開":"ㄎㄞ", "始":"ㄕˇ", "推":"ㄊㄨㄟ",
+        "寫":"ㄒㄧㄝˇ", "看":"ㄎㄢˋ", "讀":"ㄉㄨˊ", "聽":"ㄊㄧㄥ", "畫":"ㄏㄨㄚˋ",
+        "畫":"ㄏㄨㄚˋ", "通":"ㄊㄨㄥ", "過":"ㄍㄨㄛˋ", "建":"ㄐㄧㄢˋ", "築":"ㄓㄨˊ",
+        "房":"ㄈㄤˊ", "子":"ㄗˇ", "關":"ㄍㄨㄢ", "閉":"ㄅㄧˋ", "把":"ㄅㄚˇ",
+        "打":"ㄉㄚˇ", "撿":"ㄐㄧㄢˇ", "找":"ㄓㄠˇ", "查":"ㄔㄚˊ", "研":"ㄧㄢˊ",
+        "究":"ㄐㄧㄡ", "深":"ㄕㄣ", "入":"ㄖㄨˋ", "保":"ㄅㄠˇ", "護":"ㄏㄨˋ",
+        "照":"ㄓㄠˋ", "顧":"ㄍㄨˋ", "資":"ㄗ", "料":"ㄌㄧㄠˋ", "依":"ㄧ",
+        "據":"ㄐㄩˋ", "證":"ㄓㄥˋ", "據":"ㄐㄩˋ", "權":"ㄑㄩㄢˊ", "力":"ㄌㄧˋ",
+        "許":"ㄒㄩˇ", "可":"ㄎㄜˇ", "加":"ㄐㄧㄚ", "助":"ㄓㄨˋ", "好":"ㄏㄠˇ",
+        "處":"ㄔㄨˇ", "望":"ㄨㄤˋ", "希":"ㄒㄧ", "願":"ㄩㄢˋ", "應":"ㄧㄥ",
+        "該":"ㄍㄞ", "承":"ㄔㄥˊ", "擔":"ㄉㄢ", "工":"ㄍㄨㄥ", "作":"ㄗㄨㄛˋ",
+        "種":"ㄓㄨㄥˋ", "東":"ㄉㄨㄥ", "西":"ㄒㄧ", "圍":"ㄨㄟˊ", "繞":"ㄖㄠˋ",
+        "周":"ㄓㄡ", "圍":"ㄨㄟˊ", "樣":"ㄧㄤˋ", "情":"ㄑㄧㄥˊ", "形":"ㄒㄧㄥˊ",
+        "材":"ㄘㄞˊ", "料":"ㄌㄧㄠˋ", "樣":"ㄧㄤˋ", "狀":"ㄓㄨㄤˋ", "態":"ㄊㄞˋ",
+        "表":"ㄅㄧㄠˇ", "示":"ㄕˋ", "觀":"ㄍㄨㄢ", "意":"ㄧˋ", "見":"ㄐㄧㄢˋ",
+        "計":"ㄐㄧˋ", "算":"ㄙㄨㄢˋ", "排":"ㄆㄞˊ", "方":"ㄈㄤ", "法":"ㄈㄚˇ",
+        "討":"ㄊㄠˇ", "論":"ㄌㄨㄣˋ", "提":"ㄊㄧˊ", "看":"ㄎㄢˋ", "證":"ㄓㄥˋ",
+        "明":"ㄇㄧㄥˊ", "真":"ㄓㄣ", "實":"ㄕˊ", "現":"ㄒㄧㄢˋ", "常":"ㄔㄤˊ"
+    };
+
+    function renderEnglishMeaningOption(text) {
+        const fragment = document.createDocumentFragment();
+        for (const ch of Array.from(text)) {
+            const zh = englishMeaningZhuyin[ch] || zhuyinByCharacter[ch] || "";
+            if (!zh || /[^\u4e00-\u9fff]/.test(ch)) {
+                fragment.appendChild(document.createTextNode(ch));
+                continue;
+            }
+            const span = document.createElement("span");
+            span.className = "english-answer-zhuyin";
+            const small = document.createElement("small");
+            small.textContent = zh;
+            const base = document.createElement("b");
+            base.textContent = ch;
+            span.append(small, base);
+            fragment.appendChild(span);
+        }
+        return fragment;
+    }
+
     function annotateText(container) {
 
         const walker = document.createTreeWalker(
@@ -4291,6 +4564,19 @@
 
 
     /* Replaced by the four-stage English course below.
+    // 給幼兒看的中文注音式發音提示（僅作輔助，不取代老師發音）。
+    const englishZhuyinByWord = {
+        cat:"ㄎㄟ特", dog:"ㄉㄛㄍ", apple:"ㄟˋ剖", ball:"ㄅㄛˋ", red:"ㄖㄟˋ德", blue:"ㄅㄌㄨˋ",
+        sun:"ㄙㄢ", milk:"ㄇㄧㄡ克", mom:"ㄇㄚㄇ", book:"ㄅㄨㄎ", friend:"ㄈㄖㄣ德", school:"ㄙㄎㄨˋ",
+        water:"ㄨㄛˋ特", happy:"ㄏㄟˋ皮", jump:"ㄐㄢㄆ", sleep:"ㄙㄌㄧˋㄆ", family:"ㄈㄟˋㄇㄌㄧ",
+        teacher:"ㄊㄧˋㄑㄜˋ", small:"ㄙㄇㄛˋㄡ", morning:"ㄇㄛˋㄋㄧㄥ", because:"ㄅㄧˋㄎㄛˋㄗ",
+        important:"ㄧㄣㄆㄛˋㄊㄣ特", different:"ㄉㄧˋㄈㄜㄖㄣ特", careful:"ㄎㄟˋㄈㄜㄡ", weather:"ㄨㄟˋㄉㄜㄖ",
+        picture:"ㄆㄧㄎˋㄑㄜㄖ", question:"ㄎㄨㄟˋㄙㄑㄣ", answer:"ㄢˋㄙㄜㄖ", together:"ㄊㄜㄍㄟˋㄉㄜㄖ",
+        practice:"ㄆㄖㄟˋㄎㄊㄧㄙ", environment:"ㄧㄣㄨㄞˋㄖㄣㄇㄣ特", recycle:"ㄖㄧˋㄙㄞˋㄎㄜㄡ",
+        healthy:"ㄏㄟˋㄡㄙㄧ", decision:"ㄉㄧㄙㄧˋㄓㄣ", discover:"ㄉㄧㄙㄎㄚˋㄨㄜㄖ", improve:"ㄧㄣㄆㄖㄨˋㄨ",
+        responsible:"ㄖㄧㄙㄆㄢˋㄙㄜㄅㄜㄡ", community:"ㄎㄜㄇㄩˋㄋㄊㄧ", challenge:"ㄑㄟˋㄌㄣㄐ", knowledge:"ㄋㄚˋㄌㄧㄐ"
+    };
+
     function getEnglishAgeBand(age) {
 
         if (age <= 5) {
@@ -4517,8 +4803,12 @@
         }
         characterDemoActive = false;
 
+        const currentPool = getCurrentCharacterList()
+            .filter(entry => !!getLocalMoeStrokeData(entry.character));
+        const rememberedIndex = loadCharacterProgress(characterGrade, currentPool.length);
+        const completedCount = Math.min(rememberedIndex, currentPool.length);
         document.getElementById("characterProgress").innerText =
-            `國小${["", "一", "二", "三", "四", "五", "六"][characterGrade]}年級・測驗第 ${characterIndex + 1} / 10 字`;
+            `國小${["", "一", "二", "三", "四", "五", "六"][characterGrade]}年級・第 ${characterIndex + 1} / 10 字　｜　已學 ${completedCount} / ${currentPool.length} 字`;
         document.getElementById("characterGlyph").innerText = entry.character;
         const meaningEl = document.getElementById("characterMeaning");
         meaningEl.innerText = entry.meaning || "";
@@ -4587,10 +4877,32 @@
 
         const progress = document.getElementById("characterProgress");
         if (progress) {
-            progress.textContent = `教育部標準筆順資料已準備完成 ${total} / ${total}`;
+            progress.textContent = `教育部標準筆順資料（網站內建）已準備完成 ${total} / ${total}`;
         }
     }
 
+
+    function getCharacterProgressKey(grade) {
+        return `characterLearningProgress_v2_grade${grade}`;
+    }
+
+    function loadCharacterProgress(grade, poolLength) {
+        let index = 0;
+        try {
+            index = Number(localStorage.getItem(getCharacterProgressKey(grade)) || 0);
+        } catch (e) {}
+        if (!Number.isFinite(index) || index < 0 || index >= poolLength) index = 0;
+        return index;
+    }
+
+    function saveCharacterProgress(grade, nextIndex, poolLength) {
+        const normalized = poolLength
+            ? ((nextIndex % poolLength) + poolLength) % poolLength
+            : 0;
+        try {
+            localStorage.setItem(getCharacterProgressKey(grade), String(normalized));
+        } catch (e) {}
+    }
 
     async function startCharacterPractice() {
 
@@ -4599,15 +4911,15 @@
         characterGrade = Number(document.getElementById("gradeSelect").value);
         // 只使用官方 6,063 字資料中實際存在的字；目前原有字庫中「樑」不在官方 6063png 字集，
         // 因此國字筆順練習會自動排除該字，避免整份測驗因單一缺字而無法開始。
-        const pool = [...getCurrentCharacterList()].filter(entry => !!getLocalMoeStrokeData(entry.character));
-        const historyKey = `characterRecentGrade${characterGrade}`;
-        let recent = [];
-        try { recent = JSON.parse(localStorage.getItem(historyKey) || "[]"); } catch (e) { recent = []; }
-        const freshPool = pool.filter(entry => !recent.includes(entry.character));
-        const sourcePool = freshPool.length >= 10 ? freshPool : pool;
-        characterTestDeck = shuffleCharacters(sourcePool).slice(0, 10);
-        const nextRecent = [...recent, ...characterTestDeck.map(entry => entry.character)].slice(-30);
-        try { localStorage.setItem(historyKey, JSON.stringify(nextRecent)); } catch (e) {}
+        const pool = [...getCurrentCharacterList()]
+            .filter(entry => !!getLocalMoeStrokeData(entry.character));
+
+        // 依照「簡單 → 困難」順序學習；每次開啟會從上次記住的位置繼續。
+        const startIndex = loadCharacterProgress(characterGrade, pool.length);
+        characterTestDeck = Array.from(
+            { length: Math.min(10, pool.length) },
+            (_, offset) => pool[(startIndex + offset) % pool.length]
+        );
         characterTestResults = Array(10).fill(null);
         characterIndex = 0;
 
@@ -4695,6 +5007,14 @@
             completed: characterCompleted,
             score
         };
+
+        // 立即記住下一個字；關閉網頁後也會保留進度。
+        const pool = getCurrentCharacterList()
+            .filter(item => !!getLocalMoeStrokeData(item.character));
+        const currentPoolIndex = pool.findIndex(item => item.character === entry.character);
+        if (currentPoolIndex >= 0) {
+            saveCharacterProgress(characterGrade, currentPoolIndex + 1, pool.length);
+        }
     }
 
 
@@ -4763,84 +5083,23 @@
 
     function renderStrokeOrderNumbers(characterData) {
 
-        const stage = document.getElementById("traceStage");
-        const overlay = document.getElementById("strokeNumberLayer");
-        const stageSize = Math.round(stage.getBoundingClientRect().width);
-        if (!stageSize || !characterData?.masks) return;
-
-        overlay.innerHTML = "";
-        overlay.setAttribute("viewBox", `0 0 ${stageSize} ${stageSize}`);
-        overlay.setAttribute("preserveAspectRatio", "none");
-
-        const placedLabels = [];
-        const offsets = [[0, 0]];
-
-        for (let radius = 14; radius <= 74; radius += 10) {
-            for (let angle = 0; angle < 360; angle += 30) {
-                const radians = angle * Math.PI / 180;
-                offsets.push([
-                    Math.cos(radians) * radius,
-                    Math.sin(radians) * radius
-                ]);
-            }
+        // 左側小朋友書寫區完全不顯示筆順數字。
+        const leftOverlay = document.getElementById("strokeNumberLayer");
+        if (leftOverlay) {
+            leftOverlay.innerHTML = "";
+            leftOverlay.style.display = "none";
         }
 
-        characterData.masks.forEach((stroke, index) => {
-            const centroid = stroke[2] || [25, 22.5];
-            const originX = (Number(centroid[0]) / 50) * stageSize;
-            const originY = (Number(centroid[1]) / 45) * stageSize;
-
-            let labelPosition = null;
-            for (const offset of offsets) {
-                const candidate = {
-                    x: originX + offset[0],
-                    y: originY + offset[1]
-                };
-                const inBounds = candidate.x >= 10 && candidate.x <= stageSize - 10 &&
-                    candidate.y >= 10 && candidate.y <= stageSize - 10;
-                const separated = placedLabels.every(label =>
-                    Math.hypot(label.x - candidate.x, label.y - candidate.y) >= 19
-                );
-                if (inBounds && separated) {
-                    labelPosition = candidate;
-                    break;
-                }
-            }
-
-            if (!labelPosition) {
-                labelPosition = {
-                    x: Math.max(10, Math.min(stageSize - 10, originX)),
-                    y: Math.max(10, Math.min(stageSize - 10, originY))
-                };
-            }
-            placedLabels.push(labelPosition);
-
-            if (Math.hypot(labelPosition.x - originX, labelPosition.y - originY) > 10) {
-                const leader = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                leader.setAttribute("class", "stroke-number-leader");
-                leader.setAttribute("x1", originX);
-                leader.setAttribute("y1", originY);
-                leader.setAttribute("x2", labelPosition.x);
-                leader.setAttribute("y2", labelPosition.y);
-                overlay.appendChild(leader);
-            }
-
-            const badge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            badge.setAttribute("class", "stroke-number-badge");
-            badge.setAttribute("cx", labelPosition.x);
-            badge.setAttribute("cy", labelPosition.y);
-            badge.setAttribute("r", "8");
-            overlay.appendChild(badge);
-
-            const number = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            number.setAttribute("class", "stroke-number-text");
-            number.setAttribute("x", labelPosition.x);
-            number.setAttribute("y", labelPosition.y);
-            number.textContent = String(index + 1);
-            overlay.appendChild(number);
-        });
-
-        overlay.style.display = "block";
+        // 筆順編號不再另外列在國字下方。
+        // 右側的「老師示範」會連續播放教育部標準筆順，
+        // 示範完成後保留最後完整字形，讓孩子直接看老師示範來寫。
+        const overlay = document.getElementById("characterStrokeOrderOverlay");
+        if (overlay) {
+            overlay.innerHTML = "";
+            overlay.style.display = "none";
+        }
+        const list = document.getElementById("characterStrokeOrderList");
+        if (list) list.style.display = "none";
     }
 
 
@@ -4906,7 +5165,8 @@
 
         return new Promise((resolve, reject) => {
             const target = document.getElementById("hanziWriterTarget");
-            const stageSize = Math.round(document.getElementById("traceStage").getBoundingClientRect().width);
+            const teacherStage = document.getElementById("teacherDemoStage");
+            const stageSize = Math.round(teacherStage.getBoundingClientRect().width);
             if (!stageSize) {
                 reject(new Error("筆順練習區尺寸尚未準備完成"));
                 return;
@@ -4931,8 +5191,12 @@
 
             const img = new Image();
             img.onload = () => {
+                // 老師示範：每個字連續示範 3 次，速度放慢，讓孩子有足夠時間觀察。
+                const demoRounds = 3;
+                const frameDelay = 620;
+                const pauseBetweenRounds = 850;
+                let round = 0;
                 let frame = 0;
-                const frameDelay = 280;
 
                 const drawFrame = () => {
                     if (activeWriterCharacter !== entry.character) {
@@ -4961,7 +5225,20 @@
 
                     frame++;
                     if (frame >= characterData.strokeCount) {
-                        setTimeout(resolve, 450);
+                        round++;
+                        if (round >= demoRounds) {
+                            // 最後一次示範完成後保留完整字形。
+                            setTimeout(resolve, 900);
+                        } else {
+                            // 稍停一下，再從第一筆重新示範。
+                            setTimeout(() => {
+                                frame = 0;
+                                ctx.clearRect(0, 0, stageSize, stageSize);
+                                ctx.fillStyle = "#fffefa";
+                                ctx.fillRect(0, 0, stageSize, stageSize);
+                                setTimeout(drawFrame, 220);
+                            }, pauseBetweenRounds);
+                        }
                     } else {
                         setTimeout(drawFrame, frameDelay);
                     }
@@ -4991,35 +5268,43 @@
             characterStrokeCount = characterData.strokeCount;
             characterCanGrade = true;
 
-            document.getElementById("traceCanvas").style.display = "none";
+            // 左邊書寫區從老師示範一開始就開放，孩子可以同步跟著老師寫。
+            document.getElementById("traceCanvas").style.display = "block";
             document.getElementById("strokeNumberLayer").style.display = "none";
-
             renderStrokeOrderNumbers(characterData);
 
+            // 先建立本字的作答狀態，再開始老師示範；示範期間的書寫會直接計入本字評分。
+            startCurrentCharacterQuiz(entry);
             characterDemoActive = true;
             document.getElementById("nextCharacterButton").disabled = true;
+            const demoStatus = document.getElementById("teacherDemoStatus");
+            if (demoStatus) demoStatus.textContent = `👩‍🏫 老師正在慢慢示範「${entry.character}」；你可以在左邊跟著一起寫！`;
             setStrokeFeedback(
-                `👩‍🏫 老師示範中：請先觀察「${entry.character}」的教育部標準筆順，共 ${characterStrokeCount} 筆…`,
+                `👩‍🏫 老師示範中！你可以一邊看右邊老師，一邊在左邊跟著寫「${entry.character}」。`,
                 "success"
             );
+            requestAnimationFrame(resizeTraceCanvas);
 
             await playMoeStrokeDemo(entry, characterData);
 
             if (activeWriterCharacter !== entry.character) return;
 
             characterDemoActive = false;
-            document.getElementById("hanziWriterTarget").style.display = "none";
-            document.getElementById("traceCanvas").style.display = "block";
-            renderStrokeOrderNumbers(characterData);
+            // 老師示範完成後保留右側最後一個完整字形，左側保留孩子已經寫好的筆跡。
+            const demoStatusAfter = document.getElementById("teacherDemoStatus");
+            if (demoStatusAfter) demoStatusAfter.textContent = characterCompleted
+                ? `示範完成！你也完成「${entry.character}」了，可以進入下一個字。`
+                : `示範完成！老師寫完了，請把左邊剩下的筆畫寫完。`;
 
-            document.getElementById("nextCharacterButton").disabled = false;
+            document.getElementById("nextCharacterButton").disabled = !characterCompleted;
             setStrokeFeedback(
-                `✍️ 示範完成！現在請依照 1、2、3…的教育部標準筆順寫一次。`,
+                characterCompleted
+                    ? `🎉 很棒！你已經跟著老師完成「${entry.character}」！`
+                    : `✍️ 老師示範完成！左邊已保留你的筆跡，請繼續完成「${entry.character}」。`,
                 "success"
             );
 
             requestAnimationFrame(resizeTraceCanvas);
-            startCurrentCharacterQuiz(entry);
 
         } catch (error) {
             if (activeWriterCharacter !== entry.character) return;
@@ -5031,6 +5316,8 @@
 
             document.getElementById("hanziWriterTarget").style.display = "none";
             document.getElementById("strokeNumberLayer").style.display = "none";
+            document.getElementById("characterStrokeOrderOverlay")?.style.setProperty("display", "none");
+            document.getElementById("characterStrokeOrderList")?.style.setProperty("display", "none");
             document.getElementById("traceCanvas").style.display = "block";
             requestAnimationFrame(resizeTraceCanvas);
 
@@ -5159,7 +5446,7 @@
         characterCompleted = false;
 
         setStrokeFeedback(
-            `請從第 1 筆開始，依照編號寫「${entry.character}」。`,
+            `請從第 1 筆開始，看著右側老師示範寫「${entry.character}」。`,
             "success"
         );
         drawTraceCanvas();
@@ -5259,9 +5546,12 @@
 
             if (characterCorrectStrokeCount >= characterStrokeCount) {
                 characterCompleted = true;
-                document.getElementById("nextCharacterButton").disabled = false;
+                // 如果老師還在示範，即使孩子已經寫完，也要等示範結束才能進下一字。
+                document.getElementById("nextCharacterButton").disabled = characterDemoActive;
                 setStrokeFeedback(
-                    `🎉 完成了！「${entry.character}」${characterStrokeCount} 筆全部依序完成。`,
+                    characterDemoActive
+                        ? `🎉 你已經跟著老師完成「${entry.character}」！等老師示範完就可以進下一個字。`
+                        : `🎉 完成了！「${entry.character}」${characterStrokeCount} 筆全部依序完成。`,
                     "success"
                 );
             } else {
@@ -5273,7 +5563,7 @@
         } else {
             characterMistakeCount++;
             setStrokeFeedback(
-                `第 ${strokeIndex + 1} 筆不太符合範本，再看一次編號後重寫。錯誤 ${characterMistakeCount} 次。`,
+                `第 ${strokeIndex + 1} 筆不太符合範本，請看右側國字的編號再重寫。錯誤 ${characterMistakeCount} 次。`,
                 "error"
             );
         }
@@ -5282,24 +5572,58 @@
     }
 
 
-    function clearCharacterStrokes() {
+    async function clearCharacterStrokes() {
 
+        // 「重來本字」不是只清除孩子剛才的筆跡，
+        // 而是重新進入本字的完整學習流程：老師再次示範 → 孩子重新書寫。
         if (characterDemoActive) {
-            setStrokeFeedback("👀 老師正在示範筆順，請先觀察完成，再開始自己寫。", "");
+            setStrokeFeedback("👩‍🏫 老師正在示範，你可以跟著左邊一起寫；若要全部重來，請等示範完成後再按。", "");
             return;
         }
 
+        const entry = characterTestDeck[characterIndex];
+        if (!entry) return;
+
+        // 先清除本字目前的作答狀態，不移動到下一個字。
         characterStrokes = [];
         activeCharacterStroke = null;
         characterCorrectStrokeCount = 0;
         characterMistakeCount = 0;
         characterCompleted = false;
+        characterCanGrade = false;
+        activeCharacterData = null;
+        characterStrokeCount = 0;
+        characterDemoActive = true;
+
+        // 重新播放老師示範前，清空孩子筆跡並保留左側書寫區，
+        // 讓孩子可以從第一筆重新跟著老師寫。
+        document.getElementById("traceCanvas").style.display = "block";
+        document.getElementById("strokeNumberLayer").style.display = "none";
+        document.getElementById("strokeNumberLayer").innerHTML = "";
+        const target = document.getElementById("hanziWriterTarget");
+        target.innerHTML = "";
+        target.style.display = "block";
+        document.getElementById("nextCharacterButton").disabled = true;
 
         setStrokeFeedback(
-            "已重新開始本字，請從第 1 筆依照教育部標準筆順書寫。",
-            ""
+            `🔄 重新開始「${entry.character}」：老師會再示範一次正確筆順，請先觀察。`,
+            "success"
         );
-        drawTraceCanvas();
+
+        try {
+            // 本字資料已經內建在 HTML，不需要重新下載。
+            // loadCharacterStrokeData() 會重新播放完整老師示範，
+            // 示範結束後才重新開啟小朋友書寫。
+            await loadCharacterStrokeData(entry);
+        } catch (error) {
+            if (activeWriterCharacter !== entry.character) return;
+            characterDemoActive = false;
+            document.getElementById("nextCharacterButton").disabled = true;
+            setStrokeFeedback(
+                `重新示範失敗：${error.message || error}`,
+                "error"
+            );
+        }
     }
 
 
@@ -5308,7 +5632,7 @@
         const canvas = document.getElementById("traceCanvas");
 
         canvas.addEventListener("pointerdown", event => {
-            if (characterDemoActive || !characterCanGrade || characterCompleted) return;
+            if (!characterCanGrade || characterCompleted) return;
             event.preventDefault();
             try { canvas.setPointerCapture(event.pointerId); } catch (e) {}
             activeCharacterStroke = [];
@@ -5435,6 +5759,7 @@
         updateEnglishProgress("教學",englishTeachIndex,englishDeck.length);
         document.getElementById("englishTeachEmoji").textContent=englishEmojiByWord[entry.word]||"🔤";
         document.getElementById("englishTeachWord").textContent=entry.word;
+        document.getElementById("englishTeachZhuyin").innerHTML=`<span class="english-zhuyin-label">發音提示</span>${englishZhuyinByWord[entry.word] || "先聽老師發音"}`;
         document.getElementById("englishTeachPhonetic").textContent=`IPA：${entry.phonetic}`;
         document.getElementById("englishTeachMeaning").textContent=entry.meaning;
         document.getElementById("englishTeachExplanation").textContent=`💡 ${entry.explanation}`;
@@ -5455,25 +5780,95 @@
     }
 
     function makeEnglishChoices(entry, mode="meaning") {
-        let values;
-        if(mode==="word") values=englishDeck.map(x=>x.word).filter(x=>x!==entry.word);
-        else values=englishDeck.map(x=>x.meaning).filter(x=>x!==entry.meaning);
-        const pool=[...new Set(values)], distractors=[];
-        while(distractors.length<Math.min(3,pool.length)){const c=pool[randomNumber(0,pool.length-1)];if(!distractors.includes(c))distractors.push(c);}
-        const answers=[mode==="word"?entry.word:entry.meaning,...distractors];
-        return answers.sort(()=>Math.random()-0.5);
+        const source = Array.isArray(window.englishDeck) ? window.englishDeck : [];
+        const agePool = (
+            window.englishAgeBand &&
+            window.englishWordsByAgeBand &&
+            window.englishWordsByAgeBand[window.englishAgeBand.key]
+        ) || [];
+
+        const all = [...source, ...agePool];
+        const target = mode === "word" ? entry.word : entry.meaning;
+
+        const values = all
+            .map(x => mode === "word" ? x.word : x.meaning)
+            .filter(Boolean)
+            .filter(x => x !== target);
+
+        const pool = [...new Set(values)];
+        const distractors = [];
+
+        // 優先從同一年齡層找干擾答案。
+        while (distractors.length < 3 && pool.length) {
+            const index = randomNumber(0, pool.length - 1);
+            const value = pool.splice(index, 1)[0];
+            if (value && !distractors.includes(value)) distractors.push(value);
+        }
+
+        const answers = [target, ...distractors];
+
+        // 萬一資料不足，至少保證正確答案一定會顯示。
+        return answers.sort(() => Math.random() - 0.5);
+    }
+
+    function renderEnglishMeaningOptionSafe(text) {
+        // 選項本身永遠先保留純文字；注音只是額外的顯示層，
+        // 即使注音資料缺少，也不能讓整個選項消失。
+        const fragment = document.createDocumentFragment();
+        const chars = Array.from(String(text || ""));
+
+        chars.forEach(ch => {
+            let zh = "";
+            try {
+                zh = (typeof englishMeaningZhuyin !== "undefined" && englishMeaningZhuyin[ch])
+                    || (typeof zhuyinByCharacter !== "undefined" && zhuyinByCharacter[ch])
+                    || "";
+            } catch (e) {}
+
+            if (!zh || !/^[\u4e00-\u9fff]$/.test(ch)) {
+                fragment.appendChild(document.createTextNode(ch));
+                return;
+            }
+
+            const span = document.createElement("span");
+            span.className = "english-answer-zhuyin";
+
+            const small = document.createElement("small");
+            small.textContent = zh;
+
+            const base = document.createElement("b");
+            base.textContent = ch;
+
+            span.append(small, base);
+            fragment.appendChild(span);
+        });
+
+        return fragment;
     }
 
     function showEnglishPracticeQuestion(){
         const entry=englishDeck[englishPracticeIndex]; if(!entry)return;
         updateEnglishProgress("練習",englishPracticeIndex,englishDeck.length);
         document.getElementById("englishPracticeWord").textContent=entry.word;
+        document.getElementById("englishPracticeZhuyin").innerHTML=`<span class="english-zhuyin-label">發音提示</span>${englishZhuyinByWord[entry.word] || "先聽老師發音"}`;
         document.getElementById("englishPracticePhonetic").textContent=`IPA：${entry.phonetic}`;
         document.getElementById("englishPracticePrompt").textContent=englishPracticeIndex%2===0?"選出這個英文單字的中文意思。":"選出正確的英文單字。";
         document.getElementById("englishPracticeFeedback").textContent="這一階段不計分，答錯可以再試。";
         const mode=englishPracticeIndex%2===0?"meaning":"word";
         const answers=makeEnglishChoices(entry,mode), box=document.getElementById("englishPracticeAnswers"); box.innerHTML="";
-        answers.forEach(a=>{const b=document.createElement("button");b.className="answer-btn";b.textContent=a;b.onclick=()=>checkEnglishPractice(a,mode);box.appendChild(b);});
+        answers.forEach(a=>{
+            const b=document.createElement("button");
+            b.type="button";
+            b.className="answer-btn";
+            if(mode==="meaning"){
+                try { b.appendChild(renderEnglishMeaningOptionSafe(a)); }
+                catch(e) { b.textContent=a; }
+            } else {
+                b.textContent=a;
+            }
+            b.onclick=()=>checkEnglishPractice(a,mode);
+            box.appendChild(b);
+        });
         if(englishPracticeIndex%2===0)speakEnglishText(entry.word); else speakEnglishText(entry.meaning);
     }
     function speakPracticeWord(){ const e=englishDeck[englishPracticeIndex]; if(e)speakEnglishText(e.word); }
@@ -5494,13 +5889,26 @@
         englishTestAnswered=false;
         updateEnglishProgress("測驗",englishTestIndex,englishDeck.length);
         document.getElementById("englishTestWord").textContent=entry.word;
+        document.getElementById("englishTestZhuyin").innerHTML=`<span class="english-zhuyin-label">發音提示</span>${englishZhuyinByWord[entry.word] || "先聽老師發音"}`;
         document.getElementById("englishTestPhonetic").textContent="IPA："+entry.phonetic;
         document.getElementById("englishTestFeedback").textContent="🔊 先按喇叭聽一次，再選出正確答案。";
         const mode=englishTestIndex%3===1?"word":"meaning";
         document.getElementById("englishTestPrompt").textContent=mode==="word"?"看到中文意思，選出正確英文。":"聽英文發音，選出正確中文意思。";
         const box=document.getElementById("englishTestAnswers");box.innerHTML="";
         const answers=makeEnglishChoices(entry,mode);
-        answers.forEach(a=>{const b=document.createElement("button");b.className="answer-btn";b.textContent=a;b.onclick=()=>checkEnglishTest(a,mode);box.appendChild(b);});
+        answers.forEach(a=>{
+            const b=document.createElement("button");
+            b.type="button";
+            b.className="answer-btn";
+            if(mode==="meaning"){
+                try { b.appendChild(renderEnglishMeaningOptionSafe(a)); }
+                catch(e) { b.textContent=a; }
+            } else {
+                b.textContent=a;
+            }
+            b.onclick=()=>checkEnglishTest(a,mode);
+            box.appendChild(b);
+        });
         if(mode==="word") document.getElementById("englishTestWord").textContent=entry.meaning; else speakEnglishText(entry.word);
     }
     function speakTestQuestion(){ const e=englishDeck[englishTestIndex]; if(e)speakEnglishText(e.word); }
@@ -5542,13 +5950,14 @@
     }
     function showWrongReviewQuestion(){
         const e=englishWrongWords[englishWrongIndex];if(!e)return;
-        document.getElementById("englishWrongWord").textContent=e.word;document.getElementById("englishWrongPhonetic").textContent=e.phonetic;
+        document.getElementById("englishWrongWord").textContent=e.word;document.getElementById("englishWrongZhuyin").innerHTML=`<span class="english-zhuyin-label">發音提示</span>${englishZhuyinByWord[e.word] || "先聽老師發音"}`;
+        document.getElementById("englishWrongPhonetic").textContent="IPA："+e.phonetic;
         document.getElementById("englishWrongFeedback").textContent="聽一次，再選出正確中文意思。";speakEnglishText(e.word);
         const answers=makeEnglishChoices(e,"meaning"),box=document.getElementById("englishWrongAnswers");box.innerHTML="";
         const all=[...new Set([e,...englishWordsByAgeBand[englishAgeBand.key]])];
         let meanings=all.map(x=>x.meaning).filter(Boolean).filter(x=>x!==e.meaning); meanings=[...new Set(meanings)];
         while(meanings.length>3) meanings.splice(randomNumber(0,meanings.length-1),1);
-        [e.meaning,...meanings].sort(()=>Math.random()-0.5).forEach(a=>{const b=document.createElement("button");b.className="answer-btn";b.textContent=a;b.onclick=()=>checkWrongReview(a);box.appendChild(b);});
+        [e.meaning,...meanings].sort(()=>Math.random()-0.5).forEach(a=>{const b=document.createElement("button");b.className="answer-btn";b.appendChild(renderEnglishMeaningOption(a));b.onclick=()=>checkWrongReview(a);box.appendChild(b);});
     }
     function speakWrongWord(){const e=englishWrongWords[englishWrongIndex];if(e)speakEnglishText(e.word);}
     function checkWrongReview(answer){
