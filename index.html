@@ -1437,7 +1437,9 @@
 
         const entry = characterTestDeck[characterIndex];
         if (!entry) return;
-        speakText(`${entry.character}。${entry.meaning}`);
+        speakText(
+            `今天要學的字是${entry.character}。它念作${entry.character}。意思是：${entry.meaning}`
+        );
     }
 
 
@@ -1922,6 +1924,7 @@
 
         renderCharacterReading(entry.zhuyin);
         setStrokeFeedback("正在載入正確筆順資料…", "");
+        speakCurrentCharacter();
         requestAnimationFrame(resizeTraceCanvas);
         loadCharacterStrokeData(entry);
     }
