@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AI 數學、國字與英文練習</title>
+    <title>數學、國字與英文練習</title>
 
     <style>
         * {
@@ -1036,7 +1036,7 @@
 
         <div class="emoji">🧒🔢</div>
 
-        <h1>AI 數學、國字與英文練習</h1>
+        <h1>數學、國字與英文練習</h1>
 
         <div class="subtitle">選擇年級與練習內容，開始學習吧！</div>
 
@@ -1073,7 +1073,7 @@
 
             <div>
                 <label class="setting-label" for="childName">孩子的名字</label>
-                    <input class="name-input" id="childName" type="text" value="小朋友" maxlength="16" autocomplete="off">
+                    <input class="name-input" id="childName" type="text" value="白宸鈞" maxlength="16" autocomplete="off">
             </div>
 
             <p class="level-hint" id="levelHint" aria-live="polite"></p>
@@ -2128,7 +2128,7 @@
 
     function getChildName() {
 
-        return document.getElementById("childName").value.trim() || "小朋友";
+        return document.getElementById("childName").value.trim() || "白宸鈞";
     }
 
 
@@ -2584,12 +2584,12 @@
     }
 
     function loadEnglishWrongWords() {
-        try { return JSON.parse(localStorage.getItem("aiEnglishWrongWords") || "[]"); } catch(e) { return []; }
+        try { return JSON.parse(localStorage.getItem("englishWrongWords") || "[]"); } catch(e) { return []; }
     }
     function saveEnglishWrongWords(words) {
         const unique=[]; const seen=new Set();
         words.forEach(w=>{ if(w && !seen.has(w.word)){seen.add(w.word); unique.push(w);} });
-        localStorage.setItem("aiEnglishWrongWords", JSON.stringify(unique.slice(0,50)));
+        localStorage.setItem("englishWrongWords", JSON.stringify(unique.slice(0,50)));
     }
 
     function startEnglishPractice() {
