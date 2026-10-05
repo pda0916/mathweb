@@ -1069,6 +1069,14 @@
             </label>
 
             <div>
+                <label class="setting-label" for="mathDifficulty">數學難度</label>
+                <select id="mathDifficulty">
+                    <option value="normal" selected>一般練習</option>
+                    <option value="challenge">🔥 挑戰題（較難）</option>
+                </select>
+            </div>
+
+            <div>
                 <label class="setting-label" for="operationSelect">練習內容</label>
                 <select id="operationSelect">
                     <option value="addition">加法</option>
@@ -1299,7 +1307,7 @@
             <div class="record-list" id="recordList"></div>
             <div class="record-actions">
                 <button class="trace-button" type="button" onclick="hideLearningRecord()">← 返回學習</button>
-                <button class="trace-button" type="button" onclick="clearLearningRecord()">🗑️ 清除紀錄</button>
+                <button class="trace-button" type="button" onclick="clearLearningRecord()">🛡️ 家長清除紀錄</button>
             </div>
         </section>
     </div>
@@ -1364,6 +1372,7 @@
     let streak = 0;
     let correctAnswer = 0;
     let maxNumber = 10;
+    let mathDifficulty = "normal";
     let hasAnswered = false;
     let questionHistory = [];
     let currentLeftOperand = 0;
@@ -3460,18 +3469,33 @@
     // 產生題目
     // ==========================
 
+    function getMathChallengeRange(age) {
+        if (age <= 5) return { min: 3, max: 20 };
+        if (age <= 7) return { min: 5, max: 50 };
+        if (age <= 9) return { min: 10, max: 100 };
+        return { min: 10, max: 200 };
+    }
+
     function generateQuestion() {
 
         const operation = document.getElementById("operationSelect").value;
+        const difficulty = document.getElementById("mathDifficulty")?.value || "normal";
+        const age = Number(document.getElementById("ageSelect").value);
         let a;
         let b;
-        const isAddition = operation === "addition" ||
-            (operation === "mixed" && Math.random() < 0.5);
+        let isAddition;
 
         if (operation === "multiplication") {
 
-            a = selectedMultiplicationTable;
-            b = currentQuestion + 1;
+            // 挑戰模式下不只固定練目前的乘法表，改成 2～12 的混合乘法。
+            if (difficulty === "challenge") {
+                a = randomNumber(2, Math.min(12, Math.max(2, age)));
+                b = randomNumber(2, 12);
+            } else {
+                a = selectedMultiplicationTable;
+                b = currentQuestion + 1;
+            }
+
             currentOperator = "×";
             correctAnswer = a * b;
 
@@ -3485,58 +3509,79 @@
             const repeatedAddition = Array(a).fill(b).join(" + ");
             setChineseText(
                 document.getElementById("multiplicationHint"),
-                `${a} × ${b} 表示 ${a} 組、每組 ${b} 個，也就是 ${repeatedAddition}。數數看一共有幾個？`
+                difficulty === "challenge"
+                    ? `🔥 挑戰題：${a} × ${b}，可以用九九乘法表或分解來想一想。`
+                    : `${a} × ${b} 表示 ${a} 組、每組 ${b} 個，也就是 ${repeatedAddition}。數數看一共有幾個？`
             );
-        } else if (isAddition) {
 
-            a = randomNumber(1, maxNumber);
-            b = randomNumber(1, maxNumber);
-            document.getElementById("visualModel").style.display = "grid";
+        } else if (difficulty === "challenge") {
+
+            // 挑戰題：依年齡提高數字範圍，並避免出現負數。
+            // 為避免畫面塞滿大量圖示，挑戰題使用純算式模式。
+            const range = getMathChallengeRange(age);
+            isAddition = operation === "addition" ||
+                (operation === "mixed" && Math.random() < 0.5);
+
+            a = randomNumber(range.min, range.max);
+            b = randomNumber(range.min, range.max);
+
+            if (isAddition) {
+                currentOperator = "+";
+                correctAnswer = a + b;
+            } else {
+                currentOperator = "-";
+                if (a < b) [a, b] = [b, a];
+                correctAnswer = a - b;
+            }
+
+            document.getElementById("visualModel").style.display = "none";
             document.getElementById("multiplicationVisual").style.display = "none";
-            document.getElementById("multiplicationHint").style.display = "none";
-
-            currentOperator = "+";
-            correctAnswer = a + b;
+            document.getElementById("multiplicationHint").style.display = "block";
+            setChineseText(
+                document.getElementById("multiplicationHint"),
+                `🔥 挑戰題：數字範圍約 ${range.min}～${range.max}，這一題要仔細算喔！`
+            );
 
             document.getElementById("question").innerText =
-                `${a} + ${b} = ?`;
+                `${a} ${currentOperator} ${b} = ?`;
 
         } else {
 
-            a = randomNumber(1, maxNumber);
-            b = randomNumber(1, maxNumber);
-            while (a === b) {
+            isAddition = operation === "addition" ||
+                (operation === "mixed" && Math.random() < 0.5);
+
+            if (isAddition) {
+                a = randomNumber(1, maxNumber);
                 b = randomNumber(1, maxNumber);
+                currentOperator = "+";
+                correctAnswer = a + b;
+            } else {
+                a = randomNumber(1, maxNumber);
+                b = randomNumber(1, maxNumber);
+                while (a === b) b = randomNumber(1, maxNumber);
+                if (a < b) [a, b] = [b, a];
+                currentOperator = "-";
+                correctAnswer = a - b;
             }
 
             document.getElementById("visualModel").style.display = "grid";
             document.getElementById("multiplicationVisual").style.display = "none";
             document.getElementById("multiplicationHint").style.display = "none";
 
-            currentOperator = "-";
-            if (a < b) {
-                let temp = a;
-                a = b;
-                b = temp;
-            }
-
-            correctAnswer = a - b;
-
             document.getElementById("question").innerText =
-                `${a} - ${b} = ?`;
+                `${a} ${currentOperator} ${b} = ?`;
         }
 
         currentLeftOperand = a;
         currentRightOperand = b;
 
-        if (operation !== "multiplication") {
-            renderVisualModel(a, b, isAddition);
+        if (operation !== "multiplication" && difficulty !== "challenge") {
+            renderVisualModel(a, b, currentOperator === "+");
         }
 
         generateAnswers();
         speakQuestion();
     }
-
 
     function numberToChinese(number) {
 
@@ -4017,9 +4062,11 @@
     function recordMathResult() {
         const operationNames = { addition:"加法", subtraction:"減法", mixed:"加法＋減法混合", multiplication:"九九乘法入門" };
         const operation = document.getElementById("operationSelect").value;
+        const difficulty = document.getElementById("mathDifficulty")?.value || "normal";
+        const difficultyLabel = difficulty === "challenge" ? "🔥 挑戰題" : "一般";
         saveLearningRecord({
             date:new Date().toISOString(), type:"數學",
-            detail:`${Number(document.getElementById("ageSelect").value)} 歲・${operationNames[operation]}`,
+            detail:`${Number(document.getElementById("ageSelect").value)} 歲・${difficultyLabel}・${operationNames[operation]}`,
             score, total:totalQuestions, correct:score
         });
     }
@@ -4060,11 +4107,26 @@
 
     function hideLearningRecord(){document.getElementById("learningRecord").style.display="none";document.getElementById("setup").style.display="grid";}
     function clearLearningRecord(){
-        if(!confirm("確定要清除這台裝置上的所有學習紀錄嗎？"))return;
+        const confirmWord = prompt("🔐 家長驗證\n\n為避免孩子誤刪學習紀錄，請由家長操作。\n請輸入：家長確認\n\n若不是家長，請按取消。", "");
+        if (confirmWord !== "家長確認") {
+            if (confirmWord !== null) alert("驗證文字不正確，紀錄沒有被清除。");
+            return;
+        }
+
+        // 再加一道簡單的家長驗證題，避免孩子隨手點擊就清空。
+        const a = randomNumber(18, 49);
+        const b = randomNumber(12, 38);
+        const answer = prompt(`🔐 最後一步：家長驗證題\n\n請算：${a} + ${b} = ?\n\n（答對後才會清除紀錄）`, "");
+        if (answer === null) return;
+        if (Number(answer) !== a + b) {
+            alert("驗證題答案不正確，學習紀錄已保留。");
+            return;
+        }
+
+        if(!confirm("⚠️ 確定要清除這台裝置上的所有學習紀錄嗎？此動作無法復原。")) return;
         try{localStorage.removeItem("aiLearningRecords");}catch(e){}
         showLearningRecord();
     }
-
     function loadSavedSettings(){
         const savedName=getStoredChildName();
         if(savedName)document.getElementById("childName").value=savedName;
@@ -4486,7 +4548,91 @@
     }
 
 
-    function startCharacterPractice() {
+    // 預先下載筆順資料時共用的抓取函式。
+    // 8 秒逾時可避免 iPhone / 4G 網路卡住太久。
+    async function fetchStrokeJson(url) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 8000);
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                mode: "cors",
+                cache: "force-cache",
+                signal: controller.signal
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } finally {
+            clearTimeout(timer);
+        }
+    }
+
+    // 先把本次 10 題會用到的教育部標準筆順資料全部準備好，
+    // 再進入國字練習。資料會寫入 localStorage；之後相同字不需要重新連線。
+    async function preloadCharacterStrokeData(deck) {
+        const total = deck.length;
+        let ready = 0;
+        const errors = [];
+
+        // 先確保 HanziWriter 程式庫本身已經載入，避免進入練習後才下載。
+        await ensureHanziWriterLoaded();
+
+        for (const entry of deck) {
+            const codePoint = entry.character.codePointAt(0).toString(16).toLowerCase();
+            const cachedKey = `moe2025StrokeData:${codePoint}`;
+            let cached = null;
+
+            try {
+                const raw = localStorage.getItem(cachedKey);
+                if (raw) cached = JSON.parse(raw);
+            } catch (e) {}
+
+            const validCached = cached &&
+                Array.isArray(cached.strokes) &&
+                Array.isArray(cached.medians) &&
+                cached.strokes.length === cached.medians.length &&
+                (!cached.character || cached.character === entry.character);
+
+            if (!validCached) {
+                const strokeUrls = [
+                    `https://www.moedict.tw/api/stroke-json/${codePoint}.json`,
+                    `https://moedict.tw/api/stroke-json/${codePoint}.json`,
+                    `https://cdn.jsdelivr.net/gh/g0v/zh-stroke-data@master/json/${codePoint}.json`
+                ];
+
+                let loaded = null;
+                let lastError = null;
+                for (const url of strokeUrls) {
+                    try {
+                        loaded = await fetchStrokeJson(url);
+                        if (loaded) break;
+                    } catch (error) {
+                        lastError = error;
+                    }
+                }
+
+                if (!loaded || !Array.isArray(loaded.strokes) ||
+                    !Array.isArray(loaded.medians) ||
+                    loaded.strokes.length !== loaded.medians.length) {
+                    errors.push(`${entry.character}: ${lastError?.message || "資料格式錯誤"}`);
+                } else {
+                    try { localStorage.setItem(cachedKey, JSON.stringify(loaded)); } catch (e) {}
+                }
+            }
+
+            ready++;
+            const progress = document.getElementById("characterProgress");
+            if (progress) {
+                progress.textContent = `正在準備教育部標準筆順資料… ${ready} / ${total}`;
+            }
+        }
+
+        if (errors.length) {
+            throw new Error(`筆順資料尚未全部準備完成：${errors.join("、")}`);
+        }
+    }
+
+    async function startCharacterPractice() {
 
         saveChildName();
         characterResultRecorded=false;
@@ -4503,12 +4649,25 @@
         characterTestResults = Array(10).fill(null);
         characterIndex = 0;
 
+        // 先準備本次 10 個字；全部成功後才正式進入練習。
+        document.getElementById("characterPractice").style.display = "block";
+        document.getElementById("characterProgress").textContent = "正在準備教育部標準筆順資料…";
         document.getElementById("result").style.display = "none";
         document.getElementById("characterResult").style.display = "none";
         document.getElementById("game").style.display = "block";
         document.getElementById("setup").style.display = "none";
         document.getElementById("quiz").style.display = "none";
-        document.getElementById("characterPractice").style.display = "block";
+
+        try {
+            await preloadCharacterStrokeData(characterTestDeck);
+        } catch (error) {
+            document.getElementById("characterProgress").textContent = "教育部標準筆順資料準備失敗";
+            document.getElementById("setup").style.display = "grid";
+            document.getElementById("characterPractice").style.display = "none";
+            alert("教育部標準筆順資料尚未全部載入完成。請先連上網路再開始國字練習。\n\n" + (error.message || error));
+            console.error("MOE stroke preload failed:", error);
+            return;
+        }
 
         showCurrentCharacter();
         requestAnimationFrame(resizeTraceCanvas);
@@ -4797,26 +4956,54 @@
             // 這裡只抓「筆順資料 JSON」，不載入或嵌入教育部的網頁畫面。
             // JSON 的來源是以教育部筆順資料為基礎的 moedict stroke API。
             const codePoint = entry.character.codePointAt(0).toString(16).toLowerCase();
-            const dataUrl = `https://www.moedict.tw/api/stroke-json/${codePoint}.json`;
+            // 依序嘗試目前的 moedict API、moedict 無 www 網域，以及
+            // g0v/zh-stroke-data 的 MOE 筆順資料鏡像。
+            // 三者都是「筆順 JSON 資料」，不會載入或嵌入教育部網頁畫面。
+            // iPhone / iPad 某些網路環境可能無法連到第一個 API，因此不能只用單一網址。
+            const strokeUrls = [
+                `https://www.moedict.tw/api/stroke-json/${codePoint}.json`,
+                `https://moedict.tw/api/stroke-json/${codePoint}.json`,
+                `https://cdn.jsdelivr.net/gh/g0v/zh-stroke-data@master/json/${codePoint}.json`
+            ];
 
             let characterData = null;
-            const cachedKey = `moeStrokeData:${codePoint}`;
+            const cachedKey = `moe2025StrokeData:${codePoint}`;
 
             try {
                 const cached = localStorage.getItem(cachedKey);
                 if (cached) characterData = JSON.parse(cached);
             } catch (e) {}
 
-            if (!characterData) {
-                const response = await fetch(dataUrl, {
-                    method: "GET",
-                    mode: "cors",
-                    cache: "force-cache"
-                });
-                if (!response.ok) {
-                    throw new Error(`筆順資料 HTTP ${response.status}`);
+            async function fetchStrokeJson(url) {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 8000);
+                try {
+                    const response = await fetch(url, {
+                        method: "GET",
+                        mode: "cors",
+                        cache: "force-cache",
+                        signal: controller.signal
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return await response.json();
+                } finally {
+                    clearTimeout(timer);
                 }
-                characterData = await response.json();
+            }
+
+            if (!characterData) {
+                const errors = [];
+                for (const url of strokeUrls) {
+                    try {
+                        characterData = await fetchStrokeJson(url);
+                        if (characterData) break;
+                    } catch (error) {
+                        errors.push(`${url}: ${error.message || error}`);
+                    }
+                }
+                if (!characterData) {
+                    throw new Error(`所有教育部筆順資料來源皆無法連線：${errors.join(" | ")}`);
+                }
                 try {
                     localStorage.setItem(cachedKey, JSON.stringify(characterData));
                 } catch (e) {}
@@ -4865,13 +5052,24 @@
                         onComplete(characterData);
                     } else {
                         const cp = character.codePointAt(0).toString(16).toLowerCase();
-                        fetch(`https://www.moedict.tw/api/stroke-json/${cp}.json`, { mode: "cors", cache: "force-cache" })
-                            .then(r => {
-                                if (!r.ok) throw new Error(`筆順資料 HTTP ${r.status}`);
-                                return r.json();
-                            })
-                            .then(onComplete)
-                            .catch(onError);
+                        const urls = [
+                            `https://www.moedict.tw/api/stroke-json/${cp}.json`,
+                            `https://moedict.tw/api/stroke-json/${cp}.json`,
+                            `https://cdn.jsdelivr.net/gh/g0v/zh-stroke-data@master/json/${cp}.json`
+                        ];
+                        (async () => {
+                            let lastError = null;
+                            for (const url of urls) {
+                                try {
+                                    const data = await fetchStrokeJson(url);
+                                    onComplete(data);
+                                    return;
+                                } catch (error) {
+                                    lastError = error;
+                                }
+                            }
+                            onError(lastError || new Error("筆順資料無法載入"));
+                        })();
                     }
                 }
             });
@@ -5341,6 +5539,7 @@
 
         const age = Number(document.getElementById("ageSelect").value);
         const ageGroup = getAgeGroup(age);
+        mathDifficulty = document.getElementById("mathDifficulty")?.value || "normal";
         maxNumber = ageGroup.maxNumber;
 
         currentQuestion = 0;
@@ -5366,11 +5565,12 @@
         };
         const operation = document.getElementById("operationSelect").value;
         selectedMultiplicationTable = Number(document.getElementById("multiplicationTable").value);
+        const difficultyLabel = mathDifficulty === "challenge" ? "🔥 挑戰題" : "一般";
         setChineseText(
             document.getElementById("settingsSummary"),
             operation === "multiplication"
-                ? `${getChildName()}・${selectedMultiplicationTable} 的乘法表`
-                : `${getChildName()}・${age} 歲・${ageGroup.label}・${operationNames[operation]}`
+                ? `${getChildName()}・${difficultyLabel}・${selectedMultiplicationTable} 的乘法表`
+                : `${getChildName()}・${age} 歲・${difficultyLabel}・${ageGroup.label}・${operationNames[operation]}`
         );
 
         document.getElementById("multiplicationHint").style.display =
@@ -5395,9 +5595,15 @@
 
         const age = Number(document.getElementById("ageSelect").value);
         const ageGroup = getAgeGroup(age);
+        const difficulty = document.getElementById("mathDifficulty")?.value || "normal";
+        const hint = difficulty === "challenge"
+            ? getMathChallengeRange(age)
+            : null;
         setChineseText(
             document.getElementById("levelHint"),
-            `目前難度：${ageGroup.label}，減法不會出現負數。`
+            difficulty === "challenge"
+                ? `🔥 挑戰模式：數字約 ${hint.min}～${hint.max}，會比一般題目難，減法不會出現負數。`
+                : `目前難度：${ageGroup.label}，減法不會出現負數。`
         );
     }
 
@@ -5443,6 +5649,8 @@
         .addEventListener("change", updatePracticeSettings);
     document.getElementById("operationSelect")
         .addEventListener("change", updatePracticeSettings);
+    document.getElementById("mathDifficulty")
+        .addEventListener("change", updateLevelHint);
     document.getElementById("englishAgeSelect")
         .addEventListener("change", updateEnglishLevelHint);
     document.getElementById("zhuyinToggle")
